@@ -1,0 +1,70 @@
+<div class="header gantt-demo-header">
+  <ul class="gantt-controls">
+    <li class="gantt-menu-item"><a (click)="onEachTaskClose()"><i class="fa fa-chevron-up"></i> Collapse
+        All</a></li>
+    <li class="gantt-menu-item gantt-menu-item-last"><a (click)="onEachTaskOpen()"><i class="fa fa-chevron-down"></i>
+        Expand All</a></li>
+    <li class="gantt-menu-item gantt-menu-item-last">
+      <div class="d-flex justify-content-center bd-highlight mb-3 ganttchart_option" style="margin-bottom: 0px !important;">
+        <div class="p-2">
+          <p-radioButton name="group2" value="1" label="Days" (click)="onchangeScale()" [(ngModel)]="Gantt_scaleOptions"
+            inputId="preopt1">
+          </p-radioButton>
+        </div>
+        <div class="p-2 ">
+          <p-radioButton name="group2" value="2" label="Weeks" (click)="onchangeScale()" [(ngModel)]="Gantt_scaleOptions"
+            inputId="preopt2">
+          </p-radioButton>
+        </div>
+        <div class="p-2 ">
+          <p-radioButton name="group2" value="3" label="Months" (click)="onchangeScale()" [(ngModel)]="Gantt_scaleOptions"
+            inputId="preopt3">
+          </p-radioButton>
+        </div>
+
+      </div>
+    </li>
+    <!--<li class="gantt-menu-item"><a data-action="toggleCriticalPath"><img
+          src="demo/imgs/ic_critical_path_24.png">Critical Path</a></li>
+    <li class="gantt-menu-item gantt-menu-item-right"><a data-action="fullscreen"><img
+          src="demo/imgs/ic_fullscreen_24.png">Fullscreen</a></li>
+    <li class="gantt-menu-item gantt-menu-item-right gantt-menu-item-last"><a data-action="zoomToFit"><img
+          src="demo/imgs/ic_zoom_to_fit_24.png">Zoom to Fit</a></li>
+    <li class="gantt-menu-item gantt-menu-item-right"><a data-action="zoomOut"><img src="demo/imgs/ic_zoom_out.png">Zoom
+        Out</a></li>
+    <li class="gantt-menu-item gantt-menu-item-right"><a data-action="zoomIn"><img src="demo/imgs/ic_zoom_in.png">Zoom
+        In</a></li>-->
+    <li class="gantt-menu-item gantt-menu-item-right gantt-menu-item-first"><a><i class="fa fa-external-link"
+          aria-hidden="true"></i>&nbsp;&nbsp;Export
+        to</a>
+      <ul class="gantt-controls">
+        <!-- <li class="gantt-menu-item"><a data-action="toPNG" (click)="exportGanttTo('1')"><i class="fa fa-file-image-o"
+              aria-hidden="true"></i>&nbsp;&nbsp;PNG</a></li> -->
+        <li class="gantt-menu-item"><a data-action="toPDF" (click)="exportGanttTo('2')"><i class="fa fa-file-pdf-o"
+              aria-hidden="true"></i>&nbsp;&nbsp;PDF</a></li>
+        <!-- <li class="gantt-menu-item"><a data-action="toExcel" (click)="exportGanttTo('3')"><i class="fa fa-file-excel-o"
+              aria-hidden="true"></i>&nbsp;&nbsp;Excel</a></li>
+        <li class="gantt-menu-item"><a data-action="toExcel" (click)="exportGanttTo('4')"><i class="fa fa-file-text-o"
+              aria-hidden="true"></i>&nbsp;&nbsp;JSON</a></li> -->
+        <!-- <li class="gantt-menu-item"><a data-action="toExcel" (click)="exportGanttTo('5')"><i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp;&nbsp;ICal</a></li>
+        <li class="gantt-menu-item"><a data-action="toMSProject" (click)="exportGanttTo('6')"><i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp;&nbsp;MS
+            Project</a></li> -->
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="demo-main-content">
+  <div #gantt_here class="ganttfullWidthpopup"></div>
+</div>
+
+<p-dialog header="Error" [(visible)]="error_display" [style]="{width: '300px', height: '200px'}" dismissableMask="true"
+  modal="true" appendTo="body" styleClass="ganttchart_errorpoup">
+  <ul>
+    <li>
+      Tasks must be included (right click on the Task Title and select "Add to Gantt Chart".
+    </li>
+    <li>
+      Cards need a Start and End date in order to be included (click on Properties)
+    </li>
+  </ul>
+</p-dialog>

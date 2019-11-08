@@ -1,0 +1,606 @@
+<!-- <div class="topbutton_section" *ngIf="hasRights == true">
+    <div style="float:right; padding: 1px 15px 0px 0px;">
+        <button *ngIf="value == 'Strategy Execution'" class="btn btn-sm btn-primary" (click)="saveGoalsPercentage()">
+            <i class="fa fa-save"></i> Save</button>
+    </div>
+</div> -->
+<div id="performance-pg" class="content-page component_holder">
+    <!-- <div class="topbutton_section">
+        <div style="float:right">
+            <button *ngIf="value == 'Strategy Execution'" class="btn btn-sm btn-primary" (click)="saveGoalsPercentage()">
+                <i class="fa fa-save"></i> Save</button>
+        </div>
+    </div> -->
+    <div class="content">
+        <div class="container child_tab_container">
+            <tabset #modulesubTabset class="sub_tab_container" *ngIf="hasRights == false">
+                <tab id="stab_performance_metrics" heading="Metric" class="custom_tabs" (select)="onSelect($event)">
+                    <div class="ui-g">
+                        <div class="ui-g-12 no-padding" style="height: 800px;">
+                            <div class="page-restricted">
+                                <span>Access to this page is restricted</span>
+                            </div>      
+                        </div>
+                    </div>
+                </tab>
+                <tab [active]="false" id="stab_performance_strategyexe" heading="Strategy Execution" class="custom_tabs"
+                    (select)="onSelect($event)">
+                    <div class="ui-g">
+                        <div class="ui-g-12 no-padding" style="height: 800px">
+                            <div class="page-restricted">
+                                <span>Access to this page is restricted</span>
+                            </div>
+                        </div>
+                    </div>
+                </tab>
+
+
+            </tabset>
+            <tabset #modulesubTabset class="sub_tab_container" *ngIf="hasRights == true">
+                <tab id="stab_performance_metrics" heading="Metric" class="custom_tabs" (select)="onSelect($event)">
+                    <p-scrollPanel [style]="{width: '100%'}" styleClass=" child_tabcontent custom_scrollpane no-border overflow_y_hide">
+                        <div class="ui-g">
+                            <div class="ui-g-12 ui-md-12 no-padding">
+                                <p-panel styleClass="green_panel m-r-20">
+                                    <p-header>
+                                        <div class="ui-helper-clearfix">
+                                            <span class="ui-panel-title" style="display:inline-block;margin-top:2px">Module
+                                                Metrics
+                                            </span>
+                                            <!-- <p-button class="btnMetrics" label="Add Mertrics" (onClick)="showDialog()"></p-button> -->
+                                            <button style="float:right" class="btn btn-sm btn-primary mr-15" (click)="AddPerformanceMetric()">
+                                                <i class="fa fa-plus"></i> Add Metrics
+                                            </button>
+                                        </div>
+                                    </p-header>
+                                    <p-table [value]="metricsList" [scrollable]="true"  styleClass="ModMetrics" scrollHeight="200px" [paginator]="false"
+                                        [rows]="5" (onRowReorder)="reorderMetricList($event)">
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th style="width:4%;" class="text-center">Priority</th>
+                                                <!-- <th style="width:5%;" class="text-center">No</th> -->
+                                                <th style="width:25%;">Metric</th>
+                                                <th style="width:20%;">Target</th>
+                                                <th style="width:20%;">Actual</th>
+                                                <th style="width:7%;" class="text-center">Comments</th>
+                                                <th style="width:4%;" class="text-center">Edit</th>
+                                                <th style="width:5%;" class="text-center">Delete</th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-rowData let-index="rowIndex">
+                                            <tr [pReorderableRow]="index">
+                                                <td style="width:4%;" class="text-center">
+                                                    <i *ngIf="!isRefModule" class="fa fa-arrows-alt" pReorderableRowHandle></i>
+                                                </td>
+                                                <!-- <td style="width:5%;">{{ index+1 }}</td> -->
+                                                <td style="width:25%;">
+                                                    <div>{{ rowData.metric }}</div>
+                                                </td>
+                                                <td style="width:20%;">
+                                                    <div>{{ rowData.target }}</div>
+                                                </td>
+                                                <td style="width:20%;">
+                                                    <div>{{ rowData.actual }}</div>
+                                                </td>
+                                                <td style="width:7%;" class="text-center">
+                                                    <span container="body" [tooltip]="commentsTooltip" placement="left">
+                                                        <i class="fa fa-comment"></i>
+                                                    </span>
+                                                    <ng-template #commentsTooltip>
+                                                        <div [innerHtml]="rowData.comments"></div>
+                                                    </ng-template>
+                                                </td>
+                                                <td style="width:4%;" class="text-center">
+                                                    <a (click)="editMetricList(rowData)" href="javascript:void(0)">
+                                                        <i class="fa fa-pencil"></i>
+                                                    </a>
+                                                </td>
+                                                <td style="width:5%;" class="text-center">
+                                                    <a (click)="deleteMetricList(rowData)" href="javascript:void(0)">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="emptymessage">
+                                            <tr>
+                                                <td class="text-center font-weight-bold">
+                                                    No records found
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </p-panel>
+                            </div>
+                            <div class="ui-g-12 ui-md-12 no-padding">
+                                <p-panel styleClass="green_panel m-r-20">
+                                    <p-header>
+                                        <div class="ui-helper-clearfix">
+                                            <span class="ui-panel-title" style="display:inline-block;margin-top:2px">Reference
+                                                Metrics
+                                            </span>
+                                            <!-- <a [tooltip]="Allows the Addition of Metrics that have been Created in other module as a reference">  <i class="fa fa-question-circle"></i></a> -->
+                                            <a tooltip="Allows addition of Metrics that have been created on other Modules as a reference">
+                                                <i class="fa fa-question-circle"></i>
+                                            </a>
+                                            <button style="float:right" class="btn btn-sm btn-primary mr-15" (click)="getReferenceMetrics()">
+                                                <i class="fa fa-plus"></i> Add Reference Metrics
+                                            </button>
+                                        </div>
+                                    </p-header>
+
+                                    <p-table [value]="metricsReference" [scrollable]="true" scrollHeight="200px"
+                                        [paginator]="false" [rows]="5" (onRowReorder)="reorderReferenceMetric($event)">
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th style="width:4%;" class="text-center">Priority</th>
+                                                <!-- <th style="width:5%;">No</th> -->
+                                                <th style="width:5%;">ID</th>
+                                                <th style="width:20%;">Module</th>
+                                                <th style="width:15%;">Metric</th>
+                                                <th style="width:15%;">Target</th>
+                                                <th style="width:15%;">Actual</th>
+                                                <th style="width:7%;" class="text-center">Comments</th>
+                                                <th style="width:4%;" class="text-center">Edit</th>
+                                                <th style="width:5%;" class="text-center">Delete</th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-rowData let-index="rowIndex">
+                                            <tr [pReorderableRow]="index">
+                                                <td style="width:4%;" class="text-center">
+                                                    <i *ngIf="!isRefModule" class="fa fa-arrows-alt" pReorderableRowHandle></i>
+                                                </td>
+                                                <!-- <td style="width:5%;">{{ index+1 }}</td> -->
+                                                <td style="width:5%;">{{ rowData.legoId }}</td>
+                                                <td style="width:20%;">
+                                                    <div>{{ rowData.legoName }}</div>
+                                                </td>
+                                                <td style="width:15%;">
+                                                    <div>{{ rowData.metric }}</div>
+                                                </td>
+                                                <td style="width:15%;">
+                                                    <div>{{ rowData.target }}</div>
+                                                </td>
+                                                <td style="width:15%;">
+                                                    <div>{{ rowData.actual }}</div>
+                                                </td>
+                                                <td style="width:7%;" class="text-center">
+                                                    <span container="body" [tooltip]="commentsTooltip" placement="left">
+                                                        <i class="fa fa-comment"></i>
+                                                    </span>
+                                                    <ng-template #commentsTooltip>
+                                                        <div [innerHtml]="rowData.comments"></div>
+                                                    </ng-template>
+                                                </td>
+                                                <td style="width:4%;" class="text-center">
+                                                    <a (click)="editReferenceMetricList(rowData)" href="javascript:void(0)">
+                                                        <i class="fa fa-pencil"></i>
+                                                    </a>
+                                                </td>
+                                                <td style="width:5%;" class="text-center">
+                                                    <a (click)="deleteReferenceMetricList(rowData)" href="javascript:void(0)">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+
+                                        </ng-template>
+                                        <ng-template pTemplate="emptymessage">
+                                            <tr>
+                                                <td class="text-center font-weight-bold">
+                                                    No records found
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </p-panel>
+                            </div>
+                            <!-- <div class="ui-g-12 ui-md-12 m-r-20"> -->
+                            <div class="ui-g-12 ui-md-12 no-padding">
+                                <p-panel styleClass="green_panel m-r-20">
+                                    <p-header styleClass=" ui-treetable-header">
+                                        <div class="text-left">Sub Module Metrics</div>
+                                    </p-header>
+                                    <p-scrollPanel [style]="{width: '100%',height:'350px'}" styleClass=" child_tabcontent  no-border overflow_y_hide">
+                                        <p-treeTable [value]="treeSubmoduleMetrics" expanded="true" styleClass="performace_treecontainer lightgreen_panel">
+                                            <p-column [style]="{'width':'60%','text-align':'left'}" field="name" header="Submodule">
+                                                <ng-template let-node="rowData" pTemplate="body">
+                                                    <span *ngIf="node.type == 'Folder' "> {{ node.legoName }}
+                                                        <span class="path">{{ node.path }} </span>
+                                                    </span>
+                                                </ng-template>
+                                            </p-column>
+                                            <p-column [style]="{'width':'20%'}" field="size" header="Metrics">
+                                                <ng-template let-node="rowData" pTemplate="body">
+                                                    {{node.metric}}
+                                                </ng-template>
+                                            </p-column>
+                                            <p-column [style]="{'width':'20%'}" field="size" header="Target">
+                                                <ng-template let-node="rowData" pTemplate="body">
+                                                    {{node.target}}
+                                                </ng-template>
+                                            </p-column>
+                                            <p-column [style]="{'width':'20%'}" field="type" header="Actual">
+                                                <ng-template let-node="rowData" pTemplate="body">
+                                                    {{node.actual}}
+                                                </ng-template>
+                                            </p-column>
+                                        </p-treeTable>
+                                    </p-scrollPanel>
+                                </p-panel>
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+                    </p-scrollPanel>
+                </tab>
+                <!-- Strategy Execution Tab -->
+                <tab [active]="false" id="stab_performance_strategyexe" heading="Strategy Execution" class="custom_tabs"
+                    (select)="onSelect($event)">
+
+                    <p-scrollPanel [style]="{width: '100%'}" styleClass=" child_tabcontent custom_scrollpane no-border overflow_y_hide">
+                        <div class="ui-g">
+                            <div class="ui-g-12 ui-md-12 no-padding">
+                                <!-- Mission -->
+                                <div class="ui-g-12 ui-md-12 no-padding">
+                                    <p-panel styleClass="green_panel m-r-20">
+                                        <p-header>
+                                            <div class="ui-helper-clearfix">
+                                                <span class="ui-panel-title" style="display:inline-block;margin-top:2px">Mission</span>
+                                                <span class="ui-panel-title float-right" style="display:inline-block;margin:2px 28px 0px 0px;">Status/Comments</span>
+                                            </div>
+                                        </p-header>
+                                        <div class="table-responsive">
+                                            <table *ngIf="missionVisionData" class="table table-bordered">
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-justify" style="width:85%;">
+                                                            <div [innerHTML]="missionVisionData.mission"></div>
+                                                        </td>
+                                                        <td class="text-center" style="width:15%;">
+                                                            <!-- <ng-template #missionTooltip>
+                                                    <div [innerHtml]="missionVisionData.commentsMission"></div>
+                                                </ng-template>
+                                                <a>
+                                                    <span container="body" [tooltip]="missionTooltip" placement="top">
+                                                        <li class="fa fa-comment" tooltip="" (click)="openMissionDialog()"></li>
+                                                    </span>
+                                                </a> -->
+                                                            <p-overlayPanel appendTo="body" #Missioncomment (onShow)="hideMouseMovement($event)">
+                                                                <div class="form-group" (mouseleave)="Missioncomment.hide($event)">
+                                                                    <div class="form-group">
+                                                                        <textarea type="text" class="form-control"
+                                                                            style="width:250px; height:100px; resize:none;"
+                                                                            [(ngModel)]="missionVisionData.commentsMission"></textarea>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <button type="button" class="btn btn-sm btn-primary float-right"
+                                                                            (click)="saveMissionComments(missionVisionData);Missioncomment.show($event)">Save
+                                                                            Changes</button>
+                                                                    </div>
+                                                                    <br />
+                                                                </div>
+                                                            </p-overlayPanel>
+                                                            <a>
+                                                                <span container="body" [tooltip]="commentsTooltip"
+                                                                    placement="left">
+                                                                    <li class="fa fa-comment" tooltip="" (mouseenter)="showMissionComments(Missioncomment,$event)"></li>
+                                                                </span>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </p-panel>
+                                </div>
+                                <!--Vision -->
+                                <div class="ui-g-12 ui-md-12 no-padding">
+                                    <p-panel styleClass="green_panel m-r-20">
+                                        <p-header>
+                                            <div class="ui-helper-clearfix">
+                                                <span class="ui-panel-title" style="display:inline-block;margin-top:2px">Vision</span>
+                                                <span class="ui-panel-title float-right" style="display:inline-block;margin:2px 28px 0px 0px;">Status/Comments</span>
+                                            </div>
+                                        </p-header>
+                                        <div class="table-responsive">
+                                            <table *ngIf="missionVisionData" class="table table-bordered">
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-justify" style="width:85%;">
+                                                            <div [innerHTML]="missionVisionData.vision"></div>
+                                                        </td>
+                                                        <td class="text-center" style="width:15%;">
+                                                            <!-- <ng-template #commentsTooltip>
+                                                    <div [innerHtml]="missionVisionData.commentsVision"></div>
+                                                </ng-template>
+                                                <a>
+                                                    <span container="body" [tooltip]="commentsTooltip" placement="top">
+                                                        <li class="fa fa-comment" tooltip="" (click)="openVisionDialog()"></li>
+                                                    </span>
+                                                </a> -->
+                                                            <p-overlayPanel appendTo="body" #Visioncomment>
+                                                                <div class="form-group" (mouseleave)="Visioncomment.hide($event)">
+                                                                    <div class="form-group">
+                                                                        <textarea type="text" class="form-control"
+                                                                            style="width:250px; height:100px; resize:none;"
+                                                                            [(ngModel)]="missionVisionData.commentsVision"></textarea>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <button type="button" class="btn btn-sm btn-primary float-right"
+                                                                            (click)="saveVisionComments(missionVisionData)">Save
+                                                                            Changes</button>
+                                                                    </div>
+                                                                    <br />
+                                                                </div>
+                                                            </p-overlayPanel>
+                                                            <a>
+                                                                <span container="body" [tooltip]="commentsTooltip"
+                                                                    placement="left">
+                                                                    <li class="fa fa-comment" tooltip="" (mouseenter)="Visioncomment.show($event)"></li>
+                                                                </span>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </p-panel>
+                                </div>
+                                <!--Strategy -->
+                                <div class="ui-g-12 ui-md-12 no-padding">
+                                    <p-panel styleClass="green_panel m-r-20" *ngFor="let item of strategyList;trackBy:index; let i = index">
+                                        <p-header>
+                                            <div class="ui-helper-clearfix">
+                                                <span class="ui-panel-title" style="display:inline-block;margin-top:2px">Strategy
+                                                    {{i+1}}</span>
+                                                <span class="ui-panel-title float-right" style="display:inline-block;margin:2px 28px 0px 0px;">Status/Comments</span>
+                                            </div>
+                                        </p-header>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-justify" style="width:85%;">
+                                                            <div [innerHTML]="item.strategyValue"></div>
+                                                        </td>
+                                                        <td class="text-center" style="width:15%;">
+                                                            <!-- <ng-template #commentsTooltip>
+                                                    <div [innerHtml]="item.commentsStrategy"></div>
+                                                </ng-template>
+                                                <a>
+                                                    <span container="body" [tooltip]="commentsTooltip" placement="top">
+                                                        <li class="fa fa-comment" tooltip="" (click)="openStrategyDialog(item)"></li>
+                                                    </span>
+                                                </a> -->
+                                                            <p-overlayPanel appendTo="body" #Strategycomment>
+                                                                <div class="form-group" (mouseleave)="Strategycomment.hide($event)">
+                                                                    <div class="form-group">
+                                                                        <textarea type="text" class="form-control"
+                                                                            style="width:250px; height:100px; resize:none;"
+                                                                            [(ngModel)]="item.commentsStrategy"></textarea>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <button type="button" class="btn btn-sm btn-primary float-right"
+                                                                            (click)="saveStategyComments(item)">Save
+                                                                            Changes</button>
+                                                                    </div>
+                                                                    <br />
+                                                                </div>
+                                                            </p-overlayPanel>
+                                                            <a>
+                                                                <span container="body" [tooltip]="commentsTooltip"
+                                                                    placement="left">
+                                                                    <li class="fa fa-comment" tooltip="" (mouseenter)="Strategycomment.show($event)"></li>
+                                                                </span>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </p-panel>
+                                </div>
+                                <!-- Goals -->
+                                <div class="ui-g-12 ui-md-12 no-padding">
+                                    <p-panel styleClass="green_panel m-r-20">
+                                        <p-header>
+                                            <div class="ui-helper-clearfix">
+                                                <span class="ui-panel-title" style="display:inline-block;margin-top:2px">Goals</span>
+                                            </div>
+                                        </p-header>
+                                        <p-table [value]="goalsList" [scrollable]="true" scrollHeight="250px"
+                                            [paginator]="false" [rows]="5" [responsive]="true">
+                                            <ng-template pTemplate="header">
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Goals</th>
+                                                    <th>Deadline</th>
+                                                    <th>Strategy</th>
+                                                    <th>[%]Complete</th>
+                                                    <th class="text-center">Status/Comments</th>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="body" let-rowData let-index="rowIndex">
+                                                <tr>
+                                                    <td> {{index+1}} </td>
+                                                    <td>{{rowData.goals}} </td>
+                                                    <td>{{rowData.deadLine}} </td>
+                                                    <td>{{rowData.strategy}} </td>
+                                                    <td pEditableColumn>
+                                                        <p-cellEditor>
+                                                            <ng-template pTemplate="input">
+                                                                    <!-- (click)="setUpdate(rowData)" -->
+                                                                <p-slider (onSlideEnd)="setUpdate(rowData)" 
+                                                                    [(ngModel)]="rowData.percentage" [min]="0" [max]="100"></p-slider>
+                                                                <span>{{rowData.percentage}} % </span>
+                                                                <!-- <input type="text" (change)="setUpdate(rowData)" [(ngModel)]="rowData.percentage"> -->
+                                                            </ng-template>
+                                                            <ng-template pTemplate="output">
+                                                                    <!-- (click)="setUpdate(rowData)" -->
+                                                                <p-slider (onSlideEnd)="setUpdate(rowData)" 
+                                                                    [(ngModel)]="rowData.percentage" [min]="0" [max]="100"></p-slider>
+                                                                <span>{{rowData.percentage}} % </span>
+                                                            </ng-template>
+                                                        </p-cellEditor>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <!-- <ng-template #commentsTooltip>
+                                                <div [innerHtml]="rowData.comments"></div>
+                                            </ng-template>
+                                            <a>
+                                                <span container="body" [tooltip]="commentsTooltip" placement="top">
+                                                    <li class="fa fa-comment" tooltip="" (click)="openGoalsDialog(rowData)"></li>
+                                                </span>
+                                            </a> -->
+                                                        <p-overlayPanel appendTo="body" #goalscomment>
+                                                            <div class="form-group" (mouseleave)="goalscomment.hide($event)">
+                                                                <div class="form-group">
+                                                                    <textarea type="text" class="form-control" style="width:250px; height:100px; resize:none;"
+                                                                        [(ngModel)]="rowData.comments"></textarea>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <button type="button" class="btn btn-sm btn-primary float-right"
+                                                                        (click)="saveGoalsComments(rowData)">Save
+                                                                        Changes</button>
+                                                                </div>
+                                                                <br />
+                                                            </div>
+                                                        </p-overlayPanel>
+                                                        <a>
+                                                            <span container="body" [tooltip]="commentsTooltip"
+                                                                placement="left">
+                                                                <li class="fa fa-comment" tooltip="" (mouseenter)="goalscomment.show($event)"></li>
+                                                            </span>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="emptymessage">
+                                                <tr>
+                                                    <td class="text-center font-weight-bold">
+                                                        No records found
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+                                        </p-table>
+                                    </p-panel>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="m-b-20"></div>
+                        <br />
+                        <br />
+                    </p-scrollPanel>
+
+                </tab>
+            </tabset>
+
+            <!-- POP Up For Delete performance -->
+            <!-- <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle" width="425"></p-confirmDialog> -->
+
+            <!-- Add Reference Pop Up -->
+            <p-dialog header="" [(visible)]="referencedisplay" [modal]="true" [responsive]="true" [closable]="false"
+                appendTo="body" >
+                <p-header>Select Metric
+                </p-header>
+                <div style="width: 1000px !important;">
+                    <p-dataTable expandableRows="true" [(value)]="bindReferenceMetricsLists" [paginator]="false" [rows]="10"
+                        selectionMode="multiple" [(selection)]="temp_selectedreferencelist">
+                        <p-column field="legoId" header="" [style]="{'width':'5%','text-align':'center'}" selectionMode="multiple"></p-column>
+                        <p-column field="legoId" header="ID" [filter]="true"></p-column>
+                        <p-column field="legoName" header="Module" [filter]="true"></p-column>
+                        <p-column field="metric" header="Metric" [filter]="false"></p-column>
+                        <p-column field="target" header="Target" [filter]="false"></p-column>
+                        <p-column field="actual" header="Actual" [filter]="false"></p-column>
+                        <p-column field="comments" header="Comments" [style]="{'text-align':'center'}" [filter]="false">
+                            <ng-template pTemplate="body" let-selectedReference="rowData">
+                                <ng-template #commentsTooltip>
+                                    <div [innerHtml]="selectedReference.comments"></div>
+                                </ng-template>
+                                <span container="body" [tooltip]="commentsTooltip" placement="left">
+                                    <i class="fa fa-comment"></i>
+                                </span>
+                            </ng-template>
+                        </p-column>
+                    </p-dataTable>
+                </div>
+                <p-footer>
+                    <button type="button" pButton icon="fa-check" (click)="saveReferenceMetrics()" label="Save"></button>
+                    <button type="button" pButton icon="fa-close" (click)="referencedisplay=false" label="Exit"></button>
+                </p-footer>
+
+            </p-dialog>
+            <!-- POp Up on Add Metric -->
+            <p-dialog header="{{headerTitle}}" [(visible)]="visiblePerformanceDialog" [modal]="true" [responsive]="true"
+            appendTo="body" [closable]="false">
+                <!-- <p-header>
+                    --<-!-- <button type="button" class="btnadd">+ Add</button> ->
+                </p-header> -->
+                <div >
+                    <form [formGroup]="performanceMetricForm" (ngSubmit)="onMetricFormSubmit()">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="required_label">Metric</label>
+                                        <input type="text" id="txt_metric" maxlength="50" required formControlName="metric"
+                                            class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="required_label">Target</label>
+                                        <input type="text" maxlength="50" formControlName="target" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="required_label">Actual</label>
+                                        <input type="text" maxlength="50" formControlName="actual" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-3" *ngIf="visiblePerformanceDialog == true">
+                                    <div class="form-group">
+                                        <label for="example3" class="required_label">Date</label>
+                                        <input type="text" formControlName="date" [readonly]="true" class="form-control"
+                                            style="width: 50%" id="example3" #dp="bsDatepicker" bsDatepicker [bsConfig]="bsConfig">
+                                    </div>
+                                </div>
+                                <div class="col-xl-12 col-md-12 col-sm-12">
+                                </div>
+                                <div class="form-group">
+                                    <label class="required_label">Comments</label>
+                                    <ck-editor [ngModelOptions]="{standalone: true}" [(ngModel)]="edit_comments"
+                                        debounce="500" [config]="config" class="main_ckeditor" [readonly]="false"></ck-editor>
+                                </div>
+                            </div>
+                            <div class="col-xl-12 col-md-12 col-sm-12">
+                                <div class="form-group float-right">
+                                    <button type="submit" pButton icon="fa-check" [label]="btnName"></button>
+                                    <button type="button" pButton icon="fa-close" (click)="hideAddPerformanceDialog()"
+                                        label="Exit"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </p-dialog>
+            <!-- <p-dialog header="{{dialogHeaderName}}" [(visible)]="modal_dialog" [modal]="true" [responsive]="true"
+                appendTo="body" [closable]="false">
+                <div class="ocn-status">
+                    <div class="form-group">
+                        <textarea type="text" class="form-control" style="width:400px; height:200px; resize:none;"
+                            [(ngModel)]="NewCommands"></textarea>
+                    </div>
+                </div>
+                <p-footer>
+                    <button type="button" class="btn btn-sm btn-primary" (click)="saveComments()">Save Changes</button>
+                    &nbsp;&nbsp;
+                    <button type="button" class="btn btn-sm btn-primary" (click)="modal_dialog=false">Exit</button>
+                </p-footer>
+            </p-dialog> -->
+        </div>
+    </div>
+</div> 

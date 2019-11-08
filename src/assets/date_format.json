@@ -1,0 +1,36 @@
+[
+    {
+        "name": "MM/DD/YYYY",
+        "description": "Month/Day/Year with leading zeros"
+    },       
+    {
+        "name": "MM/DD/YY",
+        "description": "Month/Day/Year with leading zeros"
+    },
+    {
+        "name": "YYYY/MM/DD",
+        "description": "Year-Month-Day with no leading zeros"
+    },
+    {
+        "name": "YY/MM/DD",
+        "description": "Year-Month-Day with leading zeros"
+    },
+    {
+        "name": "DD-MM-YYYY",
+        "description": "Day-Month-Year with leading zeros"
+    },
+    {
+        "name": "YYYY-MM-DD",
+        "description": "Year-Month-Day with leading zeros"
+    },             
+    
+    {
+        "name": "dddd, DD MMMM YYYY",
+        "description": "Day, Day Month Year"
+    },
+    {
+        "name": "dddd, DD-MM-YYYY",
+        "description": "Day-Month-Year with leading zeros"
+    }   
+    
+]

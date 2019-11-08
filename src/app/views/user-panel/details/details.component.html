@@ -1,0 +1,1698 @@
+<!-- <button style="float: right;margin-top: -34px !important;margin-right: 58px !important;" class="btn btn-sm btn-primary"
+                    *ngIf="(queryparams.mode == 'E') && (value !='Change Log') && (value != 'Submodule Change Log') && (value != 'Access Rights') 
+                && (value != 'Job Description') && (value != 'Competencies and Skills') && (value != 'Employee List') && (value != 'Manage Filter Tags')"
+                    (click)="save_Employee()" [disabled]="!empshow">
+                    <i class="fa fa-save"></i> Save</button> -->
+
+
+<div id="details-pg" class="content-page component_holder">
+
+    <!-- Start content -->
+    <div class="content">
+        <!-- <div class="container" *ngIf="hasRights == false">
+                <div class="sub_tab_container">
+                        <div class="page-restricted">
+	<span>Access to this page is restricted</span>
+</div>
+                </div>
+        </div> -->
+
+        <div class="container">
+
+            <div class="topbutton_section">
+                <!-- <div style="float:right"> -->
+                <!-- <button class="btn btn-sm btn-primary" *ngIf="value=='Details' && value!='Access Rights' " (click)="showDialog()">
+                        <i class="fa fa-plus"></i> Add</button> -->
+                <button class="btn btn-sm btn-primary" *ngIf="( value =='Manage Filter Tags' )"
+                    (click)="showFilter_Dialog('Add')">
+                    <i class="fa fa-plus"></i> Add Tags</button>
+
+                <button class="btn btn-sm btn-primary" *ngIf="(value =='Employee List') && (queryparams.mode != 'E')"
+                    (click)="showDialog()">
+                    <i class="fa fa-plus"></i> Add</button>
+
+                <!-- <button class="btn btn-sm btn-primary" *ngIf="(queryparams.mode != 'E') && (value !='Change Log') && (value != 'Submodule Change Log') && (value != 'Access Rights') 
+                && (value != 'Job Description') && (value != 'Competencies and Skills') && (value != 'Employee List') && (value != 'Manage Filter Tags')"
+                    (click)="UpdateLego(process_info)">
+                    <i class="fa fa-save"></i> Save</button> -->
+                <button class="btn btn-sm btn-primary" *ngIf="(queryparams.mode == 'E') && (value =='Employee List')"
+                    (click)="Exit_processInfo()">
+                    <i class="fa fa-close"></i> Exit</button>
+
+                <!-- <button class="btn btn-sm btn-primary"
+                    *ngIf="(queryparams.mode == 'E') && (value !='Change Log') && (value != 'Submodule Change Log') && (value != 'Access Rights') 
+                && (value != 'Job Description') && (value != 'Competencies and Skills') && (value != 'Employee List') && (value != 'Manage Filter Tags')"
+                    (click)="save_Employee()" [disabled]="!empshow">
+                    <i class="fa fa-save"></i> Save</button> -->
+                <div class="div_top_btn">
+                    <button class="btn btn-sm btn-primary save_topbtn"
+                        *ngIf="(queryparams.mode == 'E') && (value !='Change Log') && (value != 'Submodule Change Log') && (value != 'Access Rights') 
+                            && (value != 'Job Description') && (value != 'Competencies and Skills') && (value != 'Employee List') && (value != 'Manage Filter Tags')"
+                        (click)="save_Employee()" [disabled]="!empshow">
+                        <i class="fa fa-save"></i> Save</button>
+                </div>
+
+
+                <button class="btn btn-sm btn-primary" *ngIf="value =='Access Rights' && hasRights == true"
+                    (click)="showDialog_user_rights('User')">
+                    <i class="fa fa-plus"></i> Edit Users</button>
+
+                <button class="btn btn-sm btn-primary" *ngIf="value =='Access Rights' && hasRights == true "
+                    (click)="showDialog_group_rights('Group')">
+                    <i class="fa fa-plus"></i> Edit Groups</button>
+
+                <button class="btn btn-sm btn-primary" *ngIf="value =='Access Rights' && hasRights == true"
+                    (click)="saveGroupRights()">
+                    <i class="fa fa-save"></i> Save</button>
+
+                <!-- <button class="btn btn-sm btn-primary" *ngIf="(value =='Employee List') && (queryparams.mode != 'E')" (click)="UpdatePosition(unit_emp_list)">
+                    <i class="fa fa-save"></i> Save</button> -->
+
+
+
+                <!-- </div> -->
+            </div>
+            <tabset #modulesubTabset class="sub_tab_container" *ngIf="hasRights == false">
+                <tab id="stab_details_processinfo" heading="{{details_sub_tab.stab_details_processinfo}}" class="mt-2"
+                    (select)="onSelect($event)">
+                </tab>
+                <tab [active]="false" id="stab_details_uemplist" heading="{{details_sub_tab.stab_details_uemplist}}"
+                    class="mt-2" (select)="onSelect($event)">
+                </tab>
+                <tab [active]="false" id="stab_details_managefiltertags"
+                    heading="{{details_sub_tab.stab_details_managefiltertags}}" class="mt-2" (select)="onSelect($event)"
+                    [disabled]="queryparams.mode == 'E' && queryparams.t == 'stab_details_uemplist'">
+                </tab>
+                <tab [active]="false" id="stab_details_changelogs" heading="{{details_sub_tab.stab_details_changelogs}}"
+                    class="mt-2" (select)="onSelect($event)"
+                    [disabled]="queryparams.mode == 'E' && queryparams.t == 'stab_details_uemplist'">
+                </tab>
+                <tab [active]="false" id="stab_details_submchangelogs"
+                    heading="{{details_sub_tab.stab_details_submchangelogs}}" class="mt-2" (select)="onSelect($event)"
+                    [disabled]="queryparams.mode == 'E' && queryparams.t == 'stab_details_uemplist'">
+                </tab>
+                <tab [active]="false" id="stab_details_accessrights"
+                    heading="{{details_sub_tab.stab_details_accessrights}}" class="mt-2" (select)="onSelect($event)"
+                    [disabled]="queryparams.mode == 'E' && queryparams.t == 'stab_details_uemplist'">
+                </tab>
+                <div class="ui-g">
+                    <div class="ui-g-12 no-padding">
+                        <div class="page-restricted">
+                            <span>Access to this page is restricted</span>
+                        </div>
+                    </div>
+                </div>
+            </tabset>
+            <tabset #modulesubTabset class="sub_tab_container" *ngIf="hasRights == true">
+                <tab [active]="false" id="stab_details_uemplist" heading="{{details_sub_tab.stab_details_uemplist}}"
+                    class="mt-2" (select)="onSelect($event)">
+                    <div class="ui-g" autocomplete="off" novalidate>
+                        <div class="ui-g-12 ui-md-12 no-padding">
+                            <div class="ui-g-12 ui-md-12 no-padding" id="details_uemplist">
+                                <p-panel header="Employee Details" styleClass="customTitleBar green_panel">
+                                    <!-- <div class="btn-group" dropdown #filterdropdown="bs-dropdown" [autoClose]="true"
+                                    *ngIf="this.queryparams.mode == 'E'">
+                                    <button dropdownToggle type="button" class="btn dropdown_btn dropdown-toggle">
+                                        <i class="fa fa-filter fa-sm "></i> Filter
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-triggers-manual">
+                                        <li *ngFor="let filter of filtertag;" role="menuitem">
+                                            <a class="dropdown-item" href="javascript:void(0)" *ngIf="filter.tagSelect == 1"
+                                                (click)="View_filterInfo(filter.userId)">
+                                                <i class="fa fa-angle-double-right fa-sm "></i>
+                                                {{ filter.legoTag }}</a>
+                                               
+                                        </li>
+                                    </ul>
+                                </div> -->
+                                    <div class="btn-group" dropdown #filterdropdown="bs-dropdown" [autoClose]="true"
+                                        *ngIf="this.queryparams.mode == 'E'">
+                                        <button dropdownToggle type="button" class="btn dropdown_btn dropdown-toggle">
+                                            <i class="fa fa-filter fa-sm "></i> Filter <span class="caret"></span>
+                                        </button>
+                                        <ul *dropdownMenu class="dropdown-menu" role="menu"
+                                            aria-labelledby="button-triggers-manual">
+                                            <li *ngFor="let filter1 of empfiltertag;trackBy:index" role="menuitem"
+                                                class="dropdown-submenu">
+
+                                                <a class="dropdown-item" data-toggle="dropdown">
+                                                    <i class="fa fa-angle-double-right" aria-hidden="true"></i>{{
+                                                    filter1.legoTag }}
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li style="line-height: 15px !important;cursor:pointer"
+                                                        *ngFor="let lego of filter1.moduleTag;trackBy:index; let i = index">
+                                                        <a class="dropdown-item elipse_text w250 "
+                                                            (click)="View_filterInfo(lego.assignedId)">{{lego.firstName}}</a>
+                                                    </li>
+                                                    <!-- <li style="line-height: 15px !important;cursor:pointer"><a href="#">Another action</a></li> -->
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <p-table #dt [value]="unit_emp_list" [scrollable]="true" scrollHeight="300px"
+                                        [globalFilterFields]="['firstName','lastName']"
+                                        (onRowReorder)="UpdatePosition(unit_emp_list)" [responsive]="true">
+                                        <ng-template pTemplate="caption">
+                                            <form autocomplete="off">
+                                                <div style="text-align: right">
+                                                    <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                                                    <input type="text" pInputText size="30" id="test_txt"
+                                                        placeholder="first name, Last name" [(ngModel)]="emp_filter_txt"
+                                                        (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                                        style="width:auto" [ngModelOptions]="{standalone: true}">
+                                                    <i class="fa fa-close" style="cursor:pointer;margin:4px 4px 0 0"
+                                                        *ngIf="emp_filter_txt.length > 0" (click)="resetTable()"></i>
+
+                                                </div>
+                                            </form>
+                                        </ng-template>
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th class="text-center" style="width:4%;"
+                                                    *ngIf="queryparams.mode != 'E'">Drag</th>
+
+                                                <th class="text-center" style="width:8%;"
+                                                    [pSortableColumn]="'firstName'">First
+                                                    Name
+                                                    <p-sortIcon [field]="'firstName'"></p-sortIcon>
+                                                </th>
+                                                <th class="text-center" style="width:8%;"
+                                                    [pSortableColumn]="'lastName'">Last
+                                                    Name
+                                                    <p-sortIcon [field]="'lastName'"></p-sortIcon>
+                                                </th>
+                                                <th class="text-center" style="width:7%;"
+                                                    [pSortableColumn]="'employeeId'">Submodule
+                                                    ID
+                                                    <p-sortIcon [field]="'employeeId'"></p-sortIcon>
+                                                </th>
+                                                <th class="text-center" style="width:6%;" [pSortableColumn]="'unitId'">
+                                                    Unit
+                                                    <p-sortIcon [field]="'unitId'"></p-sortIcon>
+                                                </th>
+                                                <th class="text-center" style="width:8%;"
+                                                    [pSortableColumn]="'permanentAddress1'">Address
+                                                    <p-sortIcon [field]="'permanentAddress1'"></p-sortIcon>
+                                                </th>
+                                                <th class="text-center" style="width:8%;"
+                                                    [pSortableColumn]="'permanentCity'">City
+                                                    <p-sortIcon [field]="'permanentCity'"></p-sortIcon>
+                                                </th>
+                                                <th class="text-center" style="width:5%;"
+                                                    [pSortableColumn]="'permanentState'">State
+                                                    <p-sortIcon [field]="'permanentState'"></p-sortIcon>
+                                                </th>
+                                                <th class="text-center" style="width:6%;"
+                                                    [pSortableColumn]="'permanentZipcode'">Zip
+                                                    Code
+                                                    <p-sortIcon [field]="'permanentZipcode'"></p-sortIcon>
+                                                </th>
+                                                <th class="text-center" style="width:14%;" [pSortableColumn]="'email'">
+                                                    Email
+                                                    <p-sortIcon [field]="'email'"></p-sortIcon>
+                                                </th>
+                                                <th class="text-center" style="width:10%;"
+                                                    [pSortableColumn]="'permanentPhoneNo'">Mobile
+                                                    <p-sortIcon [field]="'permanentPhoneNo'"></p-sortIcon>
+                                                </th>
+                                                <th class="text-center" class="text-center" style="width:6%;"
+                                                    *ngIf="queryparams.mode != 'E'">Delete</th>
+                                            </tr>
+
+                                        </ng-template>
+
+                                        <ng-template pTemplate="body" let-rowData let-index="rowIndex">
+                                            <tr [pReorderableRow]="index">
+                                                <td class="text-center" style="width:4%;"
+                                                    *ngIf="queryparams.mode != 'E'">
+                                                    <i *ngIf="!isRefModule" class="fa fa-arrows-alt"
+                                                        pReorderableRowHandle></i>
+                                                </td>
+                                                <!-- <td style="width:4%;">{{ index+1 }}</td> -->
+                                                <td style="width:8%;" *ngIf="queryparams.mode != 'E'">
+                                                    {{rowData.firstName}}</td>
+                                                <td style="width:8%;" *ngIf="queryparams.mode == 'E'"
+                                                    [ngClass]="rowData.employeeId == userinfo.EmployeeId ? 'current_user_link' : 'not_current_user_link'">
+                                                    <a style="cursor:pointer;"
+                                                        (click)="employeeInfo(rowData)">{{rowData.firstName}}
+                                                    </a>
+                                                    <!-- <a style="cursor:pointer;" (click)="employeeInfo(rowData)">{{rowData.firstName}}
+                                                </a> -->
+                                                </td>
+                                                <td style="width:8%;" *ngIf="queryparams.mode != 'E'">
+                                                    {{ rowData.lastName }}</td>
+                                                <!-- <td style="width:8%;" *ngIf="queryparams.mode == 'E'" [ngClass]="rowData.employeeId == userinfo.EmployeeId ? 'current_user' : null"> -->
+                                                <td style="width:8%;" *ngIf="queryparams.mode == 'E'">
+                                                    <div>{{ rowData.lastName }}</div>
+                                                </td>
+                                                <td style="width:7%;">
+                                                    <div>{{ rowData.employeeId }}</div>
+                                                </td>
+                                                <td style="width:6%;">
+                                                    <div>{{ rowData.unitId }}</div>
+                                                </td>
+                                                <td style="width:8%;">
+                                                    <div>{{ rowData.permanentAddress1 }}</div>
+                                                </td>
+                                                <td style="width:8%;">
+                                                    <div>{{ rowData.permanentCity }}</div>
+                                                </td>
+                                                <td style="width:5%;">
+                                                    <div>{{ rowData.permanentState }}</div>
+                                                </td>
+                                                <td style="width:6%;">
+                                                    <div>{{ rowData.permanentZipcode }}</div>
+                                                </td>
+                                                <td style="width:14%;">
+                                                    <div>{{ rowData.email }}</div>
+                                                </td>
+                                                <td style="width:10%;">
+                                                    <div>{{ rowData.permanentPhoneNo }}</div>
+                                                </td>
+                                                <td class="text-center" style="width:6%;"
+                                                    *ngIf="queryparams.mode != 'E'">
+                                                    <a style="cursor: pointer;" (click)="delete_Unit_Emp(rowData)">
+                                                        <i class="fa fa-trash" style="font-size:20px;"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+
+                                        <ng-template pTemplate="emptymessage">
+                                            <tr>
+                                                <td class="text-center font-weight-bold">
+                                                    No records found
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </p-panel>
+                            </div>
+                        </div>
+                    </div>
+                </tab>
+                <tab [active]="false" id="stab_details_processinfo" *ngIf="istabvisible==true"
+                    heading="{{details_sub_tab.stab_details_processinfo}}" class="mt-2" (select)="onSelect($event)"
+                    [disabled]="queryparams.mode == 'E' && queryparams.t == 'stab_details_uemplist'">
+                    <div class="ui-g" *ngIf="queryparams.mode != 'E'">
+                        <div class="ui-g-12 ui-md-6 no-padding">
+                            <p-panel header="OWNER" styleClass="green_panel customTitleBar">
+                                <div class="row" style="min-height: 200px !important;">
+                                    <div class="col-lg-10 col-sm-10 col-md-10">
+                                        <div class="form-group row">
+                                            <label for="lbl_user_name" class="col-sm-5 col-form-label">Owner</label>
+                                            <div class="col-sm-5">
+                                                <input name="text" class="form-control" placeholder="" type="text"
+                                                    [(ngModel)]="process_info.firstName" [readonly]=true>
+
+                                            </div>
+                                            <i class="fa fa-arrow-circle-right"
+                                                style="cursor:pointer; padding-top: 8px;" (click)="showownerlist()"
+                                                *ngIf="queryparams.mode == 'T'"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-10 col-sm-10 col-md-10">
+                                        <div class="form-group row ">
+                                            <label for="lbl_master_pwd" class="col-sm-5 col-form-label">Owner
+                                                Title</label>
+                                            <div class="col-sm-5">
+                                                <input name="text" class="form-control" placeholder="" type="text"
+                                                    [(ngModel)]="process_info.title" [readonly]=true>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-10 col-sm-10 col-md-10">
+                                        <div class="form-group row ">
+                                            <label for="lbl_master_pwd" class="col-sm-5 col-form-label">Owner
+                                                Mobile</label>
+                                            <div class="col-sm-5">
+                                                <input name="text" class="form-control" placeholder="" type="text"
+                                                    [(ngModel)]="process_info.permanentPhoneNo" [readonly]=true>
+                                                <!-- <p-inputMask styleClass="full_width" mask="(999) 999-9999" placeholder="(999) 999-9999" [(ngModel)]="process_info.permanentPhoneNo"></p-inputMask> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-10 col-sm-10 col-md-10">
+                                        <div class="form-group row ">
+                                            <label for="lbl_master_pwd" class="col-sm-5 col-form-label">Owner
+                                                Email</label>
+                                            <div class="col-sm-5">
+                                                <input name="text" class="form-control" placeholder="" type="text"
+                                                    [(ngModel)]="process_info.email" [readonly]=true>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </p-panel>
+                        </div>
+                        <div class="ui-g-12 ui-md-6 no-padding">
+                            <p-panel header="INFORMATION" styleClass="customTitleBar green_panel"
+                                *ngIf="queryparams.mode == 'T'">
+                                <div class="row" style="min-height: 200px !important;">
+                                    <div class="col-lg-10 col-sm-10 col-md-10">
+                                        <div class="form-group row">
+                                            <label for="lbl_user_name"
+                                                class="col-sm-5 col-form-label">Name/Heading</label>
+                                            <div class="col-sm-5">
+                                                <input name="text" class="form-control" placeholder="" type="text"
+                                                    [(ngModel)]="process_info.legoName" [readonly]=true>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-10 col-sm-10 col-md-10">
+                                        <div class="form-group row ">
+                                            <label for="lbl_master_pwd" class="col-sm-5 col-form-label">ID</label>
+                                            <div class="col-sm-5">
+                                                <input name="text" class="form-control" placeholder="" type="text"
+                                                    [(ngModel)]="process_info.legoId" [readonly]=true>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-10 col-sm-10 col-md-10">
+                                        <div class="form-group row ">
+                                            <label for="lbl_master_pwd" class="col-sm-5 col-form-label">Number Of
+                                                Processes
+                                            </label>
+                                            <div class="col-sm-5">
+                                                <input name="text" class="form-control" placeholder="" type="text"
+                                                    [(ngModel)]="process_info.total_Process" [readonly]=true>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-10 col-sm-10 col-md-10">
+                                        <div class="form-group row ">
+                                            <label for="lbl_master_pwd" class="col-sm-5 col-form-label">Number Of
+                                                Employees
+                                            </label>
+                                            <div class="col-sm-5">
+                                                <input name="text" class="form-control" placeholder="" type="text"
+                                                    [(ngModel)]="process_info.empCount" [readonly]=true>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-10 col-sm-10 col-md-10">
+                                        <div class="form-group row ">
+                                            <label for="lbl_master_pwd" class="col-sm-5 col-form-label">Number Of
+                                                Organization Unit</label>
+                                            <div class="col-sm-5">
+                                                <input name="text" class="form-control" placeholder="" type="text"
+                                                    value="" [readonly]=true>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p-panel>
+                            <p-panel header="INFORMATION" styleClass="customTitleBar green_panel"
+                                *ngIf="queryparams.mode != 'T'">
+                                <div class="row" style="min-height: 200px !important;">
+                                    <div class="col-lg-10 col-sm-10 col-md-10">
+                                        <div class="form-group row">
+                                            <label for="lbl_user_name"
+                                                class="col-sm-5 col-form-label">Name/Heading</label>
+                                            <div class="col-sm-5">
+                                                <input name="text" class="form-control" placeholder="" type="text"
+                                                    [(ngModel)]="process_info.legoName" [readonly]=true>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-10 col-sm-10 col-md-10">
+                                        <div class="form-group row ">
+                                            <label for="lbl_master_pwd" class="col-sm-5 col-form-label">ID</label>
+                                            <div class="col-sm-5">
+                                                <input name="text" class="form-control" placeholder="" type="text"
+                                                    [(ngModel)]="process_info.legoId" [readonly]=true>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-10 col-sm-10 col-md-10">
+                                        <div class="form-group row ">
+                                            <label for="lbl_master_pwd" class="col-sm-5 col-form-label">Level</label>
+                                            <div class="col-sm-5">
+                                                <input name="text" class="form-control" placeholder="" type="text"
+                                                    [(ngModel)]="process_info.legoLevel" [readonly]=true>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-10 col-sm-10 col-md-10">
+                                        <div class="form-group row ">
+                                            <label for="lbl_master_pwd" class="col-sm-5 col-form-label">Scope</label>
+                                            <div class="col-sm-5">
+                                                <input name="text" class="form-control" placeholder="" type="text"
+                                                    [(ngModel)]="process_info.scope" (blur)="UpdateLego(process_info)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p-panel>
+                        </div>
+
+                    </div>
+
+                    <div class="row" *ngIf="queryparams.mode == 'E'" [formGroup]="employeeForm" novalidate
+                        autocomplete="off">
+                        <!-- <form > -->
+                        <div class=" padding_1 card col-sm-4">
+                            <div class="col-sm-12">
+                                <p-panel header="PERMANENT INFORMATION" styleClass="customTitleBar">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                            <div class="form-group row">
+                                                <label for="lbl_user_name"
+                                                    class="col-sm-5 col-form-label required_label">First
+                                                    Name</label>
+                                                <div class="col-sm-7">
+                                                    <input pInputText class="form-control" placeholder=""
+                                                        maxlength="100" type="text" value="" required
+                                                        formControlName="firstName" #firstname>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                            <div class="form-group row ">
+                                                <label for="lbl_pwd" class="col-sm-5 col-form-label required_label">Last
+                                                    Name</label>
+                                                <div class="col-sm-7">
+                                                    <input pInputText class="form-control" placeholder=""
+                                                        maxlength="100" type="text" value="" formControlName="lastName">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                            <div class="form-group row ">
+                                                <label for="lbl_master_pwd"
+                                                    class="col-sm-5 col-form-label required_label">Address
+                                                    1</label>
+                                                <div class="col-sm-7">
+                                                    <input class="form-control" placeholder="" type="text" value=""
+                                                        required formControlName="permanentAddress1" maxlength="100">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                            <div class="form-group row ">
+                                                <label for="lbl_master_pwd" class="col-sm-5 col-form-label">Address
+                                                    2</label>
+                                                <div class="col-sm-7">
+                                                    <input class="form-control" placeholder="" type="text" value=""
+                                                        formControlName="permanentAddress2" maxlength="100">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                            <div class="form-group row ">
+                                                <label for="lbl_master_pwd"
+                                                    class="col-sm-5 col-form-label required_label">City</label>
+                                                <div class="col-sm-7">
+                                                    <!-- <input pInputText [pKeyFilter]="alphawithspance" class="form-control"
+                                                        placeholder="" type="text" value="" required formControlName="permanentCity"> -->
+                                                    <input pInputText required formControlName="permanentCity"
+                                                        maxlength="100" class="form-control" placeholder="" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                            <div class="form-group row ">
+                                                <label for="lbl_master_pwd"
+                                                    class="col-sm-5 col-form-label required_label">State</label>
+                                                <div class="col-sm-7">
+                                                    <!-- <select class="form-control" required formControlName="permanentState"> -->
+                                                    <!-- <p-dropdown [options]="stateList" [filter]="true" formControlName="permanentState" #autoComplete (onFocus)="autoComplete.show()"
+                                                        required [style]="{'width':'100%'}" optionLabel="name" appendTo="body"></p-dropdown> -->
+                                                    <!-- </select> -->
+                                                    <p-autoComplete formControlName="permanentState"
+                                                        [suggestions]="selectedstateSuggestion"
+                                                        (completeMethod)="filterResponsibilityMultiple($event)"
+                                                        [autoHighlight]="true" placeholder="select state" field="name"
+                                                        [size]="25" [minLength]="0">
+                                                    </p-autoComplete>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                            <div class="form-group row ">
+                                                <label for="lbl_master_pwd"
+                                                    class="col-sm-5 col-form-label required_label">Zip</label>
+                                                <div class="col-sm-7">
+                                                    <input pInputText pKeyFilter="num" maxlength="5"
+                                                        class="form-control" placeholder="" type="text" value=""
+                                                        required formControlName="permanentZipcode">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                            <div class="form-group row ">
+                                                <label for="lbl_master_pwd"
+                                                    class="col-sm-5 col-form-label required_label">Mobile</label>
+                                                <div class="col-sm-7">
+                                                    <p-inputMask styleClass="full_width" mask="(999) 999-9999"
+                                                        placeholder="(999) 999-9999" required
+                                                        formControlName="permanentPhoneNo"></p-inputMask>
+                                                    <!-- <input  class="form-control" placeholder="" type="text" value="(971)221-5552"> -->
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                            <div class="form-group row ">
+                                                <label for="lbl_master_pwd"
+                                                    class="col-sm-5 col-form-label required_label">Email</label>
+                                                <div class="col-sm-7">
+                                                    <input class="form-control" placeholder="" type="text" value=""
+                                                        required formControlName="email">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </p-panel>
+
+                            </div>
+                        </div>
+
+                        <div class=" padding_1 card col-sm-4">
+
+                            <p-panel header="COMMUNICATION INFORMATION" styleClass="customTitleBar">
+                                <div class="row">
+                                    <div class="col-lg-12 col-sm-12 col-md-12">
+                                        <div class="form-group row">
+                                            <label for="lbl_user_name" class="col-sm-5 col-form-label">Address</label>
+                                            <div class="col-sm-7">
+                                                <!-- [checked]="employeeForm.get('chkAddress').value" value="employeeForm.get('chkAddress').value" -->
+                                                <input class="" type="checkbox" formcontrolname="chkAddress"
+                                                    (change)="checkboxChanged($event)"
+                                                    [checked]="employeeForm.get('chkAddress').value == 'true'">
+                                                <label style="font-size: 12px !important;">Same As Permanent?</label>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12 col-sm-12 col-md-12">
+                                        <div class="form-group row ">
+                                            <label for="lbl_pwd" class="col-sm-5 col-form-label required_label">Address
+                                                1</label>
+                                            <div class="col-sm-7">
+                                                <input class="form-control" placeholder="" name="caddr1" type="text"
+                                                    value="" required formControlName="communicationAddress1"
+                                                    [(ngModel)]="emp_info.communicationAddress1" maxlength="100">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-sm-12 col-md-12">
+                                        <div class="form-group row ">
+                                            <label for="lbl_master_pwd" class="col-sm-5 col-form-label">Address
+                                                2</label>
+                                            <div class="col-sm-7">
+                                                <input class="form-control" placeholder="" type="text" value=""
+                                                    maxlength="100" formControlName="communicationAddress2"
+                                                    [(ngModel)]="emp_info.communicationAddress2">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-sm-12 col-md-12">
+                                        <div class="form-group row ">
+                                            <label for="lbl_master_pwd"
+                                                class="col-sm-5 col-form-label required_label">City</label>
+                                            <div class="col-sm-7">
+                                                <input pInputText class="form-control" placeholder="" type="text"
+                                                    value="" required formControlName="communicationCity"
+                                                    [(ngModel)]="emp_info.communicationCity" maxlength="100">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-sm-12 col-md-12">
+                                        <div class="form-group row ">
+                                            <label for="lbl_master_pwd"
+                                                class="col-sm-5 col-form-label required_label">State</label>
+                                            <div class="col-sm-7">
+                                                <!-- <p-dropdown [options]="stateList" [filter]="true" formControlName="communicationState"
+                                                    required [style]="{'width':'100%'}" optionLabel="name" [(ngModel)]="emp_info.communicationState"
+                                                    appendTo="body"></p-dropdown> -->
+
+                                                <p-autoComplete formControlName="communicationState"
+                                                    [suggestions]="selectedstateSuggestion"
+                                                    (completeMethod)="filterResponsibilityMultiple($event)"
+                                                    [autoHighlight]="true" placeholder="select state" field="name"
+                                                    [size]="25">
+                                                </p-autoComplete>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-sm-12 col-md-12">
+                                        <div class="form-group row ">
+                                            <label for="lbl_master_pwd"
+                                                class="col-sm-5 col-form-label required_label">Zip</label>
+                                            <div class="col-sm-7">
+                                                <input pInputText pKeyFilter="num" maxlength="5" class="form-control"
+                                                    placeholder="" type="text" value="" required
+                                                    formControlName="communicationZipcode"
+                                                    [(ngModel)]="emp_info.communicationZipcode">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-sm-12 col-md-12">
+                                        <div class="form-group row ">
+                                            <label for="lbl_master_pwd"
+                                                class="col-sm-5 col-form-label required_label">Mobile</label>
+                                            <div class="col-sm-7">
+                                                <p-inputMask styleClass="full_width" mask="(999) 999-9999"
+                                                    placeholder="(999) 999-9999" required
+                                                    formControlName="communicationPhoneNo"></p-inputMask>
+                                                <!-- <input  class="form-control" placeholder="" type="text" value="(971)221-5552"> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-sm-12 col-md-12">
+                                        <div class="form-group row ">
+                                            <label for="lbl_master_pwd"
+                                                class="col-sm-5 col-form-label required_label">Email</label>
+                                            <div class="col-sm-7">
+                                                <input class="form-control" placeholder="" type="text" value="" required
+                                                    formControlName="communicationEmail" maxlength="50">
+                                                <!-- <input  class="form-control" placeholder="" type="text" value="(971)221-5552"> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p-panel>
+
+                        </div>
+
+                        <div class=" padding_1 card col-sm-4">
+                            <div class="col-sm-12">
+                                <p-panel header="ORGANIZATION INFORMATION" styleClass="customTitleBar">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                            <div class="form-group row">
+                                                <label for="lbl_user_name"
+                                                    class="col-sm-5 col-form-label">Organization</label>
+                                                <div class="col-sm-7">
+                                                    <!-- <input readonly pInputText [pKeyFilter]="allownumberalphaspance"
+                                                        class="form-control" placeholder="" type="text" value=""
+                                                        formControlName="title"> -->
+                                                    <textarea readonly class="form-control" style="resize: none;"
+                                                        formControlName="title"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                            <div class="form-group row ">
+                                                <label for="lbl_pwd"
+                                                    class="col-sm-5 col-form-label required_label">Unit</label>
+                                                <div class="col-sm-7">
+                                                    <input class="form-control" placeholder="" type="text" required
+                                                        formControlName="unitId">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                            <div class="form-group row ">
+                                                <label for="lbl_pwd"
+                                                    class="col-sm-5 col-form-label required_label">Employee
+                                                    Id</label>
+                                                <div class="col-sm-7">
+                                                    <input class="form-control" type="text" required readonly
+                                                        formControlName="employeeId">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                            <div class="form-group row ">
+                                                <label for="lbl_master_pwd"
+                                                    class="col-sm-5 col-form-label required_label">Category</label>
+                                                <div class="col-sm-7">
+                                                    <p-dropdown [options]="empCategoryListDropdown"
+                                                        [style]="{'width':'100%'}" required formControlName="categoryId"
+                                                        appendTo="body">
+                                                        <ng-template let-item pTemplate="item">
+                                                            <div class="ui-helper-clearfix select-box">
+                                                                <div class="elipsis_div">{{item.label}}</div>
+                                                            </div>
+                                                        </ng-template>
+                                                    </p-dropdown>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </p-panel>
+
+                                <p-panel header="ACCOUNT INFORMATION" styleClass="customTitleBar" *ngIf="empshow">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                            <div class="form-group row">
+                                                <label for="lbl_user_name"
+                                                    class="col-sm-5 col-form-label required_label">User
+                                                    Name</label>
+                                                <div class="col-sm-7">
+                                                    <input class="form-control" placeholder="" type="text" value=""
+                                                        minlength="6" maxlength="30" required
+                                                        formControlName="userName">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                            <div class="form-group row ">
+                                                <label for="lbl_pwd"
+                                                    class="col-sm-5 col-form-label required_label">Password</label>
+                                                <div class="col-sm-7">
+                                                    <input class="form-control" placeholder="" type="password" value=""
+                                                        minlength="6" maxlength="30" required
+                                                        formControlName="password">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                            <div class="form-group row ">
+                                                <label for="lbl_master_pwd"
+                                                    class="col-sm-5 col-form-label required_label">Confirm
+                                                    Password</label>
+                                                <div class="col-sm-7">
+                                                    <input class="form-control" formControlName="confirmpassword"
+                                                        minlength="6" maxlength="30" placeholder="" type="password"
+                                                        value="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                            <div class="form-group row ">
+                                                <div class="col-sm-5">
+                                                    <!-- <input type="file" accept="image/*"
+                                                        (change)="uploadProfilePhoto(input)" #input
+                                                        style="margin: 40px 0px 0px 0px;"> -->
+                                                    <!-- <div class="upload-btn-wrapper">
+                                                            <button class="btn btn-primary" >Upload Photo</button>
+                                                            <input type="file" name="myfile" style="cursor: 'pointer'" (change)="uploadProfilePhoto(input)" #input/>
+                                                          </div> -->
+                                                    <label for="file-upload"
+                                                        class="custom-file-upload btn btn-primary btn-sm">
+                                                        <i class="fa fa-cloud-upload"></i> Upload Image
+                                                    </label>
+                                                    <input id="file-upload" type="file" name="myfile"
+                                                        style="cursor: 'pointer'" (change)="uploadProfilePhoto(input)"
+                                                        #input style="display:none;">
+                                                    <span style="color:gray;font-size: 12px;">(Image size should be
+                                                        less
+                                                        than 100KB.)</span>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <!-- <div class="upload-btn-wrapper">
+                                                                <button class="btn btn-primary btn-sm" >Upload Photo</button>
+                                                                <input type="file" name="myfile" style="cursor: 'pointer'" (change)="uploadProfilePhoto(input)" #input/>
+                                                              </div> -->
+
+                                                    <div *ngIf="userPhoto" style="background: white">
+                                                        <img [src]="userPhoto" />
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </p-panel>
+                            </div>
+                        </div>
+                        <!-- </form> -->
+                    </div>
+
+                </tab>
+
+                <tab [active]="false" id="stab_details_managefiltertags"
+                    heading="{{details_sub_tab.stab_details_managefiltertags}}" class="mt-2" (select)="onSelect($event)"
+                    *ngIf="istabvisible==true">
+                    <div class="ui-g">
+
+                        <div class="ui-g-12 ui-md-12 no-padding">
+                            <div class="ui-g-12 ui-md-4 no-padding">
+                                <p-panel header="Tags (for Filtering)" styleClass="green_panel customTitleBar">
+                                    <!-- <p-scrollPanel [style]="{ height: '375px'}" styleClass="workflow_scrollpanel"> -->
+                                    <div style="overflow:auto;height:433px;">
+                                        <div class="col-lg-12 col-sm-12 col-md-12"
+                                            *ngFor="let tag of filtertag;trackBy:index;">
+
+                                            <div class="form-group row">
+                                                <!-- <label for="lbl_user_name" class="col-sm-5 col-form-label">Name/Heading</label> -->
+                                                <div class="col-sm-12">
+                                                    <!-- <input name="text" class="" type="checkbox"> {{tag.value}}   -->
+                                                    <!-- <label class="container1">{{tag.legoTag}}
+                                                        <input type="checkbox" checked="checked">
+                                                        <span class="checkmark"></span>
+                                                    </label> -->
+                                                    <p-checkbox binary="true" name="view" label="{{tag.legoTag}}"
+                                                        [(ngModel)]="tag.tagSelect"
+                                                        (onChange)="isCheckedTag(tag, 'update')"></p-checkbox>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <!-- </p-scrollPanel> -->
+                                </p-panel>
+                            </div>
+                            <div class="ui-g-12 ui-md-8 no-padding">
+                                <p-panel header="Manage Filter Tags" styleClass="green_panel customTitleBar">
+                                    <!-- <p-scrollPanel [style]="{width: '100%', height: '375px'}" styleClass="workflow_scrollpanel"> -->
+
+                                    <p-table [value]="filtertag" [scrollable]="true" scrollHeight="400px"
+                                        (onRowReorder)="reorderFilterList($event)">
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th style="width:4%;" class="text-center">Drag</th>
+                                                <th style="width:5%;">No</th>
+                                                <th style="width:20%;">Tag Name</th>
+                                                <th style="width:5%;" class="text-center">Edit</th>
+                                                <th style="width:5%;" class="text-center">Delete</th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-rowData let-index="rowIndex">
+                                            <tr [pReorderableRow]="index">
+                                                <td style="width:4%;" class="text-center">
+                                                    <i *ngIf="!isRefModule" class="fa fa-arrows-alt"
+                                                        pReorderableRowHandle></i>
+                                                </td>
+                                                <td style="width:5%;">{{ index+1 }}</td>
+                                                <td style="width:20%;">
+                                                    <div>{{ rowData.legoTag }}</div>
+                                                </td>
+
+                                                <td style="width:5%;">
+                                                    <a class="text-center" style="text-align: center"
+                                                        (click)="showFilter_Dialog_edit(rowData, 'update')">
+                                                        <i class="fa fa-edit" style="font-size:20px;"></i>
+                                                    </a>
+                                                </td>
+                                                <td style="width:5%;">
+                                                    <a class="text-center" style="text-align: center"
+                                                        (click)="delete_filter(rowData)">
+                                                        <i class="fa fa-trash" style="font-size:20px;"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                    <!-- </p-scrollPanel> -->
+                                </p-panel>
+                            </div>
+                        </div>
+                    </div>
+
+                </tab>
+                <tab [active]="false" id="stab_details_changelogs" heading="{{details_sub_tab.stab_details_changelogs}}"
+                    class="mt-2" (select)="onSelect($event)" *ngIf="istabvisible==true">
+
+                    <div class="ui-g">
+                        <div class="ui-g-12 ui-md-12 no-padding">
+                            <div class="ui-g-12 ui-md-12 no-padding" id="changelog_table">
+                                <p-panel header="Change Log" styleClass="green_panel customTitleBar">
+
+
+                                    <p-dataTable #tempTable expandableRows="true" scrollable="true" scrollHeight="400px"
+                                        [(value)]="tabchangelog_list" styleClass="table table-striped"
+                                        sortMode="multiple">
+                                        <!-- <p-column field="" header="S.No" [style]="{'width':'5%'}">
+                                            <ng-template let-i="rowIndex" pTemplate="body">
+                                                {{i+1}}
+                                            </ng-template>
+                                        </p-column> -->
+
+                                        <p-column field="legoName" header="Module Name" [sortable]="true"
+                                            [style]="{'width':'20%'}">
+                                        </p-column>
+                                        <p-column field="savFlag" header="Transaction Type" [sortable]="true"
+                                            [style]="{'width':'10%'}">
+                                        </p-column>
+                                        <p-column field="tab" header="Tab" [sortable]="true" [style]="{'width':'25%'}">
+                                        </p-column>
+                                        <p-column field="firstName" header="User" [sortable]="true"
+                                            [style]="{'width':'15%'}">
+                                        </p-column>
+                                        <p-column field="legoId" header="Module Id" [style]="{'width':'10%'}">
+                                        </p-column>
+                                        <p-column field="dateTime" header="Date" [sortable]="true"
+                                            [style]="{'width':'15%'}">
+                                        </p-column>
+                                    </p-dataTable>
+                                </p-panel>
+                            </div>
+                        </div>
+                    </div>
+
+                </tab>
+                <tab [active]="false" id="stab_details_submchangelogs"
+                    heading="{{details_sub_tab.stab_details_submchangelogs}}" class="mt-2" (select)="onSelect($event)"
+                    *ngIf="istabvisible==true">
+
+                    <div class="ui-g" *ngIf="queryparams.mode != 'E'">
+
+                        <div class="ui-g-12 ui-md-12 no-padding" id="submodule_changelog">
+                            <p-panel header="Submodule Change Log" styleClass="green_panel customTitleBar">
+                                <div class="ui-g no-padding">
+
+                                    <div class="ui-g-3 ui-md-3 no-padding">
+                                        <p-tree [value]="[ModuleTreeItems_popup]" selectionMode="single"
+                                            [(selection)]="selectedFile" (onNodeSelect)="nodeSelect($event)">
+                                        </p-tree>
+                                    </div>
+                                    <div class="ui-g-9 ui-md-9 no-padding">
+                                        <p-dataTable #subtempTable sortMode="multiple" [(value)]="modulechangelog_list"
+                                            styleClass="table table-striped" scrollable="true" scrollHeight="300px"
+                                            [responsive]="true">
+                                            <!-- <p-column field="" header="S.No" [style]="{'width':'20%'}">
+                                                <ng-template let-i="rowIndex" pTemplate="body">
+                                                    {{i+1}}
+                                                </ng-template>
+                                            </p-column> -->
+                                            <p-column field="tab" [sortable]="true" header="Module Name"
+                                                [style]="{'width':'30%'}">
+                                            </p-column>
+                                            <p-column field="savFlag" header="Transaction Type"
+                                                [style]="{'width':'20%'}">
+                                            </p-column>
+                                            <p-column field="firstName" [sortable]="true" header="User"
+                                                [style]="{'width':'30%'}">
+                                            </p-column>
+                                            <p-column field="legoId" header="Module Id" [style]="{'width':'30%'}">
+                                            </p-column>
+                                            <p-column field="dateTime" [sortable]="true" header="Date"
+                                                [style]="{'width':'30%'}">
+                                            </p-column>
+                                        </p-dataTable>
+                                    </div>
+                                </div>
+                            </p-panel>
+                        </div>
+
+                    </div>
+
+                    <div class="ui-g" *ngIf="queryparams.mode == 'E'">
+                        <div class="ui-g-12 ui-md-12 no-padding">
+                            <div class="ui-g-12 ui-md-12 no-padding">
+                                <p-panel *ngIf="hasReadOnly" header="{{details_sub_tab.stab_details_submchangelogs}}"
+                                    styleClass="green_panel customTitleBar">
+
+                                    <ck-editor [readonly]="false" debounce="500" [config]="config"
+                                        [(ngModel)]="jobdesc.jobDesc" (blur)="updateJobDesc(jobdesc)"
+                                        class="main_ckeditor" #ckeditor></ck-editor>
+                                </p-panel>
+                                <div class="ui-g" *ngIf="!hasReadOnly">
+                                    <div class="ui-g-12 no-padding">
+                                        <div class="page-restricted">
+                                            <span>Access to this page is restricted</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </tab>
+                <tab [active]="false" id="stab_details_accessrights"
+                    heading="{{details_sub_tab.stab_details_accessrights}}" class="mt-2" (select)="onSelect($event)"
+                    *ngIf="istabvisible==true">
+
+                    <div class="ui-g-12" style="background: #fff;" *ngIf="queryparams.mode != 'E'">
+                        <div class="ui-g-8 no-padding">
+                            <span class="title-1">Access Rights Menu</span>
+                        </div>
+                    </div>
+                    <div class="ui-g" *ngIf="queryparams.mode != 'E'">
+                        <div class="ui-g-12 ui-md-12">
+                            <div class="ui-g-3 access-box">
+                                <div data-role="header">
+                                    <table class="table table-striped">
+                                        <thead align="center">
+                                            <tr>
+                                                <th>
+                                                    <h6>Access Rights</h6>
+                                                </th>
+                                            </tr>
+                                        </thead>
+
+
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <!-- <p-panelMenu [model]="items" [multiple]="false" (click)="menu_select(items)"></p-panelMenu> -->
+                                                    <p-tree [value]="items" [style]="{'width':'100% !important'}"
+                                                        selectionMode="single" [(selection)]="selectedMenu"
+                                                        (click)="menu_select(selectedMenu)"></p-tree>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+
+                            <div class="ui-g-9">
+
+                                <!-- <table class="table table-striped" style="text-align:center">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Employee ID</th>
+                                            <th>Employee</th>
+                                            <th>UnRestricted</th>
+                                            <th>View/ReadOnly</th>
+                                            <th>Restricted</th>
+                                            <th>Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td>All Users</td>
+                                            <td>
+                                                <input type="radio" name="module_rights">
+                                            </td>
+                                            <td>
+                                                <input type="radio" name="module_rights">
+                                            </td>
+                                            <td>
+                                                <input type="radio" name="module_rights">
+                                            </td>
+                                            <td></td>
+
+                                        </tr>
+                                        <tr *ngFor="let c of cols1">
+                                            <td>{{c.No}}</td>
+                                            <td>{{c.ID}}</td>
+                                            <td>{{c.File_Name}}</td>
+                                            <td>
+                                                <input type="radio" name="module_rights">
+                                            </td>
+                                            <td>
+                                                <input type="radio" name="module_rights">
+                                            </td>
+                                            <td>
+                                                <input type="radio" name="module_rights">
+                                            </td>
+                                            <td></td>
+
+                                        </tr>
+                                    </tbody>
+                                </table> -->
+
+                                <p-table [columns]="userAccess_list" [value]="userAccess_list" selectionMode="multiple"
+                                    #dt [resizableColumns]="true" [scrollable]="true" scrollHeight="200px"
+                                    columnResizeMode="expand" [(selection)]="tempselecteduser">
+
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <th>
+                                                Employee Id
+                                            </th>
+                                            <th>
+                                                Employee Name
+                                            </th>
+                                            <th>
+                                                UnRestricted
+                                            </th>
+                                            <th>
+                                                Restricted
+                                            </th>
+                                            <th>
+                                                View/ ReadOnly
+                                            </th>
+                                        </tr>
+
+                                    </ng-template>
+                                    <ng-template pTemplate="body" styleClass="doc_rights_table" let-rowData
+                                        let-rowIndex="rowIndex" let-columns="columns">
+                                        <tr class="doc_rights_table">
+                                            <td style="display: none">
+                                                {{rowData['rightsId']}}
+                                            </td>
+                                            <td>
+                                                {{rowData['employeeId']}}
+                                            </td>
+                                            <td>
+                                                {{rowData['firstName']}}&nbsp;{{ rowData['lastName']}}
+                                            </td>
+                                            <!-- <td pEditableColumn>
+                                                <p-radioButton [pSelectableRow]="rowData" name="{{rowData['employeeId']}}" value="{{rowData.unrestricted}}" (onClick)="setAccess1(rowData,'unrestricted')"
+                                                    [(ngModel)]="rowData.unrestricted"></p-radioButton>
+                                            </td> -->
+                                            <td>
+                                                <p-radioButton [pSelectableRow]="rowData"
+                                                    name="{{rowData['employeeId']}}" value="{{rowData.unrestricted}}"
+                                                    (onClick)="setAccess1(rowData,'unrestricted')"
+                                                    [(ngModel)]="rowData.unrestricted"></p-radioButton>
+                                            </td>
+                                            <td>
+                                                <p-radioButton [pSelectableRow]="rowData"
+                                                    name="{{rowData['employeeId']}}" value="{{rowData.restricted}}"
+                                                    (onClick)="setAccess1(rowData,'restricted')"
+                                                    [(ngModel)]="rowData.restricted"></p-radioButton>
+                                            </td>
+                                            <td>
+                                                <p-radioButton [pSelectableRow]="rowData"
+                                                    name="{{rowData['employeeId']}}" value="{{rowData.readonly}}"
+                                                    (onClick)="setAccess1(rowData,'readonly')"
+                                                    [(ngModel)]="rowData.readonly"></p-radioButton>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage" let-columns>
+                                        <tr>
+                                            <td [attr.colspan]="columns.length" style="text-align: center;">
+                                                No records found
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                                <br />
+                                <p-table [columns]="groupAccess_list" [value]="groupAccess_list"
+                                    selectionMode="multiple" [scrollable]="true" scrollHeight="200px" #dt
+                                    [resizableColumns]="true" columnResizeMode="expand"
+                                    [(selection)]="tempselectedgroup">
+
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <th>
+                                                Group Id
+                                            </th>
+                                            <th>
+                                                Group Name
+                                            </th>
+                                            <th>
+                                                UnRestricted
+                                            </th>
+                                            <th>
+                                                Restricted
+                                            </th>
+                                            <th>
+                                                View/ ReadOnly
+                                            </th>
+                                        </tr>
+
+                                    </ng-template>
+                                    <ng-template pTemplate="body" styleClass="doc_rights_table" let-rowData
+                                        let-rowIndex="rowIndex" let-columns="columns">
+                                        <tr class="doc_rights_table">
+                                            <td>
+                                                {{rowData['groupId']}}
+                                            </td>
+                                            <td>
+                                                {{rowData['groupName']}}
+                                            </td>
+                                            <!-- <td>
+                                                <p-radioButton [pSelectableRow]="rowData" disabled="true" name="grouprights" value="UnRestricted"
+                                                    [(ngModel)]="grouprights"></p-radioButton>
+                                            </td>
+                                            <td>
+                                                <p-radioButton [pSelectableRow]="rowData" disabled="true" name="grouprights"  value="Restricted"
+                                                     [(ngModel)]="grouprights"></p-radioButton>
+                                            </td>
+                                            <td>
+                                                <p-radioButton [pSelectableRow]="rowData" disabled="true" name="grouprights" value="ReadOnly"
+                                                      [(ngModel)]="grouprights"></p-radioButton>
+                                            </td> -->
+                                            <td>
+                                                <p-radioButton [pSelectableRow]="rowData" disabled="true"
+                                                    name="{{rowData['groupId']}}" value="UnRestricted"
+                                                    (onClick)="setAccess1(rowData,'unrestricted')"
+                                                    [(ngModel)]="rowData.unrestricted"></p-radioButton>
+                                            </td>
+                                            <td>
+                                                <p-radioButton [pSelectableRow]="rowData" disabled="true"
+                                                    name="{{rowData['groupId']}}" value="Restricted"
+                                                    (onClick)="setAccess1(rowData,'restricted')"
+                                                    [(ngModel)]="rowData.restricted"></p-radioButton>
+                                            </td>
+                                            <td>
+                                                <p-radioButton [pSelectableRow]="rowData" disabled="true"
+                                                    name="{{rowData['groupId']}}" value="ReadOnly"
+                                                    (onClick)="setAccess1(rowData,'readonly')"
+                                                    [(ngModel)]="rowData.readonly"></p-radioButton>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage" let-columns>
+                                        <tr>
+                                            <td [attr.colspan]="columns.length" style="text-align: center;">
+                                                No records found
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-g" *ngIf="queryparams.mode == 'E'">
+                        <div class="ui-g-12 ui-md-12 no-padding">
+                            <div class="ui-g-12 ui-md-12 no-padding">
+                                <p-panel *ngIf="hasReadOnly" header="{{details_sub_tab.stab_details_accessrights}}"
+                                    styleClass="green_panel customTitleBar">
+
+                                    <ck-editor [readonly]="false" debounce="500" [config]="config"
+                                        [(ngModel)]="jobdesc.skillSet" (blur)="updateJobDesc(jobdesc)"
+                                        class="main_ckeditor" (ready)="onReady($event)" #ckeditor></ck-editor>
+                                </p-panel>
+                                <div class="ui-g" *ngIf="!hasReadOnly">
+                                    <div class="ui-g-12 no-padding">
+                                        <div class="page-restricted">
+                                            <span>Access to this page is restricted</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </tab>
+
+            </tabset>
+
+            <!-- ADD USER IN ORGANIZATION  Dialog -->
+            <p-dialog header="Organization Unit" [(visible)]="display" [modal]="true" [responsive]="true"
+                appendTo="body" [closable]="false">
+                <div class="ocn-status">
+                    <p-dataTable #tempEmpTable expandableRows="true" [(value)]="employee_list" [scrollable]="true"
+                        scrollHeight="400px" [paginator]="false" [rows]="10" selectionMode="multiple"
+                        [(selection)]="tempselectedparticipated" sortMode="multiple">
+                        <p-column field="employeeId" header="" [style]="{'width':'10%'}">
+                        </p-column>
+                        <p-column field="firstName" [filter]="true" header="First Name" [sortable]="true"
+                            [style]="{'width':'20%'}">
+                        </p-column>
+                        <p-column field="lastName" [filter]="true" header="Last Name" [sortable]="true"
+                            [style]="{'width':'20%'}">
+                        </p-column>
+                        <p-column field="employeeId" header="Id" [style]="{'width':'20%'}">
+                        </p-column>
+                    </p-dataTable>
+                </div>
+                <p-footer>
+                    <button type="button" pButton icon="fa-check" label="Save"
+                        (click)="SaveTempEmployee(tempselectedparticipated)"></button>
+                    <button type="button" pButton icon="fa-close" label="Exit" (click)="closeOrg_dialog();"></button>
+                </p-footer>
+
+            </p-dialog>
+            <!-- ADD USER IN ORGANIZATION  Dialog -->
+
+
+
+        </div>
+        <!-- end container -->
+
+        <!-- ADD FILTER TAG POPUP START -->
+        <p-dialog header="{{filter_dialog_header}}" [(visible)]="filter_dialog" [modal]="true" [responsive]="true"
+            appendTo="body" [closable]="false">
+
+            <!-- <div class="ocn-status"> -->
+            <div class="form-group">
+                <label class="required_label">Filter Tag Name</label>
+                <input type="text" class="form-control" id="addTag" #addTag [(ngModel)]="tagName" maxlength="15"
+                    (keyup.enter)="AddUpdateFiltertags(tagName)">
+            </div>
+            <!-- </div> -->
+
+            <p-footer>
+                <!-- <button type="button" class="btn btn-sm btn-primary" (click)="AddUpdateFiltertags(tagName)">Save</button>
+                <button type="button" class="btn btn-sm btn-primary" (click)="filter_dialog=false">Exit</button> -->
+                <p-button icon="fa fa-fw fa-check" label="Save" styleClass="custom_btn"
+                    (click)="AddUpdateFiltertags(tagName)"></p-button>
+                <p-button icon="fa fa-fw fa-close" label="Cancel" styleClass="custom_btn" (click)="filter_dialog=false">
+                </p-button>
+            </p-footer>
+        </p-dialog>
+        <!-- ADD FILTER TAG POPUP END-->
+        <!-- Access User Rights  Dialog -->
+        <p-dialog header="Edit Users" [(visible)]="show_user_rights" [modal]="true" [responsive]="true" appendTo="body"
+            [closable]="false">
+
+            <div class="ocn-status">
+                <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
+                    <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                    <input #gb type="text" pInputText size="50" placeholder="search">
+                </div>
+                <p-dataTable #tempEmpTable expandableRows="true" [globalFilter]="gb" [(value)]="employee_list"
+                    [paginator]="false" scrollable="true" scrollHeight="200px" [rows]="10"
+                    [(selection)]="tempparticipatedemp">
+                    <p-column field="employeeId" header="" [style]="{'width':'10%'}" selectionMode="multiple">
+                    </p-column>
+                    <p-column field="firstName" header="First Name" [style]="{'width':'20%'}">
+                    </p-column>
+                    <p-column field="lastName" header="Last Name" [style]="{'width':'20%'}">
+                    </p-column>
+                    <p-column field="employeeId" header="Id" [style]="{'width':'20%'}">
+                    </p-column>
+                </p-dataTable>
+            </div>
+
+            <p-footer>
+                <button type="button" pButton icon="fa-check" label="Save"
+                    (click)="add_user_rights(tempparticipatedemp)"></button>
+                <button type="button" pButton icon="fa-close" label="Exit" (click)="show_user_rights=false"></button>
+            </p-footer>
+        </p-dialog>
+        <!-- Access User Rights  Dialog -->
+        <!-- GROUP DIALOG START -->
+        <p-dialog header="Edit Groups" [(visible)]="show_group_rights" [modal]="true" [responsive]="true"
+            appendTo="body" [closable]="false">
+            <div class="ocn-status">
+                <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
+                    <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                    <input #groupsearch type="text" pInputText size="50" placeholder="search">
+                </div>
+                <p-dataTable #tempGrpTable expandableRows="true" [globalFilter]="groupsearch" [(value)]="group_list"
+                    [paginator]="false" [rows]="10" scrollable="true" scrollHeight="200px"
+                    [(selection)]="selectedgroup">
+                    <p-column field="groupId" header="Select" [style]="{'width':'10%'}" selectionMode="multiple">
+                    </p-column>
+                    <p-column field="groupName" header="Group Name" [style]="{'width':'30%'}">
+                    </p-column>
+                    <p-column field="groupId" header="Group Id" [style]="{'width':'20%'}">
+                    </p-column>
+                    <p-column field="managerId" header="Id" [style]="{'width':'20%'}">
+                    </p-column>
+                </p-dataTable>
+            </div>
+            <p-footer>
+                <button type="button" pButton icon="fa-check" label="Save" (click)="addToGroup(selectedgroup)"></button>
+                <button type="button" pButton icon="fa-close" label="Exit"
+                    (click)="show_group_rights = false;"></button>
+            </p-footer>
+
+        </p-dialog>
+        <!-- GROUP DIALOG END-->
+
+        <!-- CONFIRMATION DIALOG FOR DELETE FILTER START -->
+        <!-- <p-confirmDialog></p-confirmDialog> -->
+        <!-- CONFIRMATION DIALOG FOR DELETE FILTER START -->
+
+
+
+    </div>
+    <!-- end content -->
+    <!-- Add Owner Dialog -->
+    <p-dialog header="Direct Reporting Manager" [(visible)]="show_owner_dialog" [modal]="true" [positionTop]='110'
+        [responsive]="true" appendTo="body" [closable]="false">
+        <div class="ocn-status">
+            <p-dataTable #tempEmpTable expandableRows="true" [(value)]="employee_list" [paginator]="true" [rows]="10"
+                selectionMode="single" [(selection)]="selectedowner">
+
+                <p-column field="firstName" header="First Name" [style]="{'width':'20%'}">
+                </p-column>
+                <p-column field="lastName" header="Last Name" [style]="{'width':'20%'}">
+                </p-column>
+                <p-column field="employeeId" header="Id" [style]="{'width':'20%'}">
+                </p-column>
+            </p-dataTable>
+        </div>
+        <p-footer>
+            <button type="button" pButton icon="fa-check" label="Add" (click)="addOwner(selectedowner)"></button>
+            <button type="button" pButton icon="fa-close" label="Exit" (click)="closeDialog()"></button>
+        </p-footer>
+
+    </p-dialog>
+    <!-- Add Owner Dialog -->
+
+</div>
+
+
+
+<style>
+    .btn-search {
+        background: rgb(59, 175, 218);
+        border-radius: 0;
+        color: #fff;
+        border-width: 1px;
+        border-style: solid;
+        border-color: rgb(59, 175, 218);
+    }
+
+    .btn-search:link,
+    .btn-search:visited {
+        color: #fff;
+    }
+
+    .btn-search:active,
+    .btn-search:hover {
+        background: rgb(59, 175, 218);
+        color: #fff;
+    }
+
+    #table-wrapper {
+        position: relative;
+    }
+
+    #table-scroll {
+        height: 350px;
+        overflow: auto;
+        margin-top: 20px;
+    }
+
+    #table-wrapper table {
+        width: 100%;
+
+    }
+
+    tr:hover {
+        background-color: #ddd;
+    }
+</style>
+
+<style>
+    .btn1-primary:hover {
+        color: #fff;
+        background-color: #1b8eb7;
+        border-color: #1985ac;
+    }
+
+    .btn1:hover,
+    .btn1:focus {
+        text-decoration: none;
+    }
+
+    .btn1 {
+        display: inline-block;
+        font-weight: 400;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        border: 1px solid transparent;
+
+        font-size: 0.875rem;
+
+        border-radius: 0.25rem;
+
+    }
+
+    .btn1-primary {
+        background-color: #3bafda !important;
+        border: 1px solid #3bafda !important;
+        color: white !important;
+    }
+
+    .btn1-primary:hover {
+        color: #fff;
+        background-color: #1b8eb7;
+        border-color: #1985ac;
+    }
+
+    .btn:hover,
+    .btn:focus {
+        text-decoration: none;
+    }
+
+    .btn1-primary:hover,
+    .btn1-primary:focus,
+    .btn1-primary:active,
+    .btn1-primary.active,
+    .btn1-primary.focus,
+    .btn1-primary:active,
+    .btn1-primary:focus,
+    .btn1-primary:hover,
+    .open>.dropdown-toggle.btn1-primary {
+        background-color: #28a5d4 !important;
+        border: 1px solid #28a5d4 !important;
+    }
+
+
+    .nav-tabs .nav-item {
+        height: 40px !important;
+    }
+
+    .nav.nav-tabs {
+        height: 40px !important;
+    }
+
+    .nav.nav-tabs>li>a {
+        height: 40px !important;
+    }
+
+    .tab-container .nav-tabs .nav-link.active:focus {
+        height: 40px !important;
+    }
+
+    .tab-container .nav-tabs .nav-link {
+        height: 40px !important;
+    }
+</style>
+<style>
+    .container1 {
+        display: block;
+        position: relative;
+        padding-left: 35px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        font-size: 22px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    /* Hide the browser's default checkbox */
+
+    .container1 input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    /* Create a custom checkbox */
+
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 25px;
+        width: 25px;
+        background-color: #eee;
+    }
+
+
+
+    /* When the checkbox is checked, add a blue background */
+
+    .container1 input:checked~.checkmark {
+        background-color: #2196F3;
+    }
+
+    /* Create the checkmark/indicator (hidden when not checked) */
+
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    /* Show the checkmark when checked */
+
+    .container1 input:checked~.checkmark:after {
+        display: block;
+    }
+
+    /* Style the checkmark/indicator */
+
+    .container1 .checkmark:after {
+        left: 9px;
+        top: 5px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+</style>
+<style>
+    .drag-handler {
+        width: 1.4em;
+        position: relative;
+        background-color: #E4E6EB;
+        background-image: linear-gradient(45deg, #E4E6EB, #E4E6EB 2px, #fff 2px, #fff 4px, #E4E6EB 4px, #E4E6EB 9px, #fff 9px, #fff 11px, #E4E6EB 11px, #E4E6EB 16px, #fff 16px, #fff 18px, #E4E6EB 18px, #E4E6EB 22px);
+        background-size: 10px 20px;
+        cursor: move;
+        border-top: 2px solid #FFF;
+        border-bottom: 2px solid #FFF;
+    }
+
+    .drag-handler:active {
+        background-image: linear-gradient(45deg, #bab86c, #bab86c 2px, #fff 2px, #fff 4px, #bab86c 4px, #bab86c 9px, #fff 9px, #fff 11px, #bab86c 11px, #bab86c 16px, #fff 16px, #fff 18px, #bab86c 18px, #bab86c 22px);
+        background-size: 10px 20px;
+    }
+
+    .btn {
+        outline: none;
+    }
+
+    .nav-item5 {
+        display: none;
+    }
+
+    .ui-tabview-nav>li.ui-state-active {
+        background: #32b76d !important;
+
+    }
+</style>
+<style>
+    .dropdown-submenu {
+        position: relative;
+    }
+
+    .dropdown-submenu>.dropdown-menu {
+        top: 0;
+        left: 100%;
+        margin-top: -6px;
+        margin-left: -1px;
+        -webkit-border-radius: 0 6px 6px 6px;
+        -moz-border-radius: 0 6px 6px;
+        border-radius: 0 6px 6px 6px;
+
+    }
+
+    .dropdown-submenu:hover>.dropdown-menu {
+        display: block;
+        max-height: 300px;
+        overflow: auto;
+    }
+
+    .dropdown-submenu>a:after {
+        display: block;
+        content: " ";
+        float: right;
+        width: 0;
+        height: 0;
+        border-color: transparent;
+        border-style: solid;
+        border-width: 5px 0 5px 5px;
+        border-left-color: #ccc;
+        margin-top: 5px;
+        margin-right: -10px;
+    }
+
+    .dropdown-submenu:hover>a:after {
+        border-left-color: #fff;
+    }
+
+    .dropdown-submenu.pull-left {
+        float: none;
+    }
+
+    .dropdown-submenu.pull-left>.dropdown-menu {
+        left: -100%;
+        margin-left: 10px;
+        -webkit-border-radius: 6px 0 6px 6px;
+        -moz-border-radius: 6px 0 6px 6px;
+        border-radius: 6px 0 6px 6px;
+    }
+</style>

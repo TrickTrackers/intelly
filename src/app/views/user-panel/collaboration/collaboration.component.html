@@ -1,0 +1,169 @@
+<!-- <div class="">        
+            <button  class="btn btn_tab" style="float:left" (click)="openmail()">
+                Module Owner</button>        
+</div> -->
+<div id="collaboration-pg" class="content-page component_holder">
+    <tabset #modulesubTabset class="sub_tab_container" *ngIf="hasRights == false">
+
+        <!-- Notes Tab -->
+        <tab id="stab_collaboration_notes" heading="Notes" class="custom_tabs" (select)="onSelect($event)">
+
+        </tab>
+        <!-- Module Owner Tab -->
+        <tab disabled="true" class="custom_tabs" [active]="false" id="stab_collaboration_module" (select)="onSelect($event)">
+            <div *tabHeading class="dropdown" disabled="true" (click)="openmail($event)">
+                Module Owner
+            </div>
+        </tab>
+        <div class="ui-g">
+            <div class="ui-g-12 no-padding">
+                <div class="page-restricted">
+                    <span>Access to this page is restricted</span>
+                </div>
+            </div>
+        </div>
+
+    </tabset>
+    <tabset #modulesubTabset class="sub_tab_container" *ngIf="hasRights == true">
+        <!-- <tab  id="stab_performance_forum" heading="Discussion Forums" class="custom_tabs" (select)="onSelectTab($event)">
+        <p-scrollPanel [style]="{width: '100%'}" styleClass=" child_tabcontent  no-border overflow_y_hide">
+            <p-panel styleClass="green_panel m-r-20">
+                <p-header>
+                    <div class="ui-helper-clearfix">
+                        <span class="ui-panel-title" style="display:inline-block;margin-top:2px">Module Metrics</span>
+                        <button style="float:right" class="btn btn-sm btn-primary mr-15" (click)="addGoalDialog()">
+                            <i class="fa fa-plus"></i> Post New Forum
+                        </button>
+                    </div>
+                </p-header>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Forums</th>
+                            <th>Last Post</th>
+                            <th>Topics</th>
+                            <th>Posts</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Test Forum1</td>
+                            <td>Posted By blake10 3/17/2018 9:40:45 AM</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>
+                                <a (click)="showDialog()">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Test Forum2</td>
+                            <td>Posted By blake10 3/17/2018 9:40:45 AM</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>
+                                <a (click)="showDialog()">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </p-panel>
+        </p-scrollPanel>
+    </tab> -->
+        <!-- Notes Tab -->
+        <tab id="stab_collaboration_notes" heading="Notes" class="custom_tabs" (select)="onSelect($event)">
+            <!-- <p-scrollPanel [style]="{width: '100%'}" styleClass=" child_tabcontent  no-border overflow_y_hide"> -->
+            <!-- <ck-editor id="notes" (blur)="addUpdateNotes()" [(ngModel)]="Notes" [readonly]="false" debounce="500"
+                [config]="config" class="main_ckeditor" (ready)="onReady($event)" #ckeditor></ck-editor> -->
+            <!-- </p-scrollPanel> -->
+
+            <!-- <ng-container *ngIf="(Notes != null)">
+                <ck-editor id="notes" (blur)="addUpdateNotes()" [(ngModel)]="Notes" [readonly]="false" debounce="500"
+                    [config]="config" class="main_ckeditor" (ready)="onReady($event)" class="main_ckeditor" #ckeditor>
+                </ck-editor>
+            </ng-container>
+            <ng-container *ngIf="(Notes == null)"> -->
+                    <ck-editor id="notes" (blur)="addUpdateNotes()" [(ngModel)]="Notes" [readonly]="false" debounce="500"
+                        [config]="config" class="main_ckeditor" (ready)="onReady($event)" class="main_ckeditor" #ckeditor>
+                    </ck-editor>
+                <!-- </ng-container> -->
+        </tab>
+        <!-- Module Owner Tab -->
+        <tab disabled="true" class="custom_tabs" [active]="false" id="stab_collaboration_module" (select)="onSelect($event)">
+            <div *tabHeading class="dropdown" (click)="openmail($event)">
+                Module Owner
+            </div>
+            <!-- <ck-editor [readonly]="false" debounce="500" value="Module Owner" [config]="config"></ck-editor>         -->
+        </tab>
+
+    </tabset>
+</div>
+<!-- Pop Up Dialogs Follows -->
+
+
+<p-dialog header="Edit Forum" [(visible)]="display" [modal]="true" [responsive]="true" appendTo="body">
+    <form>
+        <div class="form-group">
+            <label>Forum Name</label>
+            <input type="text" class="form-control" placeholder="Forum Name">
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea class="form-control w-100 h-100" placeholder="Description"></textarea>
+        </div>
+    </form>
+    <p-footer>
+        <button type="button" pButton icon="fa-check" (click)="display=false" label="Save Changes"></button>
+        <button type="button" pButton icon="fa-close" (click)="display=false" label="Exit"></button>
+    </p-footer>
+
+</p-dialog>
+<!-- Post Forum Pop Up Added -->
+<p-dialog header="Add New Forum" [(visible)]="addForum" [modal]="true" [responsive]="true" appendTo="body">
+    <form>
+        <div class="form-group">
+            <label>Forum Name</label>
+            <!-- <input type="text" class="form-control" id="example" aria-describedby="emailHelp" placeholder="Forum Name"> -->
+            <select class="form-control">
+                <option selected="selected" value="0">--Select Forum Name--</option>
+                <option value="Name Your Own Forum">Name Your Own Forum</option>
+                <option value="Modules Tab Forum">Modules Tab Forum</option>
+                <option value="Plan Tab Forum">Plan Tab Forum</option>
+                <option value="Workflow Tab Forum">Workflow Tab Forum</option>
+                <option value="Documents Tab Forum">Documents Tab Forum</option>
+                <option value="Assessment Tab Forum">Assessment Tab Forum</option>
+                <option value="Performance Tab Forum">Performance Tab Forum</option>
+                <option value="Details Tab Forum">Details Tab Forum</option>
+                <option value="Connections Tab Forum">Connections Tab Forum</option>
+                <option value="Collaboration Tab Forum">Collaboration Tab Forum</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea class="form-control w-100 h-100" placeholder="Description"></textarea>
+        </div>
+    </form>
+    <p-footer>
+        <button type="button" pButton icon="fa-check" (click)="addForum=false" label="Submit Forum"></button>
+        <button type="button" pButton icon="fa-close" (click)="addForum=false" label="Cancel"></button>
+    </p-footer>
+</p-dialog>
+
+<style>
+    btn_tab {
+        background-color: #eee;
+        color: #868686 !important;
+        box-shadow: 1px -1px 2px 0px rgba(0, 0, 0, 0.16), 2px 0px 0px 2px rgba(0, 0, 0, 0.04) !important;
+        background: #eeeeee;
+        border-left: solid 1px #fffdfd;
+        border-right: solid 1px #fffdfd;
+        border-top: solid 1px #fffdfd;
+        border-bottom: none;
+        margin: 0px 1.2px;
+        padding: 5px 10px;
+    }
+</style>

@@ -1,0 +1,228 @@
+<div class="topbutton_section" *ngIf="hasRights == true">
+        <div style="float:right; padding-right:10px;">
+                <button class="btn btn-sm btn-primary" *ngIf="value =='Performance Reviewer'"
+                        (click)="showDialog_Reviewer()">
+                        <i class="fa fa-save"></i> Add Reviewer</button>
+
+        </div>
+</div>
+<div id="assessment-pg" class="content-page component_holder">
+        <!-- Start content -->
+        <div class="content">
+                <div class="container child_tab_container">
+
+                        <tabset #modulesubTabset class="sub_tab_container" *ngIf="hasRights == false">
+                                <tab id="stab_assessment_summary" heading="Summary" class="custom_tabs"
+                                        (select)="onSelect($event)"></tab>
+                                <tab id="stab_assessment_strength" heading="{{tabheading.Strength}}" class="custom_tabs"
+                                        (select)="onSelect($event)"></tab>
+                                <tab id="stab_assessment_weakness" heading="{{tabheading.Weaknesses}}"
+                                        class="custom_tabs" (select)="onSelect($event)"></tab>
+                                <tab id="stab_assessment_opportunities" heading="{{tabheading.Opportunities}}"
+                                        class="custom_tabs" (select)="onSelect($event)"></tab>
+                                <tab id="stab_assessment_threats" heading="{{tabheading.Threats}}" class="custom_tabs"
+                                        (select)="onSelect($event)"></tab>
+                                <tab id="stab_assessment_reviewer" *ngIf="performanceStatus"
+                                        heading="Performance Reviewer" class="custom_tabs" (select)="onSelect($event)">
+                                </tab>
+                                <div class="ui-g">
+                                        <div class="ui-g-12 no-padding">
+                                                <div class="page-restricted">
+                                                        <span>Access to this page is restricted</span>
+                                                </div>
+                                        </div>
+                                </div>
+                        </tabset>
+
+                        <tabset #modulesubTabset class="sub_tab_container" *ngIf="hasRights == true">
+                                <tab id="stab_assessment_summary" heading="Summary" class="custom_tabs"
+                                        (select)="onSelect($event)">
+                                        <p-scrollPanel [style]="{width: '100%'}"
+                                                styleClass=" child_tabcontent  no-border overflow_y_hide">
+                                                <p-panel styleClass="green_panel m-r-20">
+                                                        <p-header>
+                                                                <div class="ui-helper-clearfix">
+                                                                        <span class="ui-panel-title"
+                                                                                style="display:inline-block;margin-top:2px">{{tabheading.Strength}}</span>
+                                                                </div>
+                                                        </p-header>
+                                                        <div class="strat-panel" [innerHTML]="assessment.strength">
+                                                        </div>
+                                                </p-panel>
+
+                                                <p-panel styleClass="green_panel m-r-20">
+                                                        <p-header>
+                                                                <div class="ui-helper-clearfix">
+                                                                        <span class="ui-panel-title"
+                                                                                style="display:inline-block;margin-top:2px">{{tabheading.Weaknesses}}</span>
+                                                                </div>
+                                                        </p-header>
+                                                        <div class="strat-panel" [innerHTML]="assessment.weakness">
+                                                        </div>
+                                                </p-panel>
+
+
+                                                <p-panel styleClass="green_panel m-r-20">
+                                                        <p-header>
+                                                                <div class="ui-helper-clearfix">
+                                                                        <span class="ui-panel-title"
+                                                                                style="display:inline-block;margin-top:2px">{{tabheading.Opportunities}}</span>
+                                                                </div>
+                                                        </p-header>
+                                                        <div class="strat-panel" [innerHTML]="assessment.opportunity">
+                                                        </div>
+                                                </p-panel>
+
+                                                <p-panel styleClass="green_panel m-r-20">
+                                                        <p-header>
+                                                                <div class="ui-helper-clearfix">
+                                                                        <span class="ui-panel-title"
+                                                                                style="display:inline-block;margin-top:2px">{{tabheading.Threats}}</span>
+                                                                </div>
+                                                        </p-header>
+                                                        <div class="strat-panel" [innerHTML]="assessment.threat"></div>
+                                                </p-panel>
+                                                <div class="clearfix" style="min-height: 25px"></div>
+                                        </p-scrollPanel>
+                                </tab>
+                                <!-- Strength Tab -->
+                                <tab id="stab_assessment_strength" heading="{{tabheading.Strength}}" class="custom_tabs"
+                                        (select)="onSelect($event)">
+                                        <!-- <p-scrollPanel [style]="{width: '100%'}" styleClass=" child_tabcontent  no-border overflow_y_hide"> -->
+                                        <ng-container *ngIf="refreshEditor">
+                                                <ck-editor id="txtstrength" #ckeditor="ngModel"
+                                                        [(ngModel)]="assessment.strength"
+                                                        (blur)="AddUpdateAssessment('AddUpdateStrength', 'Strength')"
+                                                        [readonly]="false" debounce="500" [config]="config"
+                                                        class="main_ckeditor">
+                                                </ck-editor>
+                                        </ng-container>
+                                        <!-- <div *ngIf="(assessment.strength != null)">
+                                                <ck-editor id="txtstrength" #ckeditor="ngModel"
+                                                        [(ngModel)]="assessment.strength"
+                                                        (blur)="AddUpdateAssessment('AddUpdateStrength', 'Strength')"
+                                                        [readonly]="false" debounce="500" [config]="config"
+                                                        class="main_ckeditor">
+                                                </ck-editor>
+                                        </div> -->
+                                </tab>
+                                <!-- Weaknesses Tab -->
+                                <tab id="stab_assessment_weakness" heading="{{tabheading.Weaknesses}}"
+                                        class="custom_tabs" (select)="onSelect($event)">
+                                        <ng-container *ngIf="refreshEditor">
+                                                <ck-editor id="txtweak" #ckeditor="ngModel"
+                                                        [(ngModel)]="assessment.weakness"
+                                                        (blur)="AddUpdateAssessment('AddUpdateWeakness', 'Weaknessess')"
+                                                        [readonly]="false" debounce="500" [config]="config"
+                                                        class="main_ckeditor">
+                                                </ck-editor>
+                                        </ng-container>
+
+                                </tab>
+                                <!-- Opportunities Tab -->
+                                <tab id="stab_assessment_opportunities" heading="{{tabheading.Opportunities}}"
+                                        class="custom_tabs" (select)="onSelect($event)">
+                                        <!-- <ng-container *ngIf="refreshEditor"> -->
+                                        <div *ngIf="refreshEditor">
+                                                <ck-editor id="txtoppur" #ckeditor="ngModel"
+                                                        [(ngModel)]="assessment.opportunity"
+                                                        (blur)="AddUpdateAssessment('AddUpdateOpportunity', 'Opportunities')"
+                                                        [readonly]="false" debounce="500" [config]="config"
+                                                        class="main_ckeditor">
+                                                </ck-editor>
+                                        </div>
+
+                                </tab>
+                                <!-- Threats Tab -->
+                                <tab id="stab_assessment_threats" heading="{{tabheading.Threats}}" class="custom_tabs"
+                                        (select)="onSelect($event)">
+                                        <div *ngIf="refreshEditor">
+                                                <ck-editor id="txtthreat" #ckeditor="ngModel"
+                                                        [(ngModel)]="assessment.threat"
+                                                        (blur)="AddUpdateAssessment('AddUpdateThreat', 'Threats')"
+                                                        [readonly]="false" debounce="500" [config]="config"
+                                                        class="main_ckeditor">
+                                                </ck-editor>
+                                        </div>
+                                </tab>
+                                <tab id="stab_assessment_reviewer" *ngIf="performanceStatus"
+                                        heading="Performance Reviewer" class="custom_tabs" (select)="onSelect($event)">
+
+                                        <p-dataTable [(value)]="tempselectedparticipated">
+                                                <p-column field="employeeId" header="Employee Id"
+                                                        [style]="{'width':'20%'}">
+                                                </p-column>
+                                                <p-column field="employeeName" header="Employee Name"
+                                                        [style]="{'width':'40%'}">
+                                                </p-column>
+                                                <p-column field="permanentPhoneNo" header="Employee Phone"
+                                                        [style]="{'width':'40%'}">
+                                                </p-column>
+
+                                                <p-column styleClass="col-button" [style]="{'width':'20%'}">
+                                                        <ng-template pTemplate="header">
+                                                                <span class="ui-column-title">Delete</span>
+                                                        </ng-template>
+                                                        <ng-template let-selectedemployee="rowData" let-ridx="rowIndex"
+                                                                pTemplate="body">
+                                                                <button (click)="deleteReviewer(selectedemployee)"
+                                                                        type="button" class="btn btn-danger btn-sm">
+                                                                        <i class="fa fa-times-circle"></i>
+                                                                </button>
+                                                                <!-- <button type="button" class="btn btn-xs btn-danger" (click)="RemoveEmployee(selectedemployee)">Remove</button> -->
+                                                        </ng-template>
+                                                </p-column>
+                                        </p-dataTable>
+
+                                </tab>
+
+                        </tabset>
+                </div>
+        </div>
+        <!-- <div class = "content" *ngIf ="!assessment.pagerights">
+                <div class="container child_tab_container">
+                        {{assessment.messages}}
+        
+                </div>
+        </div> -->
+</div>
+
+
+
+
+<p-dialog header="Add User(s)" appendTo="body" [(visible)]="employeelist_display" [width]="700" [modal]="true"
+        [closable]="false">
+        <div class="ui-g">
+                <!-- <div class="ui-g-12 ui-md-12">
+                        <button type="button" class="btn btn-xs btn-primary pull-right m-b-5" (click)="revertTempEmployee()">
+                                Cancel</button>
+                        <button type="button" class="btn btn-xs btn-primary pull-right m-b-5 m-r-5" (click)="SaveTempEmployee(temp_nonselectedparticipated)">
+                                Save </button>
+
+                </div> -->
+                <div class="clearfix"></div>
+                <div class="ui-g-12 ui-md-12 no-padding">
+
+                        <p-dataTable #tempEmpTable expandableRows="true" [(value)]="employeelist" [paginator]="true"
+                                [rows]="10" selectionMode="multiple" [(selection)]="temp_nonselectedparticipated">
+                                <p-column field="employeeId" header="" [style]="{'width':'10%'}"
+                                        selectionMode="multiple">
+                                </p-column>
+                                <p-column field="employeeId" header="Employee Id" [style]="{'width':'20%'}">
+                                </p-column>
+                                <p-column field="employeeName" header="Employee Name" [style]="{'width':'40%'}">
+                                </p-column>
+                                <p-column field="permanentPhoneNo" header="Employee Phone" [style]="{'width':'40%'}">
+                                </p-column>
+
+
+                        </p-dataTable>
+                </div>
+        </div>
+        <p-footer>
+                <button type="button" pButton icon="fa-check" (click)="SavePerformanceReviewers()"
+                        label="Save"></button>
+                <button type="button" pButton icon="fa-close" (click)="hideDialog_Reviewer()" label="Cancel"></button>
+        </p-footer>
+
+</p-dialog>

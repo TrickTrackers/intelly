@@ -1,0 +1,280 @@
+<div>
+    <li class="nav-item" dropdown #dropdown="bs-dropdown" [autoClose]="true">
+        <a class="nav-link " dropdownToggle style="cursor:pointer">
+            <i class="fa fa-bar-chart fa-lg mt-3 mr-1 headermenu-icon"></i>
+            <span class="headermenu_txt">Reports</span> </a>
+        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+            <li role="menuitem" style="cursor:pointer">
+                <a class="dropdown-item" (click)="show_module_dialog()" style="line-height: 15px !important">
+                    <i class="fa fa-angle-double-right" aria-hidden="true"></i>My Modules</a>
+            </li>
+            <li class="divider dropdown-divider"></li>
+            <!-- <li role="menuitem" class="dropdown-submenu" style="line-height: 15px !important;cursor:pointer">
+                <a class="dropdown-item" (click)="show_task_dialog()">
+                    <i class="fa fa-angle-double-right" aria-hidden="true"></i>My Tasks</a>
+            </li> -->
+            <li role="menuitem" style="line-height: 15px !important;cursor:pointer">
+                <a class="dropdown-item" (click)="show_task_dialog()">
+                    <i class="fa fa-angle-double-right" aria-hidden="true"></i>My Tasks</a>
+            </li>
+            <li class="divider dropdown-divider"></li>
+            <li role="menuitem" style="line-height: 15px !important;cursor:pointer">
+                <a class="dropdown-item" (click)="show_response_dialog()">
+                    <i class="fa fa-angle-double-right" aria-hidden="true"></i>My Responsibility</a>
+            </li>
+            <li class="divider dropdown-divider"></li>
+
+        </ul>
+    </li>
+</div>
+<p-dialog header="My Module Report" [(visible)]="module_report_dialog" [modal]="true" scrollable="true"
+    [responsive]="true" appendTo="body" [closable]="false" styleClass="fullWidthpopup">
+    <div class="ui-g">
+        <div class="col-lg-12 col-sm-12 col-md-12" style="padding-left: 2px;">
+            <!-- ocn-status -->
+            <div class="col-md-12">
+                <!-- <p-dataTable #tempTable expandableRows="true" [(value)]="module_report_list" id="mdl_rpt"
+                    scrollable="true" [scrollHeight]="getTableHeight()">
+                    <p-column field="moduleId" header="Module Id" [style]="{'width':'20%'}">
+                    </p-column>
+                    <p-column field="moduleName" header="Module Name" [style]="{'width':'30%'}">
+                    </p-column>
+                    <p-column field="subModuleCount" header="No. Of SubModule" [style]="{'width':'30%'}">
+                    </p-column>
+                    <p-column field="sub_ModuleName" header="subModule Name" [style]="{'width':'30%'}">
+                    </p-column>
+                    <p-column field="taskListCount" header="No. Of Tasks" [style]="{'width':'30%'}">
+                    </p-column>
+                    <p-column field="taskName" header="Task Name" [style]="{'width':'30%'}">
+                    </p-column>
+                    <p-column field="docmentCount" header="No. Of Documents" [style]="{'width':'30%'}">
+                    </p-column>
+                    <p-column field="documentTitle" header="Document Title" [style]="{'width':'30%'}">
+                    </p-column>
+                </p-dataTable> -->
+
+                <!-- <p-treeTable [value]="module_report_list">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Module Id</th>
+                            <th>Module Name</th>
+                            <th>No. Of SubModule</th>
+                            <th>Submodule Name</th>
+                            <th>No. Of Tasks</th>
+                            <th>Task Name</th>
+                            <th>No. Of Documents</th>
+                            <th>Document Title</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+                        <tr >
+                            <td>
+                                <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                                {{rowData.moduleId}}
+                            </td>
+                            <td>{{rowData.moduleName}}</td>
+                            <td>{{rowData.subModuleCount}}</td>
+                            <td>{{rowData.sub_ModuleName}}</td>
+                            <td>{{rowData.taskListCount}}</td>
+                            <td>{{rowData.taskName}}</td>
+                            <td>{{rowData.docmentCount}}</td>
+                            <td>{{rowData.documentTitle}}</td>
+                        </tr>
+                    </ng-template>
+                </p-treeTable> -->                
+                <p-treeTable [value]="module_report_list" expanded="true" id="report" scrollHeight=100%
+                    styleClass="reporttree_container lightgreen_panel">
+                    <p-column [style]="{'width':'40%','text-align':'left'}" field="legoName" header="Module Name">
+                        <ng-template let-node="rowData" pTemplate="body">
+                            <span *ngIf="node.type == 'Folder' "> {{ node.legoName }}
+                                <!-- <span class="path">{{ node.path }} </span> -->
+                            </span>
+                        </ng-template>
+                    </p-column>
+                    <p-column [style]="{'width':'20%'}" field="tempId" header="Lego Id">
+                        <ng-template let-node="rowData" pTemplate="body">
+                            <a style="cursor:pointer;color: blueviolet">{{node.tempId}}</a>
+
+                        </ng-template>
+                    </p-column>
+                    <p-column [style]="{'width':'20%'}" field="size" header="No. Of SubModule">
+                        <ng-template let-node="rowData" pTemplate="body">
+                            <!-- {{node.subModuleCount}} -->
+                            {{node.tempmodcount}}
+
+                        </ng-template>
+                    </p-column>
+                    <p-column [style]="{'width':'20%'}" field="size" header="Sub Module">
+                        <ng-template let-node="rowData" pTemplate="body">
+                            {{node.sub_ModuleName}}
+                            <!-- {{node.tempmodname}} -->
+
+                        </ng-template>
+                    </p-column>
+                    <p-column [style]="{'width':'20%'}" field="size" header="No. Of TaskList">
+                        <ng-template let-node="rowData" pTemplate="body">
+                            {{node.taskListCount}}
+
+                        </ng-template>
+                    </p-column>
+                    <p-column [style]="{'width':'20%'}" field="size" header="Task Name">
+                        <ng-template let-node="rowData" pTemplate="body">
+                            {{node.taskName}}
+
+                        </ng-template>
+                    </p-column>
+                    <p-column [style]="{'width':'20%'}" field="size" header="No. of Document">
+                        <ng-template let-node="rowData" pTemplate="body">
+                            {{node.docmentCount}}
+
+                        </ng-template>
+                    </p-column>
+                    <p-column [style]="{'width':'20%'}" field="size" header="Document Title">
+                        <ng-template let-node="rowData" pTemplate="body">
+                            {{node.documentTitle}}
+
+                        </ng-template>
+                    </p-column>
+
+                </p-treeTable>
+            </div>
+        </div>
+    </div>
+    <p-footer>
+        <button type="button" pButton icon="fa-check" label="Print" id="btnprintMymodule"
+            (keyup.enter)="moduleReport('mdl_rpt')" (click)="moduleReport('mdl_rpt')"></button>
+        <button type="button" pButton icon="fa-close" label="Exit" (click)="module_report_dialog = false"></button>
+    </p-footer>
+</p-dialog>
+
+
+<p-dialog header="My Task Report" [(visible)]="task_report_dialog" [modal]="true" [responsive]="true" appendTo="body"
+    [closable]="false" styleClass="fullWidthpopup">
+    <div class="ui-g" *ngIf="task_report_dialog == true">
+        <div class="col-lg-12 col-sm-12 col-md-12" style="padding-left: 2px;">
+            <!-- ocn-status -->
+            <div class="col-md-12">
+                <p-dataTable #tempTable expandableRows="true" [(value)]="task_report_list" scrollable="true"
+                    [scrollHeight]="getTableHeight()" id="tsk_rpt">
+                    <p-column field="taskName" header="Task Name" [style]="{'width':'20%'}">
+                    </p-column>
+                    <p-column field="subTaskName" header="Sub Task Name" [style]="{'width':'30%'}">
+                    </p-column>
+                    <p-column field="comments" header="Comments" [style]="{'width':'30%'}">
+                    </p-column>
+                    <p-column field="fileName" header="File Name" [style]="{'width':'30%'}">
+                    </p-column>
+                    <p-column field="startDate" header="Start Date" [style]="{'width':'30%'}">
+                    </p-column>
+                    <p-column field="endDate" header="End Date" [style]="{'width':'30%'}">
+                    </p-column>
+                    <p-column field="responsibilityUser" header="Responsibility Users" [style]="{'width':'30%'}">
+                    </p-column>
+
+                </p-dataTable>
+            </div>
+        </div>
+    </div>
+    <p-footer>
+        <button type="button" pButton icon="fa-check" label="Print" id="btnprintTask"
+            (keyup.enter)="taskReport('tsk_rpt')" (click)="taskReport('tsk_rpt')"></button>
+        <button type="button" pButton icon="fa-close" label="Exit" (click)="task_report_dialog = false"></button>
+    </p-footer>
+</p-dialog>
+
+
+<p-dialog header="My Responsibility Report" [(visible)]="response_report_dialog" [modal]="true" [responsive]="true"
+    appendTo="body" [closable]="false" styleClass="fullWidthpopup">
+    <div class="ui-g">
+        <div class="col-lg-12 col-sm-12 col-md-12" style="padding-left: 2px;">
+            <!-- ocn-status -->
+            <div class="col-md-12">
+                <p-dataTable #tempTable expandableRows="true" [(value)]="response_report_list" scrollable="true"
+                    [scrollHeight]="getTableHeight()" id="res_rpt">
+                    <p-column field="taskName" header="Task Name" [style]="{'width':'20%'}">
+                    </p-column>
+                    <p-column field="subTaskName" header="Sub Task Name" [style]="{'width':'30%'}">
+                    </p-column>
+                    <p-column field="comments" header="Comments" [style]="{'width':'30%'}">
+                    </p-column>
+                    <p-column field="fileName" header="File Name" [style]="{'width':'30%'}">
+                    </p-column>
+                    <p-column field="startDate" header="Start Date" [style]="{'width':'30%'}">
+                    </p-column>
+                    <p-column field="endDate" header="End Date" [style]="{'width':'30%'}">
+                    </p-column>
+                    <p-column field="responsibilityUser" header="Responsibility Users" [style]="{'width':'30%'}">
+                    </p-column>
+
+                </p-dataTable>
+            </div>
+        </div>
+    </div>
+    <p-footer>
+        <button type="button" pButton icon="fa-check" label="Print" id="btnprintMytask"
+            (keyup.enter)="ResponsibilityReport('res_rpt')" (click)="ResponsibilityReport('res_rpt')"></button>
+        <button type="button" pButton icon="fa-close" label="Exit" (click)="response_report_dialog = false"></button>
+    </p-footer>
+</p-dialog>
+
+<style>
+    .dropdown-submenu {
+        position: relative;
+    }
+
+    .dropdown-submenu>.dropdown-menu {
+        top: 0;
+        left: 100%;
+        margin-top: -6px;
+        margin-left: -1px;
+        -webkit-border-radius: 0 6px 6px 6px;
+        -moz-border-radius: 0 6px 6px;
+        border-radius: 0 6px 6px 6px;
+
+    }
+
+    .dropdown-submenu:hover>.dropdown-menu {
+        display: block;
+        max-height: 300px;
+        overflow: auto;
+    }
+
+    .dropdown-submenu>a:after {
+        display: block;
+        content: " ";
+        float: right;
+        width: 0;
+        height: 0;
+        border-color: transparent;
+        border-style: solid;
+        border-width: 5px 0 5px 5px;
+        border-left-color: #ccc;
+        margin-top: 5px;
+        margin-right: -10px;
+    }
+
+    .dropdown-submenu:hover>a:after {
+        border-left-color: #fff;
+    }
+
+    .dropdown-submenu.pull-left {
+        float: none;
+    }
+
+    .dropdown-submenu.pull-left>.dropdown-menu {
+        left: -100%;
+        margin-left: 10px;
+        -webkit-border-radius: 6px 0 6px 6px;
+        -moz-border-radius: 6px 0 6px 6px;
+        border-radius: 6px 0 6px 6px;
+    }
+
+    .reporttree_container>.ui-treetable-tablewrapper>table>tbody.ui-treetable-data>div.ui-treetable-row:first-child {
+        /* display: none !important; */
+    }
+
+    .reporttree_container>.ui-treetable-tablewrapper {
+        overflow-y: scroll !important;
+        height: 450px !important;
+    }
+</style>

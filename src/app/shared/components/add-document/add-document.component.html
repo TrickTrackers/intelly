@@ -1,0 +1,90 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-5 ">
+            <div class="form-group">
+                <label class="required_label">Select File to Upload</label>
+                <input #file type="file" />
+
+            </div>
+            <div class="form-group">
+                <p-checkbox binary="true" name="isCheck" label="Add this file to new Version to an Existing File"
+                    [(ngModel)]="addDocument.isCheck"></p-checkbox>
+            </div>
+        </div>
+        <div class="col-md-3 ">
+            <div class="form-group">
+                <label class="required_label">File Description</label>
+                <textarea class="form-control" placeholder="Description" [(ngModel)]="addDocument.title" maxlength="100"></textarea>
+            </div>
+
+        </div>
+        <div class="col-md-3 ">
+            <div class="form-group">
+                <label class="required_label">Date
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                </label>
+                <input type="text" #dp="bsDatepicker" bsDatepicker class="form-control" id="example" [(ngModel)]="addDocument.docDate"
+                    readonly [bsConfig]="bsConfig">
+            </div>
+        </div>
+    </div>
+    <!-- <h5>Comments</h5> -->
+    <div class="row">
+        <div class="col-md-12 " *ngIf="(queryparams.lLvl != 1 && queryparams.mode == 'D') || queryparams.mode == 'T' || queryparams.mode == 'O' || queryparams.mode == 'P' || queryparams.mode == 'E' || queryparams.mode == 'S'">
+            <div class="form-group">
+                <ck-editor [readonly]="false" style="height:50px !important;" [config]="config" [(ngModel)]="addDocument.comments">
+                </ck-editor>
+            </div>
+        </div>
+        <div class="col-md-9 " *ngIf="queryparams.lLvl == 1 && queryparams.mode == 'D'">
+            <div class="form-group">
+                <ck-editor [readonly]="false" style="height:50px !important; width: 150px;" [config]="config"
+                    [(ngModel)]="addDocument.comments">
+                </ck-editor>
+            </div>
+        </div>
+        <div class="col-md-3 " *ngIf="queryparams.lLvl == 1 && queryparams.mode == 'D'">
+            <div class="form-group">
+                <!-- <p-tree [value]="[ModuleTreeItems_popup]" selectionMode="checkbox" [(selection)]="selectednodeModule" [style]="{'max-height':'400px','overflow-y':'scroll'}">
+                </p-tree> -->
+                <div class="doc-body">
+                    <div class="doc-list">
+                        <div class="doc-list-body">
+                            <ng-template #recursiveList let-TreeItems let-parentModule='parentModule'>
+                                <li class="doc-listitem">
+                                    <div class="doc_link_holder" [ngClass]="{ 'active' : (TreeItems.legoId == selectedModuleId) }">
+                                        <span *ngIf="checkChildExist(TreeItems)" class="documentmodule_expandcollapse"
+                                            [ngClass]="(TreeItems.expanded == true) ? 'doctree_expanded' : 'doctree_collapsed'"
+                                            (click)="toggleExpandCollapse(TreeItems,$event)">
+                                            <i class="icon-arrow-down icons collapsed"></i>
+                                            <i class="icon-arrow-up icons expanded"></i>
+                                        </span>
+                                        <p-checkbox name="selectedLinkModules" [value]="TreeItems.legoId" [(ngModel)]="selectedLinkModuleItems"></p-checkbox>
+                                        <!-- <input type="checkbox" [(ngModel)]="selectedModuleIds" value="{{TreeItems.legoId}}" /> -->
+                                        <a class="doc-link" style="cursor: pointer"> {{ TreeItems.legoName }}</a>
+                                    </div>
+                                    <div class="doc_child_holder" *ngIf="TreeItems.expanded == true">
+                                        <ul class="moduledropdown-items" *ngFor="let listChild of TreeItems.children;trackBy:index;let in = index;">
+                                            <!-- <a class="sidebarmodule-link" routerLink="{{ listChild.url }}"><div>
+                                            {{ listChild.legoName }}</div>
+                                        </a> -->
+                                            <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: listChild,parentModule:TreeItems}"></ng-container>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ng-template>
+                            <div style="width:100%;max-height:calc( 55vh );overflow-y:auto;overflow-x:auto">
+                                <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: ModuleTreeItems_popup,parentModule : null}"></ng-container>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <p-footer style="float:right;">
+        <p-button icon="fa fa-fw fa-check" label="Save" styleClass="custom_btn" (click)="Docupload(file.files, addDocument, selectednodeModule)"></p-button>
+        <p-button icon="fa fa-fw fa-close" label="Cancel" styleClass="custom_btn" (click)="closeModal(file.files, selectednodeModule)"></p-button>
+    </p-footer>
+</div>

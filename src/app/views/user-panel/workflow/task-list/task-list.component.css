@@ -1,0 +1,253 @@
+.ngx-contextmenu li:last-child>a:hover {
+  background: #fff !important;
+}
+
+.ngx-contextmenu ul.dropdown-menu li:last-child a:hover {
+  background: #fff !important;
+}
+
+.comment_section {
+  text-align: left;
+}
+
+.comment_section .comment_cname {
+  width      : 97%;
+  float      : right;
+  font-weight: bold;
+}
+
+.comment_section .user_icon {
+  font-size: 20px;
+}
+
+.comment_options {
+  color    : #3bafda;
+  font-size: 15px;
+}
+
+#taskcomp-topdropdown {
+  top: 119px;
+}
+
+.fa.fa-calendar {
+  padding-right: 3px;
+}
+
+i.fa.fa-user.user_icon {
+  float        : left;
+  width        : auto;
+  padding-right: 10px;
+}
+
+.comment_section[_ngcontent-c19] .comment_cname[_ngcontent-c19] {
+  width: auto;
+  float: left;
+}
+
+.responsibility_autocomplete {}
+
+.checkList-items-container {
+  border-right : solid 1px #d6d6d6;
+  border-left  : solid 1px #d6d6d6;
+  border-bottom: 1px solid #d6d6d6;
+  margin-bottom: 5px;
+}
+
+.checkList-items-card-container {
+  border-right : solid 1px #d6d6d6;
+  border-left  : solid 1px #d6d6d6;
+  border-bottom: 1px solid #d6d6d6;
+  margin-bottom: 5px;
+  width        : 185px;
+}
+
+.checkList-items-card-container .checkList-items {
+  border-top: solid 1px #d6d6d6;
+  padding   : 5px !important;
+}
+
+.checkList-items-card-container .check-list-title {
+  margin    : 0;
+  text-align: center;
+  font-size : 15px;
+}
+
+.checkList-items-container .check-list-title {
+  margin    : 0;
+  text-align: center;
+  font-size : 15px;
+}
+
+.checkList-items-container .checkList-items {
+  border-top: solid 1px #d6d6d6;
+  padding   : 5px !important;
+}
+
+.checkList-items-container .check-list-header {
+  padding   : 5px 0px !important;
+  background: #ebedf0;
+  border-top: solid 1px #d6d6d6;
+}
+
+.checklist-chosen {
+  border: solid 1px #a2d0f4;
+  color : #0000;
+}
+
+.p-l-5 {
+  padding-left: 5px !important;
+}
+
+.p-r-5 {
+  padding-right: 5px !important;
+}
+
+.checkList-items-container .checkList-item-block1 {}
+
+.checkList-items-container .checkList-item-block2 {}
+
+.checkList-items-container .checkList-item-block3 {
+  text-align: center;
+}
+
+.ui-inplace .ui-inplace-display {
+  display: block !important;
+}
+
+.checkList-items.checklist-chosen {
+  color      : #100f0f !important;
+  font-weight: bold;
+}
+
+.checkList-item-break {
+  white-space: initial !important;
+  word-break : break-all !important;
+}
+
+/* .tooltip-inner {
+  min-width       : 300px ! important;
+  min-height      : 300px ! important;
+  padding         : 3px 8px;
+  color           : #ffffff;
+  text-align      : left !important;
+  text-decoration : none;
+  background-color: #000000;
+  border-radius   : 4px;
+} */
+
+.responsibility_list {
+  padding-left: 10px;
+}
+
+.ui-inputgroup {
+  display   : -webkit-box;
+  display   : -ms-flexbox;
+  display   : flex;
+  overflow  : none;
+  word-break: break-word !important;
+  word-wrap : break-word;
+  /* firefox style */
+}
+
+.panelcolor_ul_holder {
+  padding: 0px;
+  margin-top: -3px;
+  z-index: 999;
+  left: auto;
+  right: auto;
+  margin-left: -13px;
+  float: left;
+  overflow: hidden; 
+}
+
+.panelcolor_ul {
+  /* position: absolute; */
+  padding:0px;
+  margin:1px;
+}
+
+.panelcolor_li {
+  background: red;
+  margin-top: 1px;
+}
+
+.checklist-name {
+  float     : left;
+  min-width : 155px;
+  max-width : 158px;
+  word-break: break-word;
+}
+
+.checklist-edit {
+  float  : right;
+  display: none;
+}
+
+.checklist-edit i {
+  padding-top: 5px;
+}
+
+.selectedtask_popup {
+  position  : fixed;
+  width     : 100%;
+  height    : 100%;
+  background: #666666;
+  opacity   : .50;
+  z-index   : 1003;
+}
+
+.selectedtask_popup_container {
+
+  display   : block;
+  width     : 1000px;
+  min-width : 150px;
+  min-height: 150px;
+  z-index   : 1004;
+  left      : 460px;
+  top       : 50px;
+  opacity   : 1;
+
+  position  : fixed;
+  padding   : 0;
+  background: #fff !important;
+  border    : 1px solid #D5D5D5;
+}
+
+.dummy_subtask_minheight {
+  min-height: 50px;
+  background: red;
+}
+
+.custom-card-header {
+  width   : 100% !important;
+  overflow: hidden !important;
+}
+
+.cardtextareaholder {
+  display: none;
+}
+
+.cardbuttonholder {
+  display: none;
+  min-width:25px !important;
+}
+
+.task-card-input-style {
+  width     : 100%;
+  min-height: 35px !important;
+  max-height: 35px !important;
+  resize    : none;
+  overflow-y  : scroll !important;
+}
+.full-width{
+  width: 100
+}
+.hide{
+  display: none !important;
+}
+.task_textbox{
+  width: 175px;
+}
+.panelcolor_collapsed{
+  height: 20px !important;
+}

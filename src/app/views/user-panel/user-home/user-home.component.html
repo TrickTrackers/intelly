@@ -1,0 +1,134 @@
+<!-- <link href="./assets/css/user-home.css" rel="stylesheet" type="text/css"> -->
+<div class="animated fadeIn content dashboard" *ngIf="RedirectToDefaultTab == true">
+    <div class="container">
+        <div class="row dash-board">
+            <div class="col-lg-4 col-md-4 col-sm-4 m-b-2">
+                <!-- <a [routerLink]="['/submodule']" [queryParams]="{ t: 'submodule'}"> -->
+                    <a (click) = "navigateRoute('submodule','submodules')">
+                    <div class="portlet">
+                        <div class="portlet-body dash-section blu-bgs ">
+                            <div class="img-txt-pad"><span class="img-txt blu-bg"></span>
+                                <!--<img src="assets/images/icon1.png" width="" height="">--></div>
+                            <div class="rgt-txt">
+                                <div class="value-txt">SubModules</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 m-b-2">
+                <!-- <a [routerLink]="['/workflow']" [queryParams]="{ t: 'workflow'}"> -->
+                    <a (click) = "navigateRoute('workflow','tasks')">
+                    <div class="portlet">
+                        <div class="portlet-body dash-section grn-bgs">
+                            <div class="img-txt-pad"> <span class="img-txt grn-bg"> </span></div>
+                            <div class="rgt-txt">
+                                <div class="value-txt">Work Flow</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 m-b-2">
+                <!-- <a [routerLink]="['/documents']" [queryParams]="{ t: 'documents'}"> -->
+                    <a (click) = "navigateRoute('documents','stab_view_document')">
+                    <div class="portlet">
+                        <div class="portlet-body dash-section orng-bgs">
+                            <div class="img-txt-pad"> <span class="img-txt orng-bg"></span> </div>
+                            <div class="rgt-txt">
+                                <div class="value-txt">Documents</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 m-b-2">
+                <!-- <a [routerLink]="['/strategy']" [queryParams]="{ t: 'strategy'}"> -->
+                    <a (click) = "navigateRoute('strategy','stab_strategy_summary')">
+                    <div class="portlet">
+                        <div class="portlet-body dash-section ylw-bgs">
+                            <div class="img-txt-pad"> <span class="img-txt ylw-bg"></span> </div>
+                            <div class="rgt-txt">
+                                <div class="value-txt">Strategy</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 m-b-2">
+                <!-- <a [routerLink]="['/assessment']"> -->
+                    <a (click) = "navigateRoute('assessment','stab_assesment_threats')">
+                    <div class="portlet">
+                        <div class="portlet-body dash-section vlt-bgs">
+                            <div class="img-txt-pad"> <span class="img-txt vlt-bg"></span> </div>
+                            <div class="rgt-txt">
+                                <div class="value-txt">Assessment</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 m-b-2">
+                <!-- <a [routerLink]="['/performance']" [queryParams]="{ t: 'performance'}"> -->
+                    <a (click) = "navigateRoute('performance','performance')">
+                    <div class="portlet">
+                        <div class="portlet-body dash-section dgrn-bgs">
+                            <div class="img-txt-pad"> <span class="img-txt dgrn-bg"></span> </div>
+                            <div class="rgt-txt">
+                                <div class="value-txt">Performance</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 m-b-2">
+                <!-- <a [routerLink]="['/connections']" [queryParams]="{ t: 'connections'}"> -->
+                    <a (click) = "navigateRoute('connections','connections')">
+                    <div class="portlet">
+                        <div class="portlet-body dash-section pink-bgs">
+                            <div class="img-txt-pad"> <span class="img-txt pink-bg"></span> </div>
+                            <div class="rgt-txt">
+                                <div class="value-txt">Connections</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 m-b-2">
+                <!-- <a [routerLink]="['/details']" [queryParams]="{ t: 'details'}"> -->
+                    <a (click) = "navigateRoute('details','stab_details_processinfo')">
+                    <div class="portlet">
+                        <div class="portlet-body dash-section gry-bgs">
+                            <div class="img-txt-pad"> <span class="img-txt gry-bg"></span> </div>
+                            <div class="rgt-txt">
+                                <div class="value-txt">Details</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 m-b-2">
+                <!-- <a [routerLink]="['/collaboration']" [queryParams]="{ t: 'collaborations'}"> -->
+                    <a (click) = "navigateRoute('collaboration','stab_collaboration_notes')">
+                    <div class="portlet">
+                        <div class="portlet-body dash-section lblu-bgs">
+                            <div class="img-txt-pad"> <span class="img-txt lblu-bg"></span> </div>
+                            <div class="rgt-txt">
+                                <div class="value-txt">Collaboration</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <!-- end row -->
+
+    </div>
+    <!-- end container -->
+</div>
+<style>
+     .m-b-2
+     {
+         margin-bottom:2px;
+     }
+</style>

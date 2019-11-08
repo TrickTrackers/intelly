@@ -1,0 +1,143 @@
+.dash-section .img-txt.blu-bg {
+    background: url(assets/images/icon1.png);
+    width: 42px;
+    height: 35px;
+    display: inline-block;
+    margin-top: 19px;
+}
+
+.dash-section .img-txt.grn-bg {
+    background: url(assets/images/icon2.png);
+    width: 58px;
+    height: 59px;
+    display: inline-block;
+    margin-top: 0px;
+}
+
+.dash-section .img-txt.orng-bg {
+    background: url(assets/images/icon3.png);
+    width: 52px;
+    height: 44px;
+    display: inline-block;
+    margin-top: 17px;
+}
+
+.dash-section .img-txt.ylw-bg {
+    background: url(assets/images/icon4.png);
+    width: 46px;
+    height: 46px;
+    display: inline-block;
+    margin-top: 13px;
+}
+
+.dash-section .img-txt.vlt-bg {
+    background: url(assets/images/icon5.png);
+    width: 62px;
+    height: 62px;
+    display: inline-block;
+    margin-top: 3px;
+}
+
+.dash-section .img-txt.dgrn-bg {
+    background: url(assets/images/icon6.png);
+    width: 66px;
+    height: 49px;
+    display: inline-block;
+    margin-top: 14px;
+}
+
+.dash-section .img-txt.pink-bg {
+    background: url(assets/images/icon7.png);
+    width: 48px;
+    height: 54px;
+    display: inline-block;
+    margin-top: 7px;
+}
+
+.dash-section .img-txt.gry-bg {
+    background: url(assets/images/icon8.png);
+    width: 57px;
+    height: 57px;
+    display: inline-block;
+    margin-top: 6px;
+}
+
+.dash-section .img-txt.lblu-bg {
+    background: url(assets/images/icon9.png);
+    width: 63px;
+    height: 61px;
+    display: inline-block;
+    margin-top: 3px;
+}
+
+.dash-section:hover .img-txt.blu-bg {
+    background: url(assets/images/icon1-hover.png);
+    width: 42px;
+    height: 35px;
+    display: inline-block;
+    margin-top: 19px;
+}
+
+.dash-section:hover .img-txt.grn-bg {
+    background: url(assets/images/icon2-hover.png);
+    width: 58px;
+    height: 59px;
+    display: inline-block;
+    margin-top: 0px;
+}
+
+.dash-section:hover .img-txt.orng-bg {
+    background: url(assets/images/icon3-hover.png);
+    width: 52px;
+    height: 44px;
+    display: inline-block;
+    margin-top: 17px;
+}
+
+.dash-section:hover .img-txt.ylw-bg {
+    background: url(assets/images/icon4-hover.png);
+    width: 46px;
+    height: 46px;
+    display: inline-block;
+    margin-top: 13px;
+}
+
+.dash-section:hover .img-txt.vlt-bg {
+    background: url(assets/images/icon5-hover.png);
+    width: 62px;
+    height: 62px;
+    display: inline-block;
+    margin-top: 3px;
+}
+
+.dash-section:hover .img-txt.dgrn-bg {
+    background: url(assets/images/icon6-hover.png);
+    width: 66px;
+    height: 49px;
+    display: inline-block;
+    margin-top: 14px;
+}
+
+.dash-section:hover .img-txt.pink-bg {
+    background: url(assets/images/icon7-hover.png);
+    width: 48px;
+    height: 54px;
+    display: inline-block;
+    margin-top: 7px;
+}
+
+.dash-section:hover .img-txt.gry-bg {
+    background: url(assets/images/icon8-hover.png);
+    width: 57px;
+    height: 57px;
+    display: inline-block;
+    margin-top: 6px;
+}
+
+.dash-section:hover .img-txt.lblu-bg {
+    background: url(assets/images/icon9-hover.png);
+    width: 63px;
+    height: 61px;
+    display: inline-block;
+    margin-top: 3px;
+}

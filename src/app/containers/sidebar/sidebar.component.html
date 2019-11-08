@@ -1,0 +1,206 @@
+<div id="sidemenuHolder" (click)="$event.preventDefault()">
+  <div #PerfectScrollbarDirective class="customsidebar sidebar-inner " id="customsidebar" [perfectScrollbar]="scrollConfig" >
+    <!-- <div class="sidebar-header">
+      <span class="logo">Kanbangular</span>
+      <span class="close-icon glyphicon glyphicon-remove"  aria-hidden="true" (click)="toggleMenu()"></span>           
+    </div> -->
+    <div class="sidebar-body">
+      <div class="sidebarmodule-list" id="lego_menu">
+        <div *ngIf="ModuleTreeItems" class="sidebarmodule-list-body">
+          <ng-template #recursiveList let-TreeItems let-parentModule='parentModule'>
+            <li class="sidebarmodule-listitem" *ngIf=" TreeItems.type !='E' && TreeItems.type !='D'">
+              <div *ngIf="TreeItems.type !='D'" class="sidebarmodule_link_holder" [ngClass]="{ 'active' : setSelectedsidebar(TreeItems),'sidebar_refmodule' : (TreeItems.referenceLegoId != 0 && ReferenceLegoId != null) }"
+                [contextMenu]="sidebarRightMenu" [contextMenuSubject]="[parentModule,TreeItems]">
+                <span class="sidebar_icon">
+                  <img [src]="setIcon(TreeItems)" />
+                </span>
+                <a class="sidebarmodule-link" (click)="setSelectedModule(TreeItems)" href="javascript:void()"
+                  [tooltip]="TreeItems.legoName" [isDisabled]="checkIsTooltipDisabled(TreeItems)" container="body"
+                  placement="right">
+                  {{ TreeItems.legoName }}
+                </a>
+
+                <span *ngIf="checkChildExist(TreeItems)" class="sidebarmodule_expandcollapse" [ngClass]="(TreeItems.expanded == true) ? 'sidebarmodule_expanded' : 'sidebarmodule_collapsed'"
+                  (click)="toggleExpandCollapse(TreeItems,$event)">
+                  <i class="icon-arrow-down icons collapsed"></i>
+                  <i class="icon-arrow-up icons expanded"></i>
+                </span>
+              </div>
+              
+              <div class="sidebarmodule_child_holder" *ngIf="TreeItems.expanded == true">
+                <ul class="moduledropdown-items" *ngFor="let listChild of TreeItems.children;trackBy:index;let in = index;">
+                  <!-- <a class="sidebarmodule-link" routerLink="{{ listChild.url }}"><div>
+                    {{ listChild.legoName }}</div>
+                </a> -->
+                  <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: listChild,parentModule:TreeItems }"></ng-container>
+                </ul>
+              </div>
+            </li>
+          </ng-template>
+          <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: ModuleTreeItems,parentModule : null }"></ng-container>
+        </div>
+      </div>
+      <div class="sidebarmodule-list"  id="doc_menu">
+          <div *ngIf="ModuleTreeItems" class="sidebarmodule-list-body">
+              <ng-template #recursiveList_doc let-TreeItems let-parentModule='parentModule'>
+                  <li class="sidebarmodule-listitem">
+                      <div *ngIf="TreeItems.type =='D'" class="sidebarmodule_link_holder" [ngClass]="{ 'active' : (TreeItems.legoId == selectedModuleId),'sidebar_refmodule' : (TreeItems.referenceLegoId != 0 && ReferenceLegoId != null) }"
+                      [contextMenu]="sidebarRightMenu" [contextMenuSubject]="[parentModule,TreeItems]">
+                    <!-- <ng-template #docMenu> -->
+                      <div class="sidebarmodule_link_holder" [ngClass]="{ 'active' : (TreeItems.legoId == selectedModuleId),'sidebar_refmodule' : (TreeItems.referenceLegoId != 0 && ReferenceLegoId != null) }"
+                        [contextMenu]="sidebarRightMenu" [contextMenuSubject]="[parentModule,TreeItems]">
+                        <span class="sidebar_icon">
+                          <img [src]="setIcon(TreeItems)" />
+                        </span>
+                        
+                        <a (drop)="dropDocument($event,TreeItems)" (dragover)="allowDocumentDrop($event)"
+                          class="sidebarmodule-link" (click)="setSelectedModule(TreeItems)" [routerLink]="['./']"
+                          [queryParams]="TreeItems.params" [tooltip]="TreeItems.legoName" [isDisabled]="checkIsTooltipDisabled(TreeItems)"
+                          container="body" placement="right">
+                          {{ TreeItems.legoName }}
+                        </a>
+      
+                        <span *ngIf="checkChildExist(TreeItems)" class="sidebarmodule_expandcollapse" [ngClass]="(TreeItems.expanded == true) ? 'sidebarmodule_expanded' : 'sidebarmodule_collapsed'"
+                          (click)="toggleExpandCollapse(TreeItems,$event)">
+                          <i class="icon-arrow-down icons collapsed"></i>
+                          <i class="icon-arrow-up icons expanded"></i>
+                        </span>
+                      </div>
+                    <!-- </ng-template> -->
+                  </div>
+                    <div class="sidebarmodule_child_holder" *ngIf="TreeItems.expanded == true">
+                      <ul class="moduledropdown-items" *ngFor="let listChild of TreeItems.children;trackBy:index;let in = index;">
+                        
+                        <ng-container *ngTemplateOutlet="recursiveList_doc; context:{ $implicit: listChild,parentModule:TreeItems }"></ng-container>
+                      </ul>
+                    </div>
+                  </li>
+                </ng-template>
+              <ng-container *ngTemplateOutlet="recursiveList_doc; context:{ $implicit: ModuleTreeItems,parentModule : null }"></ng-container>
+            
+          </div>
+        </div>
+    </div>
+  </div>
+  <div class="resize_grabber" (drag)="DragResizeGrabber($event)" (mouseup)="MouseUpResizeGrabber($event)"></div>
+
+  <!-- context menu basic template start -->
+  <div style="position:fixed;top:35px;height:100%;width:100%;display:table; border-collapse: collapse;border:none;outline:none; pointer-events: none">
+    <div style="display: table-cell;width:200px;vertical-align: top">
+      <div style="position:absolute; top: 20px;">
+        <div style="position:fixed;top:200px;left:-200px">
+          <context-menu #sidebarRightMenu style="pointer-events:all">
+            <!-- <ng-template contextMenuItem (execute)="selectIcon($event)">
+                          <div class="context-items">
+                              <span class="context-icon">
+                                  <i class="fa fa-hand-rock-o"></i>
+                              </span>
+                              <span class="context-title">Select Icon</span>
+                          </div>
+            </ng-template> -->
+            <ng-template *ngFor="let action of sidebarRightMenuActions;let i = index;" contextMenuItem let-item [visible]="action.visible"
+              [enabled]="action.enabled(item)" [divider]="action.divider(item)" (execute)="action.click($event)">
+              <div [innerHTML]="action.html(item)"></div>
+            </ng-template>
+          </context-menu>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- <div style="position:fixed;top:35px;height:100%;width:100%;display:table; border-collapse: collapse;border:none;outline:none; pointer-events: none">
+  <div style="display: table-cell;width:200px;vertical-align: top">
+    <div style="position:absolute; top: 20px;">
+      <div style="position:fixed;top:200px;left:-200px">
+       
+      </div>
+    </div>
+  </div>
+</div> -->
+<!-- <context-menu #sidebarRightMenu>
+    <ng-template *ngFor="let action of sidebarRightMenuActions" contextMenuItem let-item [visible]="action.visible" [enabled]="action.enabled"
+                            [divider]="action.divider" (execute)="action.click($event)">
+                            <div [innerHTML]="action.html(item)"></div>
+    </ng-template>
+  </context-menu> -->
+
+
+<!-- ADD FOLDER DIALOG -->
+<p-dialog header="Add Folder" [(visible)]="addfolder_dialog" [modal]="true" [responsive]="true" appendTo="body"
+  [closable]="false">
+
+  <div>
+    <div class="ocn-status">
+
+      <div class="form-group row ">
+        <label for="lbl_master_pwd" class="col-sm-5 col-form-label required_label">Folder Name</label>
+        <div class="col-sm-7">
+          <input class="form-control" id="addfolder" placeholder="" type="text" value="" required [(ngModel)]="folderDetails.legoName"
+            (keyup.enter)="addNewFolder(folderDetails)">
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <p-footer>
+    <!-- <button type="button" class="btn btn-primary" (click)="addNewFolder(folderDetails)">save</button>
+      <button type="button" class="btn btn-primary" (click)="revert_cancelDialog()">Exit</button> -->
+    <p-button icon="fa fa-fw fa-check" label="Save" styleClass="custom_btn" (click)="addNewFolder(folderDetails)"></p-button>
+    <p-button icon="fa fa-fw fa-close" label="Cancel" styleClass="custom_btn" (click)="revert_cancelDialog()"></p-button>
+  </p-footer>
+</p-dialog>
+
+<!-- EDIT FOLDER DIALOG -->
+<p-dialog header="Edit Folder" [(visible)]="editfolder_dialog" [modal]="true" [responsive]="true" appendTo="body"
+  [closable]="false">
+
+  <div>
+    <div class="ocn-status">
+
+      <div class="form-group row ">
+        <label for="lbl_master_pwd" class="col-sm-5 col-form-label required_label">Folder Name</label>
+        <div class="col-sm-7">
+          <input class="form-control" id="editfolder" placeholder="" type="text" required [(ngModel)]="parentDetails.legoName"
+            (keyup.enter)="editFolder(parentDetails)">
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <p-footer>
+    <!-- <button type="button" class="btn btn-primary" (click)="editFolder(parentDetails)">save</button>
+    <button type="button" class="btn btn-primary" (click)="revert_cancelDialog()">Exit</button> -->
+    <p-button icon="fa fa-fw fa-check" label="Save" styleClass="custom_btn" (click)="editFolder(parentDetails)"></p-button>
+    <p-button icon="fa fa-fw fa-close" label="Cancel" styleClass="custom_btn" (click)="revert_cancelDialog()"></p-button>
+  </p-footer>
+</p-dialog>
+<!-- RENAME Module -->
+<p-dialog header="Rename Module" [(visible)]="renamemodule_dialog" [modal]="true" [responsive]="true" appendTo="body"
+  [closable]="false">
+
+  <div>
+    <div class="ocn-status">
+
+      <div class="form-group row ">
+        <label for="lbl_master_pwd" class="col-sm-5 col-form-label required_label">Module Name</label>
+        <div class="col-sm-7">
+          <input class="form-control" id="renamemodule_textbox" placeholder="" type="text" required [(ngModel)]="renamemodule_text"
+            (keyup.enter)="renameModule()">
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <p-footer>
+    <!-- <button type="button" class="btn btn-primary" (click)="editFolder(parentDetails)">save</button>
+    <button type="button" class="btn btn-primary" (click)="revert_cancelDialog()">Exit</button> -->
+    <p-button icon="fa fa-fw fa-check" label="Save" styleClass="custom_btn" (click)="renameModule()"></p-button>
+    <p-button icon="fa fa-fw fa-close" label="Cancel" styleClass="custom_btn" (click)="renamemodule_dialog=false;"></p-button>
+  </p-footer>
+</p-dialog>
+<p-dialog header="Icon Library" [(visible)]="icons_display" [modal]="true" [responsive]="true" appendTo="body" [width]="1300">
+  <div *ngIf="icons_display == true">
+    <app-icon-set (iconChanged)="icons_display=$event" [selectedModule]="localSelectedModule"></app-icon-set>
+  </div>
+</p-dialog>

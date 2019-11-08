@@ -1,0 +1,305 @@
+<div id="reporting-pg" class="content-page component_holder">
+  <!-- Start content -->
+  <div class="content">
+    <div class="container">
+      <div class="ui-g">
+        <div class="ui-g-12 ui-md-12 no-padding">
+          <div class="ui-g-12 ui-md-12 no-padding">
+            <div class="dropmenu_holder">
+              <div class="btn-group" dropdown #filterdropdown="bs-dropdown" [autoClose]="true" *ngIf="this.queryparams.mode == 'E'">
+                <button dropdownToggle type="button" class="btn dropdown_btn dropdown-toggle">
+                  <i class="fa fa-filter fa-sm "></i> Filter <span class="caret"></span>
+                </button>
+                <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-triggers-manual">
+                  <li *ngFor="let filter1 of empfiltertag;trackBy:index" role="menuitem" class="dropdown-submenu">
+
+                    <a class="dropdown-item" data-toggle="dropdown">
+                      <i class="fa fa-angle-double-right" aria-hidden="true"></i>{{
+                      filter1.legoTag }}
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li style="line-height: 15px !important;cursor:pointer" *ngFor="let lego of filter1.moduleTag;trackBy:index; let i = index">
+                        <a class="dropdown-item elipse_text w250 " (click)="View_filterInfo(lego.assignedId)">{{lego.firstName}}</a>
+                      </li>
+                      <!-- <li style="line-height: 15px !important;cursor:pointer"><a href="#">Another action</a></li> -->
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+              <div class="btn-group">
+                <button class="btn dropdown_btn" type="button" (click)="view_unitEmployees()">
+                  <i class="fa fa-handshake-o fa-sm"></i>&nbsp;Reporting Information
+                </button>
+              </div>
+            </div>
+            <p-panel header="Direct Report Manager Information" styleClass="customTitleBar green_panel">
+              <div class="row" style="min-height: 200px !important;">
+                <div class="col-lg-12 col-sm-12 col-md-12">
+                  <div class="form-group row">
+                    <label for="lbl_user_name" class="col-sm-1 col-form-label">Name</label>
+                    <div class="col-sm-2">
+                      <input name="text" class="form-control" [(ngModel)]="selectedReportingManager.employeeName"
+                        placeholder="" type="text" [readonly]=true>
+                    </div>
+                    <i class="fa fa-arrow-circle-right" style="cursor:pointer; padding-top: 8px;" (click)="showownerlist(true)"></i>
+                  </div>
+                </div>
+                <div class="col-lg-12 col-sm-12 col-md-12">
+                  <div class="form-group row ">
+                    <label for="lbl_master_pwd" class="col-sm-1 col-form-label">Address</label>
+                    <div class="col-sm-2">
+                      <input name="text" class="form-control" placeholder="" [(ngModel)]="selectedReportingManager.address1"
+                        type="text" [readonly]=true>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-12 col-sm-12 col-md-12">
+                  <div class="form-group row ">
+                    <label for="lbl_master_pwd" class="col-sm-1 col-form-label">Phone</label>
+                    <div class="col-sm-2">
+                      <input name="text" class="form-control" placeholder="" [(ngModel)]="selectedReportingManager.phoneNo"
+                        type="text" [readonly]=true>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-12 col-sm-12 col-md-12">
+                  <div class="form-group row ">
+                    <label for="lbl_master_pwd" class="col-sm-1 col-form-label">Email</label>
+                    <div class="col-sm-2">
+                      <input name="text" class="form-control" placeholder="" type="text" [(ngModel)]="selectedReportingManager.eMail"
+                        [readonly]=true>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </p-panel>
+            <br />
+            <p-panel styleClass="customTitleBar green_panel">
+              <p-header>
+                <div class="ui-helper-clearfix">
+                  <span class="ui-panel-title" style="display:inline-block;margin-top:2px">Module
+                    Subordinates
+                  </span>
+                  <!-- <p-button class="btnMetrics" label="Add Mertrics" (onClick)="showDialog()"></p-button> -->
+                  <button style="float:right" class="btn btn-sm btn-primary mr-15" (click)="showsubordinateslist(true)">
+                    <i class="fa fa-plus"></i> Add Subordinates
+                  </button>
+                </div>
+              </p-header>
+              <div class="" style="min-height: 200px !important;">
+                <p-table [value]="subordinateslist" [scrollable]="true" scrollHeight="400px" [responsive]="true">
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th class="text-center" style="width:4%;">Drag</th>
+                      <th class="text-center" style="width:6%;" [pSortableColumn]="'no'">
+                        No
+                        <p-sortIcon [field]="'no'"></p-sortIcon>
+                      </th>
+                      <th class="text-center" style="width:28%;" [pSortableColumn]="'name'">
+                        Name
+                        <p-sortIcon [field]="'name'"></p-sortIcon>
+                      </th>
+                      <th class="text-center" style="width:28%;" [pSortableColumn]="'phone'">
+                        Phone
+                        <p-sortIcon [field]="'phone'"></p-sortIcon>
+                      </th>
+                      <th class="text-center" style="width:28%;" [pSortableColumn]="'email'">
+                        Email
+                        <p-sortIcon [field]="'email'"></p-sortIcon>
+                      </th>
+                      <th class="text-center" class="text-center" style="width:5%;">Delete</th>
+                    </tr>
+
+                  </ng-template>
+
+                  <ng-template pTemplate="body" let-rowData let-index="rowIndex">
+                    <tr [pReorderableRow]="index">
+                      <td class="text-center" style="width:4%;">
+                        <i class="fa fa-arrows-alt" pReorderableRowHandle></i>
+                      </td>
+                      <td style="width:6%;">
+                        <div>{{index+1}} </div>
+                      </td>
+                      <td style="width:28%;">
+                        <div> {{rowData.employeeName}}</div>
+                      </td>
+                      <td style="width:28%;">
+                        <div>{{rowData.phoneNo}} </div>
+                      </td>
+                      <td style="width:28%;">
+                        <div>{{rowData.eMail}} </div>
+                      </td>
+                      <td class="text-center" style="width:5%;">
+                        <a style="cursor: pointer;" (click)="deleteSubordinates(rowData)">
+                          <i class="fa fa-trash" style="font-size:20px;"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template pTemplate="emptymessage">
+                    <tr>
+                      <td class="text-center font-weight-bold">
+                        No records found
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            </p-panel>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end content -->
+
+</div>
+
+<p-dialog header="Reporting Manager" [(visible)]="show_manager_dialog" [modal]="true" [positionTop]='110' [responsive]="true"
+  appendTo="body" [closable]="true" [style]="{width: '500px'}">
+  <div class="">
+    <p-table #dt [value]="unit_emp_list" selectionMode="single" [(selection)]="selectedReportingManager" (onRowSelect)="onSelectEmployee($event)"
+      [scrollable]="true" scrollHeight="400px" [responsive]="true" [style]="{width: '500px'}">
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="text-center" style="width:30%;" [pSortableColumn]="'employeeId'">
+            Employee Id
+            <p-sortIcon [field]="'employeeId'"></p-sortIcon>
+          </th>
+          <th class="text-center" style="width:70%;" [pSortableColumn]="'employeeName'">
+            Employee Name
+            <p-sortIcon [field]="'employeeName'"></p-sortIcon>
+          </th>
+        </tr>
+        <tr>
+          <th style="width:30%;">
+            <input pInputText type="text" style="width:100%;" (input)="dt.filter($event.target.value, 'employeeId','contains')">
+          </th>
+          <th style="width:70%;">
+            <input pInputText type="text" style="width:100%;" (input)="dt.filter($event.target.value, 'employeeName','contains')">
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-index="rowIndex">
+        <tr [pSelectableRow]="rowData">
+          <td style="width:30%;">
+            {{rowData.employeeId}}</td>
+
+          <td style="width:70%;">
+            {{ rowData.employeeName }}</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td class="text-center font-weight-bold">
+            No records found
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <p-footer>
+    <button type="button" pButton icon="fa-close" label="Exit" (click)="show_manager_dialog=false"></button>
+  </p-footer>
+</p-dialog>
+
+<p-dialog header="Subordinates" [(visible)]="show_subordinates_dialog" [modal]="true" [positionTop]='110' [responsive]="true"
+  appendTo="body" [closable]="true" [style]="{width: '500px'}">
+  <div class="">
+    <p-table #pt [value]="subordindate_emp_list" selectionMode="single" [(selection)]="selectedReportingSubordinate"
+      (onRowSelect)="onSelectSubordinate($event)" [scrollable]="true" scrollHeight="400px" [responsive]="true" [style]="{width: '500px'}">
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="text-center" style="width:30%;" [pSortableColumn]="'employeeId'">
+            Employee Id
+            <p-sortIcon [field]="'employeeId'"></p-sortIcon>
+          </th>
+          <th class="text-center" style="width:70%;" [pSortableColumn]="'employeeName'">
+            Employee Name
+            <p-sortIcon [field]="'employeeName'"></p-sortIcon>
+          </th>
+        </tr>
+        <tr>
+          <th style="width:30%;">
+            <input pInputText type="text" style="width:100%;" (input)="pt.filter($event.target.value, 'employeeId','contains')">
+          </th>
+          <th style="width:70%;">
+            <input pInputText type="text" style="width:100%;" (input)="pt.filter($event.target.value, 'employeeName','contains')">
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-index="rowIndex">
+        <tr [pSelectableRow]="rowData">
+          <td style="width:30%;">
+            {{rowData.employeeId}}</td>
+
+          <td style="width:70%;">
+            {{ rowData.employeeName }}</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td class="text-center font-weight-bold">
+            No records found
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <p-footer>
+    <button type="button" pButton icon="fa-close" label="Exit" (click)="show_subordinates_dialog=false"></button>
+  </p-footer>
+</p-dialog>
+<style>
+  .dropdown-submenu {
+    position: relative;
+  }
+
+  .dropdown-submenu>.dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -6px;
+    margin-left: -1px;
+    -webkit-border-radius: 0 6px 6px 6px;
+    -moz-border-radius: 0 6px 6px;
+    border-radius: 0 6px 6px 6px;
+
+  }
+
+  .dropdown-submenu:hover>.dropdown-menu {
+    display: block;
+    max-height: 300px;
+    overflow: auto;
+  }
+
+  .dropdown-submenu>a:after {
+    display: block;
+    content: " ";
+    float: right;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 5px 0 5px 5px;
+    border-left-color: #ccc;
+    margin-top: 5px;
+    margin-right: -10px;
+  }
+
+  .dropdown-submenu:hover>a:after {
+    border-left-color: #fff;
+  }
+
+  .dropdown-submenu.pull-left {
+    float: none;
+  }
+
+  .dropdown-submenu.pull-left>.dropdown-menu {
+    left: -100%;
+    margin-left: 10px;
+    -webkit-border-radius: 6px 0 6px 6px;
+    -moz-border-radius: 6px 0 6px 6px;
+    border-radius: 6px 0 6px 6px;
+  }
+</style>

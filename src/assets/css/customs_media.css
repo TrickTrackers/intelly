@@ -1,0 +1,32 @@
+@media (max-width: 1920px) {
+    .pl-3, .px-3 {
+        padding-left: 0rem !important;
+    }
+}
+
+@media (max-width: 1360px) {
+    .pl-3, .px-3 {
+        padding-left: 0rem !important;
+    }
+}
+
+@media (min-width: 992px) {
+    .header-fixed .app-header {
+        position: fixed;
+        z-index: 999 !important;
+        width: 100%;
+    }
+    .sidebar-fixed .sidebar {
+        z-index: 999 !important;
+    }
+    .sidebar-fixed .app-header+.app-body .customsidebar {
+        height: calc(100vh - 65px);
+        margin-right: 6px;
+    }
+}
+
+@media (max-width: 767px) {
+    .app-header .navbar-brand {
+        left: 0px;
+    }
+}

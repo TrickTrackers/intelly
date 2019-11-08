@@ -1,0 +1,637 @@
+<div id="strategy-pg" class="content-page component_holder">
+    <!-- Start content -->
+    <div class="content">
+        <div class="container child_tab_container">
+
+            <div class="topbutton_section" *ngIf="hasRights == true">
+                <div style="float:right; padding-right: 5px;">
+
+                    <button *ngIf="value == 'Strategy'" class="btn btn-sm btn-primary" (click)="showDialog()"
+                        [disabled]="hasReadOnly">
+                        <i class="fa fa-plus"></i> Add</button>
+                    <button *ngIf="value == 'Goals'" class="btn btn-sm btn-primary" (click)="addGoalDialog()"
+                        [disabled]="hasReadOnly">
+                        <i class="fa fa-plus"></i> Add</button>
+                </div>
+            </div>
+
+            <tabset #modulesubTabset class="sub_tab_container" *ngIf="hasRights == false">
+                <tab id="stab_strategy_summary" heading="Summary" (select)="onSelect($event)"></tab>
+                <tab [active]="false" id="stab_strategy_mission" heading="Mission" class="custom_tabs"
+                    (select)="onSelect($event)"></tab>
+                <tab [active]="false" id="stab_strategy_vision" heading="Vision" class="custom_tabs"
+                    (select)="onSelect($event)"></tab>
+                <tab [active]="false" id="stab_strategy_strategy" heading="Strategy" class="custom_tabs"
+                    (select)="onSelect($event)"></tab>
+                <tab [active]="false" id="stab_strategy_goals" heading="Goals" class="custom_tabs"
+                    (select)="onSelect($event)"></tab>
+                <div class="ui-g">
+                    <div class="ui-g-12 no-padding">
+                        <div class="page-restricted">
+                            <span>Access to this page is restricted</span>
+                        </div>
+                    </div>
+                </div>
+            </tabset>
+
+            <tabset #modulesubTabset class="sub_tab_container" *ngIf="hasRights == true">
+                <tab id="stab_strategy_summary" heading="Summary" (select)="onSelect($event)">
+                    <p-scrollPanel [style]="{width: '100%',height:'calc( 73vh )'}"
+                        styleClass=" no-border overflow_y_hide">
+                        <!-- mission -->
+                        <p-panel styleClass=" green_panel customTitleBar m-r-20">
+                            <p-header>
+                                <div class="ui-helper-clearfix">
+                                    <span class="ui-panel-title"
+                                        style="display:inline-block;margin-top:2px">Mission</span>
+
+                                </div>
+                            </p-header>
+                            <div class="strat-panel" [innerHTML]="planMVS.mission">
+
+                            </div>
+                        </p-panel>
+                        <!-- Vision -->
+                        <p-panel styleClass="green_panel customTitleBar m-r-20">
+                            <p-header>
+                                <div class="ui-helper-clearfix">
+                                    <span class="ui-panel-title"
+                                        style="display:inline-block;margin-top:2px">Vision</span>
+                                </div>
+                            </p-header>
+                            <div class="strat-panel" [innerHTML]="planMVS.vision">
+
+                            </div>
+
+                        </p-panel>
+                        <!-- Strategy -->
+                        <!-- <div class="ui-g no-padding m-r-20">
+                            <div class="ui-g-12" style="background: #fff;">
+                                <div class="ui-g-8 no-padding ">
+                                    <span class="title-1">Strategies</span>
+                                </div>
+                                <div class="ui-g-4 no-padding" >
+                                    <button style="float:right" class="btn btn-sm btn-primary" (click)="showDialog()">
+                                        <i class="fa fa-plus"></i> Add Strategy
+                                    </button>
+                                </div>
+                            </div>
+                        </div> -->
+                        <p-panel styleClass="lightgreen_panel m-r-20" [style]="{'max-height': '250px !important'}">
+                            <p-header>
+                                <div class="ui-helper-clearfix">
+                                    <span class="ui-panel-title"
+                                        style="display:inline-block;margin-top:2px">Strategies</span>
+                                    <button style="float:right" class="btn btn-sm btn-primary" (click)="showDialog()"
+                                        [disabled]="hasReadOnly">
+                                        <i class="fa fa-plus"></i> Add Strategy
+                                    </button>
+                                </div>
+                            </p-header>
+                            <p-scrollPanel [style]="{height: '260px'}" *ngIf="plan_strategy.length > 0">
+
+                                <p-panel styleClass="lightgreen_panel"
+                                    *ngFor="let item of plan_strategy;trackBy:index; let i = index"
+                                    [style]="{'margin-right': '5px !important'}">
+                                    <p-header>
+                                        <div class="ui-helper-clearfix">
+                                            <span class="ui-panel-title"
+                                                style="display:inline-block;margin-top:2px">Strategy
+                                                {{i+1}}</span>
+                                        </div>
+                                    </p-header>
+                                    <div class="strat-panel" [innerHTML]="item.strategy_Value">
+
+                                    </div>
+                                </p-panel>
+                            </p-scrollPanel>
+
+                        </p-panel>
+                        <!-- <p-scrollPanel [style]="{height: '260px',width: '1680px'}">
+
+                            <p-panel styleClass="lightgreen_panel m-r-20" *ngFor="let item of plan_strategy; let i = index">
+                                <p-header>
+                                    <div class="ui-helper-clearfix">
+                                        <span class="ui-panel-title" style="display:inline-block;margin-top:2px">Strategy {{i+1}}</span>
+                                    </div>
+                                </p-header>
+                                <div class="strat-panel" [innerHTML]="item.strategy_Value">
+
+                                </div>
+                            </p-panel>
+                        </p-scrollPanel> -->
+                        <div class="ui-g no-padding m-r-20">
+                            <div class="ui-g-12" style="background: #fff;">
+                                <div class="ui-g-8 no-padding">
+                                    <span class="title-1">Goals</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="m-r-20" style="height: 280px !important;">
+                            <!-- <p-dataTable #tempEmpTable expandableRows="true" [(value)]="goals" [paginator]="true" [rows]="5"
+                                draggableRows="true" [styleClass]="m-r-20">
+                                <p-column field="" header="S.No" [style]="{'width':'20%'}">
+                                    <ng-template let-i="rowIndex" pTemplate="body">
+                                        {{i+1}}
+                                    </ng-template>
+                                </p-column>
+                                
+                                <p-column field="goals" header="Goals" [style]="{'width':'40%'}">
+                                </p-column>
+                                <p-column field="deadLine" header="Deadline" [style]="{'width':'10%'}">
+                                </p-column>
+                                <p-column field="strategy" header="Strategy" [style]="{'width':'50%'}">
+                                </p-column>
+                            </p-dataTable> -->
+                            <p-table [value]="goals" [scrollable]="true" scrollHeight="200px"
+                                (onRowReorder)="reorderGoalsList($event)" (blur)="update_position(goals)"
+                                [paginator]="false" [rows]="5">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th style="width:4%;" class="text-center">Priority</th>
+                                        <!-- <th style="width:5%;">No</th> -->
+                                        <th style="width:20%;">Goals</th>
+                                        <th style="width:20%;">Deadline</th>
+                                        <th style="width:25%;">Strategy</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-rowData let-index="rowIndex">
+                                    <tr [pReorderableRow]="index">
+                                        <td style="width:4%;" class="text-center">
+                                            <!-- <i *ngIf="hasRights == true && !isRefModule && hasReadOnly !=true"
+                                                class="fa fa-arrows-alt" pReorderableRowHandle></i> -->
+                                            <span class="allow-drag"
+                                                *ngIf="hasRights == true && !isRefModule && hasReadOnly !=true"
+                                                pReorderableRowHandle>{{ index+1 }}</span>
+                                        </td>
+                                        <!-- <td style="width:5%;">{{ index+1 }}</td> -->
+                                        <td style="width:20%;">
+                                            <div>{{ rowData.goals }}</div>
+                                        </td>
+                                        <td style="width:20%;">
+                                            <div>{{ rowData.deadLine }}</div>
+                                        </td>
+                                        <td style="width:25%;">
+                                            <div>{{ rowData.strategy }}</div>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage" let-rowData let-index="rowIndex">
+                                    <tr>
+                                        <td [attr.colspan]="rowData" class="text-center font-weight-bold">
+                                            No records found
+                                        </td>
+
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </p-scrollPanel>
+
+                </tab>
+                <!-- Mision Tab -->
+                <tab [active]="false" id="stab_strategy_mission" heading="Mission" class="custom_tabs"
+                    (select)="onSelect($event)">
+
+                    <!-- <ck-editor id="mission" (blur)="AddUpdatePlanMVS('AddUpdateMission', 'Mission')" [(ngModel)]="planMVS.mission"
+                        [readonly]="false" debounce="500" [config]="config" class="main_ckeditor" (ready)="onReady($event)"
+                        #ckeditor>
+                    </ck-editor> -->
+
+                    <!-- <ng-container *ngIf="(planMVS.mission != null)">
+                            <ck-editor id="mission" (blur)="AddUpdatePlanMVS('AddUpdateMission', 'Mission')"
+                                [(ngModel)]="planMVS.mission" [readonly]="false" debounce="500" [config]="config" class="main_ckeditor"
+                                (ready)="onReady()" >
+                            </ck-editor>
+                        </ng-container>-->
+                    <!-- <ng-container *ngIf="planMVS.mission != null"> -->
+                    <!-- <ck-editor id="mission" (blur)="AddUpdatePlanMVS('AddUpdateMission', 'Mission')"
+                            [(ngModel)]="planMVS.mission" [readonly]="false" debounce="500" [config]="config"
+                            class="main_ckeditor" (ready)="onReady($event)">
+                        </ck-editor> -->
+                    <div *ngIf="(planMVS.vision != null)">
+                        <ck-editor id="mission" #ckeditor="ngModel" [(ngModel)]="planMVS.mission"
+                            (blur)="AddUpdatePlanMVS('AddUpdateMission', 'Mission')" [readonly]="false" debounce="500"
+                            [config]="config" class="main_ckeditor">
+                        </ck-editor>
+                    </div>
+                    <!-- </ng-container> -->
+
+                </tab>
+                <!-- Vision Tab -->
+                <tab [active]="false" id="stab_strategy_vision" heading="Vision" class="custom_tabs"
+                    (select)="onSelect($event)">
+                    <!-- <p-scrollPanel [style]="{width: '100%'}" styleClass=" child_tabcontent  no-border overflow_y_hide"> -->
+                    <!-- <ck-editor id="vision" (blur)="AddUpdatePlanMVS('AddUpdateVision', 'Vision')" [(ngModel)]="planMVS.vision"
+                        [readonly]="false" debounce="500" [config]="config" class="main_ckeditor" #ckeditor1 (ready)="onReady1($event)">
+                    </ck-editor> -->
+
+                    <div *ngIf="(planMVS.vision != null)">
+                        <ck-editor id="vision" #ckeditor="ngModel" [(ngModel)]="planMVS.vision"
+                            (blur)="AddUpdatePlanMVS('AddUpdateVision', 'Vision')" [readonly]="false" debounce="500"
+                            [config]="config" class="main_ckeditor">
+                        </ck-editor>
+                    </div>
+                    <!-- <ng-container *ngIf="planMVS.vision == null">
+                    <ck-editor id="vision" (blur)="AddUpdatePlanMVS('AddUpdateVision', 'Vision')"
+                        [(ngModel)]="planMVS.vision" [readonly]="false" debounce="500" [config]="config"
+                        class="main_ckeditor" (ready)="onReady($event)">
+                    </ck-editor>
+                    
+                    </ng-container> -->
+
+
+                    <!-- </p-scrollPanel> -->
+                </tab>
+                <!-- Strategy Tab -->
+                <tab [active]="false" id="stab_strategy_strategy" heading="Strategy" class="custom_tabs"
+                    (select)="onSelect($event)">
+                    <p-scrollPanel [style]="{width: '100%'}"
+                        styleClass="summary-padding child_tabcontent  no-border overflow_y_hide">
+                        <div class="ui-g no-padding">
+                            <div class="ui-g-12 ui-md-12 no-padding">
+                                <!-- </p-panel> -->
+                                <p-panel styleClass="green_panel m-r-20"
+                                    *ngFor="let item of plan_strategy;trackBy:index; let i = index">
+                                    <p-header>
+                                        <div class="ui-helper-clearfix">
+                                            <span class="ui-panel-title"
+                                                style="display:inline-block;margin-top:2px">Strategy
+                                                {{i+1}}</span>
+                                            <span class="ui-panel-title" style="margin-top:2px;float:right">
+                                                <button type="button" pButton icon="fa-edit" [disabled]="hasReadOnly"
+                                                    (click)="editStrategy_dialog(item)"></button>
+                                                <button type="button" pButton icon="fa-trash" [disabled]="hasReadOnly"
+                                                    (click)="DeleteStrategy(item)"></button>
+                                            </span>
+                                        </div>
+                                    </p-header>
+                                    <div class="strat-panel" [innerHTML]="item.strategy_Value"></div>
+                                </p-panel>
+
+                            </div>
+                        </div>
+                    </p-scrollPanel>
+                </tab>
+                <!-- Goals Tab -->
+                <tab [active]="false" id="stab_strategy_goals" heading="Goals" class="custom_tabs"
+                    (select)="onSelect($event)">
+                    <!-- <p-scrollPanel [style]="{width: '100%'}" styleClass=" child_tabcontent  no-border overflow_y_hide">
+                        <p-header>
+                            <div class="strategy1">
+
+                            </div>
+                        </p-header> -->
+                    <div>
+                        <!-- <table class="table table-striped" tabindex="0" (blur)="update_position(goals)">
+                                    
+                                <thead>
+                                    <tr>
+                                        <th style="width: 5%">Drag</th>
+                                        <th style="width: 5%">No.</th>
+                                        <th style="width: 30%">Goals</th>
+                                        <th style="width: 10%">Deadline</th>
+                                        <th style="width: 30%">Strategy</th>
+                                        <th style="width: 10%">Edit</th>
+                                        <th style="width: 10%">Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recipeTableBody" class="goals" [sortablejs]="goals">
+
+                                    <tr *ngFor="let g of goals; let i= index;" class="item" >
+                                        <td class="drag-handler" >
+                                            <a>
+                                                <i class="fa fa-arrows-alt"></i>
+                                            </a>
+                                        </td>
+                                        <td >{{i+1}}</td>
+                                        <td>{{g.goals}}</td>
+                                        <td>{{g.deadLine | date: 'MM/dd/yyyy'}}</td>
+                                        <td [innerHtml]="g.strategy"></td>
+                                        <td>
+                                            <a (click)="EditGoal_Dialog(g)">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a (click)="DeleteGoals(g)">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <pagination *ngIf="goals.length > 10" [totalItems]="goals.length" (pageChanged)="pageChanged($event)"></pagination> -->
+
+
+                        <p-table [value]="goals" [scrollable]="true" scrollHeight="520px"
+                            (onRowReorder)="reorderGoalsList($event)" (blur)="update_position(goals)"
+                            [paginator]="false" [rows]="10">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="width:4%;" class="text-center">Priority</th>
+                                    <!-- <th style="width:5%;">No</th> -->
+                                    <th style="width:20%;">Goals</th>
+                                    <th style="width:20%;">Deadline</th>
+                                    <th style="width:25%;">Strategy</th>
+                                    <th style="width:4%;" class="text-center">Edit</th>
+                                    <th style="width:5%;" class="text-center">Delete</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-index="rowIndex">
+                                <tr [pReorderableRow]="index">
+                                    <td style="width:4%;" class="text-center">
+                                        <!-- <i *ngIf="hasRights == true && !isRefModule" class="fa fa-arrows-alt"
+                                            pReorderableRowHandle></i> -->
+                                        <span class="allow-drag"
+                                            *ngIf="hasRights == true && !isRefModule && hasReadOnly !=true"
+                                            pReorderableRowHandle>{{ index+1 }}</span>
+                                    </td>
+                                    <!-- <td style="width:5%;">{{ index+1 }}</td> -->
+                                    <td style="width:20%;">
+                                        <div>{{ rowData.goals }}</div>
+                                    </td>
+                                    <td style="width:20%;">
+                                        <div>{{ rowData.deadLine}}</div>
+                                    </td>
+                                    <td style="width:25%;">
+                                        <div [innerHtml]="rowData.strategy"></div>
+                                    </td>
+
+                                    <td style="width:4%;">
+                                        <a class="text-center" style="text-align: center; cursor: pointer;"
+                                            *ngIf="!hasReadOnly" (click)="EditGoal_Dialog(rowData)">
+                                            <i class="fa fa-edit" style="font-size:20px;"></i>
+                                        </a>
+                                    </td>
+                                    <td style="width:5%;">
+                                        <a class="text-center" style="align-items: center;cursor: pointer;"
+                                            *ngIf="!hasReadOnly" (click)="DeleteGoals(rowData)">
+                                            <i class="fa fa-trash" style="font-size:20px;"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage" let-rowData let-index="rowIndex">
+                                <tr>
+                                    <td [attr.colspan]="rowData" class="text-center font-weight-bold">
+                                        No records found
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <!-- </p-scrollPanel> -->
+                </tab>
+            </tabset>
+
+            <!-- Delete POp Up -->
+            <p-dialog header="Delete" [(visible)]="confirm" appendTo="body">
+                This will Permanently delete this.Are you sure want to Proceed?
+                <p-footer>
+                    <button type="button" pButton icon="fa-check" (click)="confirm=false" label="Delete"></button>
+                    <button type="button" pButton icon="fa-close" (click)="confirm=false" label="Don't Delete"></button>
+                </p-footer>
+            </p-dialog>
+
+
+            <!-- POp Up For Add in Strategy Tab -->
+            <p-dialog header="Add Strategy" [(visible)]="display" [modal]="true" [responsive]="true" appendTo="body"
+                [closable]="false">
+                <div class="row">
+                    <!-- <div class="ocn-status"> -->
+                    <div class="form-group">
+                        <ck-editor [readonly]="false" id="addstrategy" [config]="config" [(ngModel)]="strategyValue">
+                        </ck-editor>
+                    </div>
+                    <!-- </div> -->
+                </div>
+                <p-footer>
+                    <!-- <button type="button" class="btn btn-primary" (click)="AddPlanStrategy('AddUpdateStrategy', 'Strategy', strategyValue)">Save</button>
+                    <button type="button" class="btn btn-primary" (click)="display=false">Exit</button> -->
+                    <p-button icon="fa fa-fw fa-check" label="Save" styleClass="custom_btn"
+                        (click)="AddPlanStrategy('AddUpdateStrategy', 'Strategy', strategyValue)"></p-button>
+                    <p-button icon="fa fa-fw fa-close" label="Cancel" styleClass="custom_btn" (click)="display=false">
+                    </p-button>
+                </p-footer>
+            </p-dialog>
+
+            <!-- POp Up For Edit in Strategy Tab -->
+            <p-dialog header="Edit Strategy" [(visible)]="editStrategyDialog" [modal]="true" [responsive]="true"
+                appendTo="body" [closable]="false">
+                <div class="row">
+                    <div class="form-group">
+                        <ck-editor [readonly]="false" id="txtstrategy" [config]="config"
+                            [(ngModel)]="editStrategy.strategy_Value"></ck-editor>
+                    </div>
+                </div>
+                <p-footer>
+                    <!-- <button type="button" class="btn btn-primary" (click)="UpdatePlanStrategy('AddUpdateStrategy', 'Strategy', editStrategy)">Save</button>
+                    <button type="button" class="btn btn-primary" (click)="cancelUpdateStrategy()">Exit</button> -->
+                    <p-button icon="fa fa-fw fa-check" label="Save" styleClass="custom_btn"
+                        (click)="UpdatePlanStrategy('AddUpdateStrategy', 'Strategy', editStrategy)"></p-button>
+                    <p-button icon="fa fa-fw fa-close" label="Cancel" styleClass="custom_btn"
+                        (click)="cancelUpdateStrategy()"></p-button>
+                </p-footer>
+            </p-dialog>
+
+            <!-- POP Up For Delete Strategy -->
+            <!-- <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle" width="425"></p-confirmDialog> -->
+
+            <!-- pop up for Edit in Goal -->
+            <p-dialog header="Edit Goals" [(visible)]="viewgoal" [positionTop]="50" [modal]="true" [responsive]="true"
+                appendTo="body" [closable]="false" [minWidth]="500">
+
+                <div class="form-group row">
+                    <div class="col-sm-3 required_label">
+                        Name
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="example1" aria-describedby="emailHelp"
+                            [(ngModel)]="edit_goals.goals" maxlength="100">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3 required_label">
+                        Select Date
+                    </div>
+                    <div class="col-sm-6" *ngIf="viewgoal == true">
+                        <input type="text" bsDatepicker [minDate]="minDate" class="form-control"
+                            [(ngModel)]="edit_goals.deadLine" readonly [bsConfig]="bsConfig" appendTo="body">
+                        <!-- <p-calendar appendTo="body" [minDate]="minDate"
+                            readonlyInput="true" dateFormat="{{date_dispayformat.date_Format}}"></p-calendar> -->
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        Strategy
+                    </div>
+                    <div class="col-sm-9">
+                        <!-- <p-dropdown [tabindex]=1 [options]="strategyListDropdown" [(ngModel)]="edit_goals.strategy" editable="false" emptyFilterMessage="Add New"
+                            appendTo="body" [style]="{'width':'100%','height':'30px'}" filter="true">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <div *ngIf="item.value" class="ui-helper-clearfix select-box elipsis_div">
+                                    <div class="namebatch_left" [innerHtml]="item.value.strategy_Value"></div>
+                                    <span class="idbatch_left">{{ item.value.strategyId }}</span>
+                                </div>
+                                <div *ngIf="! item.value" class="ui-helper-clearfix select-box elipsis_div">
+                                    <span>{{ item.label }}</span>
+                                </div>
+                            </ng-template>
+                            <ng-template let-item pTemplate="item">
+                                <div *ngIf="item.value" class="ui-helper-clearfix select-box elipsis_div">
+                                    <span class="namebatch_left" [innerHtml]="item.value.strategy_Value"> </span>
+                                    <span class="idbatch_left">{{ item.value.strategyId }}</span>
+                                </div>
+                                <div *ngIf="! item.value" class="ui-helper-clearfix select-box elipsis_div">
+                                    <span>{{ item.label }}</span>
+                                </div>
+                            </ng-template>
+
+                        </p-dropdown> -->
+                        <p-dropdown [tabindex]=1 [options]="strategyListDropdown" [(ngModel)]="edit_goals.strategy1"
+                            appendTo="body" [style]="{'width':'100%','height':'30px'}" filter="true">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <div *ngIf="item.value" class="ui-helper-clearfix select-box elipsis_div">
+                                    <div class="namebatch_left1" [innerHtml]="item.value.strategy_Value"></div>
+                                    <span class="idbatch_left">{{ item.value.strategyId }}</span>
+                                </div>
+                                <div *ngIf="! item.value" class="ui-helper-clearfix select-box elipsis_div">
+                                    <span>{{ item.label }}</span>
+                                </div>
+                            </ng-template>
+                            <ng-template let-item pTemplate="item">
+                                <div *ngIf="item.value" class="ui-helper-clearfix select-box elipsis_div">
+                                    <span class="namebatch_left1" [innerHtml]="item.value.strategy_Value"> </span>
+                                    <span class="idbatch_left">{{ item.value.strategyId }}</span>
+                                </div>
+                                <div *ngIf="! item.value" class="ui-helper-clearfix select-box elipsis_div">
+                                    <span>{{ item.label }}</span>
+                                </div>
+                            </ng-template>
+
+                        </p-dropdown>
+                    </div>
+                </div>
+
+                <p-footer>
+                    <p-button icon="fa fa-fw fa-check" label="Save" styleClass="custom_btn"
+                        (click)="updateGoals(edit_goals)"></p-button>
+                    <p-button icon="fa fa-fw fa-close" label="Cancel" styleClass="custom_btn"
+                        (click)="updategoalCancel()"></p-button>
+                </p-footer>
+            </p-dialog>
+            <p-dialog header="Add Goals" [(visible)]="addgoal_dialog" [modal]="true" [positionTop]="50"
+                [responsive]="true" appendTo="body" [closable]="false" [minWidth]="500">
+                <!-- <form> -->
+
+                <div class="form-group row">
+                    <div class="col-sm-3 required_label">
+                        Name
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="example" aria-describedby="emailHelp"
+                            placeholder="Goals" [(ngModel)]="goalsAdd.goals" maxlength="100">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3 required_label">
+                        Select Date
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" bsDatepicker [minDate]="minDate" id="example1"
+                            aria-describedby="emailHelp" placeholder="deadline" [(ngModel)]="goalsAdd.deadLine" readonly
+                            [bsConfig]="bsConfig">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        Strategy
+                    </div>
+                    <div class="col-sm-9">
+                        <p-dropdown [tabindex]=1 [options]="strategyListDropdown" [(ngModel)]="goalsAdd.strategy"
+                            appendTo="body" [style]="{'width':'100%','height':'30px'}" filter="true">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <div *ngIf="item.value" class="ui-helper-clearfix select-box elipsis_div">
+                                    <div class="namebatch_left1" [innerHtml]="item.value.strategy_Value"></div>
+                                    <span class="idbatch_left">{{ item.value.strategyId }}</span>
+                                </div>
+                                <div *ngIf="! item.value" class="ui-helper-clearfix select-box elipsis_div">
+                                    <span>{{ item.label }}</span>
+                                </div>
+                            </ng-template>
+                            <ng-template let-item pTemplate="item">
+                                <div *ngIf="item.value" class="ui-helper-clearfix select-box elipsis_div">
+                                    <div>
+                                        <span class="namebatch_left1" [innerHtml]="item.value.strategy_Value"> </span>
+                                        <span class="idbatch_left">{{ item.value.strategyId }}</span>
+                                    </div>
+                                </div>
+                                <div *ngIf="! item.value" class="ui-helper-clearfix select-box elipsis_div">
+                                    <span>{{ item.label }}</span>
+                                </div>
+                            </ng-template>
+
+                        </p-dropdown>
+                    </div>
+                </div>
+                <!-- </form> -->
+
+                <p-footer>
+                    <p-button icon="fa fa-fw fa-check" label="Save" styleClass="custom_btn"
+                        (click)="addGoals(goalsAdd)"></p-button>
+                    <p-button icon="fa fa-fw fa-close" label="Exit" styleClass="custom_btn"
+                        (click)="addgoal_dialog=false"></p-button>
+                </p-footer>
+            </p-dialog>
+
+
+            <!-- <p-dialog header="" [(visible)]="visit" [modal]="true" [responsive]="true" appendTo="body">
+
+                <div>
+                    <div class="ocn-status">
+                        <div class="form-group madeups ocn ">
+                            <ck-editor [readonly]="false" id="visit" style="height:100px;" [config]="config">
+                            </ck-editor>
+                        </div>
+                    </div>
+                </div>
+                <p-footer>
+                    <button type="button" class="btn btn-primary" (click)="visit=false">save</button>
+                    <button type="button" class="btn btn-primary" (click)="visit=false">Exit</button>
+                </p-footer>
+            </p-dialog> -->
+
+
+            <!-- <p-dialog header="" [(visible)]="addgoal" [modal]="true" [responsive]="true" appendTo="body">
+
+                <div>
+                    <div class="ocn-status">
+                        <div class="form-group madeups ocn ">
+                            <ck-editor [readonly]="false" style="height:100px;" [config]="config"></ck-editor>
+                        </div>
+                    </div>
+                </div>
+                <p-footer>
+                    <button type="button" class="btn btn-primary" (click)="addgoal=false">save</button>
+                    <button type="button" class="btn btn-primary" (click)="addgoal=false">Exit</button>
+                </p-footer>
+            </p-dialog> -->
+
+        </div>
+    </div>
+</div>
+
+<style>
+    .namebatch_left1 {
+        float: left;
+        width: 150px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -ms-text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+    }
+</style>

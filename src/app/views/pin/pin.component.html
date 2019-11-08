@@ -1,0 +1,10 @@
+<spinner backgroundColor="#44c5f5" spinner="sk-wave"></spinner>
+<!-- <p-growl [life]=10000 [(value)]="msgs"></p-growl>-->
+<p-dialog header="Title" [showHeader]="false" [positionLeft]="760" [positionTop]="50" [(visible)]="display" [modal]="true"
+    [responsive]="true" [closable]="false" appendTo="body" [draggable]="false" [minWidth]="250" minHeight="80">
+    <h5>Sorry, this module has been deleted.</h5>
+    <br />
+    <div class="float-right">
+        <p-button icon="fa fa-fw fa-check" (click)="closeCurrentTab()" label="Ok" styleClass="ustom_btn"></p-button>
+    </div>
+</p-dialog>

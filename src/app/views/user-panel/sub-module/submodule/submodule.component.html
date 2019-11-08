@@ -1,0 +1,332 @@
+<!-- ref https://stackblitz.com/edit/angular-o1pq84?file=src%2Fapp%2Flist-items.component.html -->
+
+<div id="submodule-pg-rights" *ngIf="hasRights == false" class="content-page component_holder" style="height:calc( 60vh )">
+    <div class="ui-g">
+        <div class="ui-g-12 no-padding">
+            <div class="page-restricted">
+                <span>Access to this page is restricted</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="hasRights == true" id="submodule-pg" class="content-page component_holder">
+    <!-- <p-menubar [model]="MenuBaritems" styleClass="custom_menubar"></p-menubar> -->
+    <!-- view menu -->
+    <div class="dropmenu_holder">
+        <div class="btn-group" dropdown #viewdropdown="bs-dropdown" [autoClose]="true">
+            <!-- (mouseenter)="filterdropdown.hide(true);zoomdropdown.hide(true);viewdropdown.show(true)" -->
+            <button dropdownToggle type="button" class="btn dropdown_btn dropdown-toggle">
+        <i class="fa fa-eye fa-sm "></i> View <span class="caret"></span>
+      </button>
+            <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-triggers-manual">
+                <li role="menuitem">
+                    <a [ngClass]=" (tree_st_view != true )?'active':'' " class="dropdown-item" href="javascript:void(0)" (click)="tree_st_view = false"><i class="fa fa-navicon fa-sm "></i>
+            Rows</a></li>
+                <li role="menuitem">
+                    <a [ngClass]=" (tree_st_view == true )?'active':'' " class="dropdown-item" href="javascript:void(0)" (click)="tree_st_view = true"><i class="fa fa-pencil-square fa-sm "></i>
+            Outline</a>
+                </li>
+            </ul>
+        </div>
+        <!-- filter menu -->
+        <div class="btn-group" dropdown #filterdropdown="bs-dropdown" [autoClose]="true">
+            <button dropdownToggle type="button" class="btn dropdown_btn dropdown-toggle">
+        <i class="fa fa-filter fa-sm "></i> Filter <span class="caret"></span>
+      </button>
+            <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-triggers-manual">
+                <li *ngFor="let filter of filtertag;trackBy:index" role="menuitem" class="dropdown-submenu">
+                    <!-- <a class="dropdown-item" href="javascript:void(0)"><i class="fa fa-angle-double-right fa-sm "></i>
+            {{ filter.legoTag }}</a> -->
+                    <a class="dropdown-item" data-toggle="dropdown">
+                        <i class="fa fa-angle-double-right" aria-hidden="true"></i>{{ filter.legoTag }}
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li style="line-height: 15px !important;cursor:pointer" *ngFor="let lego of filter.moduleTag;trackBy:index; let i = index">
+                            <a class="dropdown-item elipse_text w250 " (click)="FilterModules(lego)">{{lego.legoName}}</a>
+                        </li>
+                        <!-- <li style="line-height: 15px !important;cursor:pointer"><a href="#">Another action</a></li> -->
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="btn-group help helpLeft">
+            <i class="fa fa-question-circle fa-sm help_icon "></i>
+            <div class="helpHover">
+                <div class="helpHover_inner">
+                    <h5>Filters</h5>
+                    <ul class="help_ul">
+                        <li>
+                            <p>Filters are used to group Modules into types for easy viewing and access of all Modules added to a filter type. This is a powerful tool that will allow access to any Module regardless of it’s location.</p>
+                        </li>
+
+                        <li>
+                            <p>Click on the ‘Filter’ sub-tab</p>
+                        </li>
+                        <li>
+                            <p>Select the desired Filter</p>
+                        </li>
+                        <li>
+                            <p>A popup list will appear that includes all Modules that are included in the Filter</p>
+                        </li>
+                        <li>
+                            <p>Click on the ‘Module Name’ to be taken directly to the specific Module</p>
+                        </li>
+                    </ul>
+
+                    <h5>Add Filters</h5>
+                    <ul class="help_ul">
+                        <li style="float:left;">
+                            <p>
+                                To add a Module to a Filter, click on the Module to open it. The Module name will be on top of the tabs.
+                            </p>
+                        </li>
+                        <li>
+                            <p>Click on the ‘Details’ tab and go to the ‘Manage Filter Tags’ sub-menu </p>
+                        </li>
+                        <li>
+                            <p>The ‘Add Tags’ section is used to add new tags for all users to use</p>
+                        </li>
+                        <li>To add the Module to Tags, check any of the relevant ‘Tags (for filtering)’ items. The Module will now be added to these Tags and can be used with this filter(s) selected
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- filter menu -->
+        <div class="btn-group" dropdown #zoomdropdown="bs-dropdown" [autoClose]="true">
+            <button dropdownToggle type="button" class="btn dropdown_btn dropdown-toggle">
+        <i class="fa fa-search-plus fa-sm "></i> Zoom <span class="caret"></span>
+      </button>
+            <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-triggers-manual">
+                <li role="menuitem"><a [class.active]="ZoomLevel == 'S'" class="dropdown-item" href="javascript:void(0)" (click)="zoomIn('S',85)"><i class="fa fa-arrows-alt fa-sm "></i>
+            small</a></li>
+                <li role="menuitem"><a [class.active]="ZoomLevel == 'M'" class="dropdown-item" href="javascript:void(0)" (click)="zoomIn('M',105)"><i class="fa fa-arrows-alt fa-sm "></i>
+            Medium</a></li>
+                <li role="menuitem"><a [class.active]="ZoomLevel == 'L'" class="dropdown-item" href="javascript:void(0)" (click)="zoomIn('L',125)"><i class="fa fa-arrows-alt fa-sm "></i>
+            Large</a></li>
+                <li role="menuitem"><a [class.active]="ZoomLevel == 'XL'" class="dropdown-item" href="javascript:void(0)" (click)="zoomIn('XL',145)"><i class="fa fa-arrows-alt fa-sm "></i>
+            XLarge</a></li>
+                <li role="menuitem"><a [class.active]="ZoomLevel == 'XXL'" class="dropdown-item" href="javascript:void(0)" (click)="zoomIn('XXL',165)"><i class="fa fa-arrows-alt fa-sm "></i>
+            XXLarge</a></li>
+            </ul>
+        </div>
+        <div class="btn-group">
+            <button (click)="UndoEvent()" type="button" [disabled]="disableUndo" class="btn dropdown_btn ">
+        <i class="fa fa-mail-forward fa-sm "></i> Undo
+      </button>
+        </div>
+        <div class="btn-group">
+            <button (click)="RedoEvent()" type="button" [disabled]="disableRedo" class="btn dropdown_btn ">
+        <i class="fa fa-mail-reply fa-sm "></i> Redo
+      </button>
+        </div>
+        <div class="btn-group">
+            <button (click)="addModuleonMain()" [disabled]="addModuleFlag || operationalRights == 'Readonly' || operationalRights == 'Restricted' " type="button" class="btn dropdown_btn ">
+        <i class="fa fa-plus fa-sm "></i> Add Module
+      </button>
+        </div>
+
+        <div class="btn-group help helpLeft">
+            <i class="fa fa-question-circle fa-sm help_icon "></i>
+            <div class="helpHover">
+                <div class="helpHover_inner">
+                    <h4>Add Module Instructions</h4>
+                    <h6>Modules can be added in 2 ways</h6>
+                    <b>Clicking on the ‘Add Module’ button will add a Module at the bottom of the list. Once this Module
+            is added, it can be moved to any location on the page by:
+          </b>
+
+                    <ul class="help_ul">
+                        <li>
+                            <p>Left click and hold the mouse button</p>
+                        </li>
+
+                        <li>
+                            <p>Drag the Module to the end of any Module list or between any two Modules</p>
+                        </li>
+                        <li>
+                            <p>Release the mouse button</p>
+                        </li>
+                    </ul>
+                    <h6>Use the Cursor to add a Module.</h6>
+                    <div style="width:60%;float:left">
+                        <ul class="help_ul">
+                            <li style="float:left;">
+                                <p>
+                                    Move the mouse pointer to any location between any two Modules, or at the end of any Module list, and click the open space
+                                </p>
+                            </li>
+                            <li>
+                                <p>A wide blinking cursor will appear </p>
+                            </li>
+                            <li>
+                                <p>Right click on this blinking cursor and a menu will open with various options</p>
+                            </li>
+                            <li>
+                                <p>Select ‘Add New Module’</p>
+                            </li>
+                            <li>
+                                <p>A new Module will be added to this location</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div style="float:right">
+                        <img style="width:inherit" border="0" src="assets/images/add_module.jpg">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <p-scrollPanel [style]="{width: '100%' }" styleClass="custom_scrollpane"> -->
+    <div (click)="$event.preventDefault()" class="tree_container content-section modules-div as-sortable-unselectable">
+        <div class="modules_container" style="overflow: auto">
+            <span class="Mycls"></span>
+            <ng-template #recursiveList let-TreeItems let-parentModule='parentModule'>
+                <li [ngClass]="['ZoomLevel_'+ZoomLevel,(TreeItems.draggable == false) ? 'dummynode_li_container': '']" class="level" [ngClass]="(TreeItems.legoLevel == currentLegoLevel )?'level_one': 
+                    (TreeItems.legoLevel == (currentLegoLevel + 1 ) )?'level_two':
+                    (TreeItems.legoLevel== (currentLegoLevel + 2 ) )?'level_three' :
+                    (TreeItems.legoLevel > (currentLegoLevel + 2 ) )?'level_four' :level_n" *ngIf="TreeItems" [ngStyle]="getmoduleWidth(TreeItems,'li')">
+                    <div [ngClass]="{ 'draggable_node' : (TreeItems.draggable == true),
+                                                  'dummynode_container': (TreeItems.draggable == false ),
+                                                  'dummynode_containerFirefox': (TreeItems.draggable == false && isFirefox == true),
+                                                  'normal_module': (TreeItems.referenceLegoId == 0),
+                                                  'ref_module': (TreeItems.referenceLegoId > 0) }" *ngIf="(TreeItems.cType != 'E' && TreeItems.cType != 'D' && TreeItems.cType != null)" class="mdrag_items main_module">
+                        <div *ngIf="TreeItems.draggable else Dummynode" (click)="clickDblClickOpenModule(TreeItems,parentModule,true,$event)" (dblclick)="clickDblClickOpenModule(TreeItems,parentModule,false,$event)">
+                            <div [contextMenu]="mainmoduleRightMenu" [contextMenuSubject]="[parentModule,TreeItems,false]">
+                                <span class="num-top" *ngIf="(currentLegoLevel + 1) < TreeItems.legoLevel && TreeItems.isNew != true">{{ TreeItems.alphaOrder
+                  }}</span>
+                                <span class="num-top" *ngIf="(currentLegoLevel + 1) == TreeItems.legoLevel && TreeItems.isNew != true ">{{ TreeItems.position }}</span>
+                                <span class="num-top" *ngIf="(currentLegoLevel + 1) == TreeItems.legoLevel && TreeItems.isNew == true ">{{ TreeItems.position + 1 }}</span>
+                                <span class="num-top" *ngIf="(currentLegoLevel + 1) < TreeItems.legoLevel && TreeItems.isNew == true ">{{ getNewAlphaOrder(TreeItems) }}</span>
+                                <div class="title-txt-nw">
+                                    <div class="title-txt-div" *ngIf="TreeItems.renamable != true" [isDisabled]="TreeItems.isTooltipEnabled" [tooltip]="TreeItems.legoName" placement="right" container="body">
+                                        {{ TreeItems.tooltipLegoName }} </div>
+                                    <input maxlength="80" class="compact_textbox" *ngIf="TreeItems.renamable == true" type="text" [attr.value]="TreeItems.legoName" [attr.id]="'renamemodule_' + TreeItems.legoId" (focusout)="hideRename(parentModule,TreeItems,$event)" (keyup.enter)="hideRename(parentModule,TreeItems,$event)">
+                                </div>
+                                <span class="num-bottom"></span>
+                                <span class="num-pad">{{TreeItems.legoLevel}} -
+                  <span *ngIf="TreeItems.children;" [innerText]="TreeItems.childCount"></span>
+                                </span>
+                            </div>
+                            <span (click)="addBlink($event)" class="drag_hover" [contextMenu]="CommonModuleRightMenu" [contextMenuSubject]="[parentModule,TreeItems,false]"></span>
+                            <span *ngIf=" verticalVisible(TreeItems)" (click)="addBlink($event)" class="drag_hover_vertical" [contextMenu]="CommonModuleRightMenu" [contextMenuSubject]="[parentModule,TreeItems,true]"></span>
+                        </div>
+                        <ng-template #Dummynode>
+                            <div (click)="AddnewFromDummy(parentModule,TreeItems)">Add New</div>
+                        </ng-template>
+                    </div>
+                    <div attr.data-sectionvalue="{{ setSectionValue(TreeItems,false) }}" *ngIf="TreeItems.children && !(TreeItems.legoLevel >= (currentLegoLevel + 2 )) else addNewDummy" class="item-child" [sortablejs]="TreeItems.children" [sortablejsOptions]="dragoptions">
+
+                        <ul attr.data-sectionvalue="{{ setSectionValue(listChild,true) }}" class="module_level" [ngClass]="(TreeItems.legoLevel == currentLegoLevel )?'ul_level_one': 
+                            (TreeItems.legoLevel == (currentLegoLevel + 1 ) )?'ul_level_two':
+                            (TreeItems.legoLevel == (currentLegoLevel + 2 ) )?'ul_level_three' :
+                            (TreeItems.legoLevel > (currentLegoLevel + 2 ) )?'ul_level_four' :ul_level_n" *ngFor="let listChild of TreeItems.children;let in = index;trackBy:index" [class.dummyParent]="listChild.draggable && operationalRights == 'Unrestricted' "
+                            [class.draggable]="listChild.draggable && operationalRights == 'Unrestricted' " [class.disabled]="! listChild.draggable">
+                            <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: listChild,parentModule:TreeItems }"></ng-container>
+                        </ul>
+                    </div>
+                    <ng-template #addNewDummy>
+                        <div [ngClass]="(TreeItems.legoLevel == currentLegoLevel )?'dummy_level_one': 
+                            (TreeItems.legoLevel == (currentLegoLevel + 1 ) )?'dummy_level_two':
+                            (TreeItems.legoLevel == (currentLegoLevel + 2 ) )?'dummy_level_three' :
+                            (TreeItems.legoLevel > (currentLegoLevel + 2 ) )?'dummy_level_four' :dummy_level_n">
+                        </div>
+                    </ng-template>
+                </li>
+            </ng-template>
+            <div id="ModuleItems" class="ModuleItems" *ngIf="tree_st_view == false ">
+                <div *ngIf="nochildren" class="addFirstChild_container firstChildHolder" id="firstChildHolder">
+                    <!-- <div (click)="addModuleonMain()" type="button" class="btn btn-primary dropdown_btn ">
+            Add New
+            </div> -->
+                    <div class="firstchildBlinker blinkelement" [contextMenu]="FirstChildRightMenu" [contextMenuSubject]=" [ModuleTreeItems,ModuleTreeItems,true] ">
+                    </div>
+                    <!-- <span  class="drag_hover_vertical blinkelement"
+            [contextMenu]="CommonModuleRightMenu" [contextMenuSubject]=" 'empty' "></span> -->
+                </div>
+                <span id="floatingarrow_left" class="floating_arrowicon ">
+          <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        </span>
+                <span id="floatingarrow_up" class="floating_arrowicon">
+          <i class="fa fa-chevron-up" aria-hidden="true"></i>
+        </span>
+                <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: ModuleTreeItems,parentModule : null }"></ng-container>
+                <span id="floatingarrow_right" class="floating_arrowicon ">
+          <i class="fa fa-chevron-right" aria-hidden="true"></i>
+        </span>
+                <span id="floatingarrow_down" class="floating_arrowicon ">
+          <i class="fa fa-chevron-down" aria-hidden="true"></i>
+        </span>
+            </div>
+            <div *ngIf="tree_st_view == true " id="ModuletreeElement">
+                <p-tree #treeComponent [value]="[ModuleTreeItems]" [styleClass]="ModuletreeElement" draggableNodes="true" droppableNodes="true" dragdropScope="modules" (onNodeDrop)="TreedragModuleProcess($event)">
+                    <ng-template let-node pTemplate="default">
+                        <input [(ngModel)]="node.label" type="text" style="width:100%" class="ui-inputtext">
+                    </ng-template>
+
+                </p-tree>
+            </div>
+
+
+
+        </div>
+    </div>
+    <!-- </p-scrollPanel> -->
+    <div style="position:fixed;top:35px;height:100%;width:100%;display:table; border-collapse: collapse;border:none;outline:none; pointer-events: none">
+        <div style="display: table-cell;width:200px;vertical-align: top">
+            <div style="position:absolute; top: 20px;">
+                <div style="position:fixed;top:200px;left:-200px">
+                    <context-menu #mainmoduleRightMenu [disabled]="disableBasicMenu" style="pointer-events:all">
+                        <ng-template *ngFor="let action of mainmoduleRightMenuActions;trackBy:index;" contextMenuItem let-item [visible]="action.visible" [enabled]="action.enabled" [divider]="action.divider" (execute)="action.click($event)">
+                            <div [innerHTML]="action.html(item)"></div>
+                        </ng-template>
+                    </context-menu>
+                    <context-menu #FirstChildRightMenu [disabled]="disableBasicMenu" style="pointer-events:all">
+                        <ng-template *ngFor="let action of FirstChildRightMenuActions;trackBy:index;" contextMenuItem let-item [visible]="action.visible" [enabled]="action.enabled" [divider]="action.divider" (execute)="action.click($event)">
+                            <div [innerHTML]="action.html(item)"></div>
+                        </ng-template>
+                    </context-menu>
+                    <context-menu #CommonModuleRightMenu [disabled]="disableBasicMenu" style="pointer-events:all">
+                        <ng-template *ngFor="let action of CommonModuleRightMenuActions;trackBy:index;" contextMenuItem let-item [visible]="action.visible" [enabled]="action.enabled" [divider]="action.divider" (execute)="action.click($event)">
+                            <div [innerHTML]="action.html(item)"></div>
+                        </ng-template>
+                        <!-- <ng-template contextMenuItem (execute)="CommonModuleRightEvent('add',$event)">
+                            <div class="context-items">
+                                <span class="context-icon">
+                                    <i class="fa fa-plus"></i>
+                                </span>
+                                <span class="context-title">Add New Module1</span>
+                            </div>
+                        </ng-template>
+                        <ng-template contextMenuItem divider="true"></ng-template>
+                        <ng-template contextMenuItem (execute)="CommonModuleRightEvent('past',$event)">
+                            <div class="context-items">
+                                <span class="context-icon">
+                                    <i class="fa fa-clipboard"></i>
+                                </span>
+                                <span class="context-title">Paste</span>
+                            </div>
+                        </ng-template>
+                        <ng-template contextMenuItem (execute)="CommonModuleRightEvent('pastref',$event)">
+                            <div class="context-items">
+                                <span class="context-icon">
+                                    <i class="fa fa-clipboard"></i>
+                                </span>
+                                <span class="context-title">Paste Reference</span>
+                            </div>
+                        </ng-template> -->
+
+                    </context-menu>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle" width="425"></p-confirmDialog>
+</div>
+<p-dialog header="Icon Library" [(visible)]="icons_display" [modal]="true" [responsive]="true" appendTo="body" [width]="1300">
+    <div *ngIf="icons_display == true">
+        <app-icon-set (iconChanged)="icons_display=$event" [selectedModule]="localSelectedModule"></app-icon-set>
+    </div>
+
+</p-dialog>

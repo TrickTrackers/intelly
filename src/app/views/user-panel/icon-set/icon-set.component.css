@@ -1,0 +1,22 @@
+.icon_container ul.grid { list-style: none; }
+.icon_container .grid li {
+  float: left;
+  width: 20%;
+  height: 50px;
+  border-right: 1px dotted #CCC;
+  border-bottom: 1px dotted #CCC;
+  padding: 15px 0px;
+}
+.icon_container .ui-selectbutton .ui-button.ui-state-default {
+    border: 1px solid #cde8f2 !important;
+    background: #ffffff;
+    font-weight: normal;
+    color: #555555;
+    margin: 2px !important;
+    width: 5% !important;
+}
+.icon_container .ui-selectbutton .ui-button.ui-state-active {
+    border: 1px solid #060606 !important;
+    background: #e2f6fd !important;
+    color: #FFFFFF;
+}

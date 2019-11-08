@@ -1,0 +1,41 @@
+{
+  "_from": "@coreui/angular@^2.0.0-beta.2",
+  "_id": "@coreui/angular@2.0.0-beta.2",
+  "_inBundle": false,
+  "_integrity": "sha512-IBTjLR7zr+1YtbuUYXZVhu43uYCGGcQrmsdF1Sk72DXLdfeIOrrJ3oHD990A7oJ3vFc5awPybtlEcW7s1B/ptw==",
+  "_location": "/@coreui/angular",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "@coreui/angular@^2.0.0-beta.2",
+    "name": "@coreui/angular",
+    "escapedName": "@coreui%2fangular",
+    "scope": "@coreui",
+    "rawSpec": "^2.0.0-beta.2",
+    "saveSpec": null,
+    "fetchSpec": "^2.0.0-beta.2"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@coreui/angular/-/angular-2.0.0-beta.2.tgz",
+  "_shasum": "22ab6a667157b09e489a0f17d97d64c7221bcd33",
+  "_spec": "@coreui/angular@^2.0.0-beta.2",
+  "_where": "D:\\Intelli-working",
+  "bundleDependencies": false,
+  "dependencies": {
+    "@coreui/coreui": "^2.0.0-beta.10"
+  },
+  "deprecated": false,
+  "name": "@coreui/angular",
+  "peerDependencies": {
+    "@angular/common": "*",
+    "@angular/compiler": "*",
+    "@angular/core": "*",
+    "@angular/forms": "*",
+    "typescript": "*",
+    "rxjs": "*"
+  },
+  "version": "2.0.0-beta.2"
+}

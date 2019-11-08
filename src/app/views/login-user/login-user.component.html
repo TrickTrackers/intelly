@@ -1,0 +1,581 @@
+<!-- <link href="assets/user-css/icons.css" rel="stylesheet" type="text/css"> -->
+<!-- <link href="assets/user-css/core.css" rel="stylesheet" type="text/css"> -->
+<!-- <link href="assets/user-css/components.css" rel="stylesheet" type="text/css"> -->
+<!-- <link href="assets/user-css/pages.css" rel="stylesheet" type="text/css">
+<link href="assets/user-css/menu.css" rel="stylesheet" type="text/css">
+<link href="assets/user-css/responsive.css" rel="stylesheet" type="text/css"> -->
+<div class="login-page-pad">
+
+    <!-- Top Bar Start -->
+    <div class="bg-login">
+        <div class="topbar-login top-headernavbar">
+            <div class="container">
+
+                <!-- LOGO -->
+                <div class="topbar-left">
+                    <div class="text-center">
+                        <a href="javascript:void(0);" [routerLink]="['/user-login']" class="logo logo-big">
+                            <img src="assets/images/login-logo-n.png" alt="logo">
+                        </a>
+                        <span class="logo_caption">Business Made Transparent</span>
+                    </div>
+                </div>
+
+                <!-- Navbar -->
+                <div class="navbar navbar-default" style="display:flex;float:right;" role="navigation">
+                    <div id="navigation" class="navbar-right-pad">
+                        <!-- Navigation Menu-->
+                        <ul class="navigation-menu">
+
+                            <li class="has-submenu active">
+                                <a href="javascript:void(0);" [routerLink]="['/user-login']">
+                                    <!--<i class="md md-group-work"></i>-->Home</a>
+
+                            </li>
+                            <li class="has-submenu">
+                                <a href="javascript:void(0);" [routerLink]="['/sales']">Sales</a>
+                            </li>
+                            <li class="has-submenu">
+                                <a href="javascript:void(0);" [routerLink]="['/services']">
+                                    <!--<i class="md md-view-carousel"></i>-->Services</a>
+
+                            </li>
+                            <li class="has-submenu">
+                                <a href="javascript:void(0);" [routerLink]="['/support']">
+                                    <!--<i class="md md-assignment"></i> -->Support</a>
+                            </li>
+                        </ul>
+                        <!-- End navigation menu -->
+
+
+                        <ul class="nav navbar-nav navbar-right">
+
+                            <li class="hidden-xs">
+                                <a href="javascript:void(0);" class="green-pad" target="_blank" [routerLink]="['/register-employee']">Enroll
+                                    Now</a>
+                            </li>
+                            <!-- <li class="hidden-xs">
+                                    <i aria-hidden="true" class="fa fa-info-circle fa-lg mt-3 mr-1" 
+                                    tooltip="Create new user accounts for your Company. 
+                                    Before using this enrollment, a Company Account must have been created using 'Create Account'
+                                    and you must have the unique 'Company ID' sent to the Administrator who created the Company Account"
+                                     style="color:white; margin-top: 11px !important;" data-placement="bottom"></i>                                       
+                                    
+                            </li> -->
+                            <li class="hidden-xs">
+                                <a href="javascript:void(0);" class="blue-pad" target="_blank" [routerLink]="['/register-company']">Create
+                                    Account</a>
+                            </li>
+                            <!-- <li class="hidden-xs">
+                                    <i aria-hidden="true" class="fa fa-info-circle fa-lg mt-3 mr-1" 
+                                    tooltip="Create a Company Account. This will add your company and
+                                    send you the Master credentials required to manage your Company Account 
+                                    and allow new users to enroll using the “Enroll Now” feature"
+                                     style="color:white;margin-top: 11px !important;" data-placement="bottom"></i>                                       
+                                    
+                            </li> -->
+                        </ul>
+                    </div>
+                    <!-- end #navigation -->
+                </div>
+            </div>
+        </div>
+        <!-- Top Bar End -->
+
+        <div class="topbar-login top-headerbanner">
+            <div class="container">
+                <div class="wrapper-page login-wrapper">
+                    <p-growl [life]=3000 [(value)]="msgs"></p-growl>
+                    <div class="text-left">
+                        <h3>
+                            <i class="fa fa-user-circle"></i> {{loginHeaderText}} </h3>
+                    </div>
+                    <!-- <div *ngIf="showLoginUser == true"> -->
+                    <!-- <form class="form-horizontal m-t-40" novalidate> -->
+                    <form [formGroup]="upLoginForm" *ngIf="showLoginUser == true" (ngSubmit)="Login_up(upLoginForm)"
+                        class="form-horizontal m-t-10">
+
+                        <div class="form-group">
+                            <div class="col-xs-11">
+                                <label>Username</label>
+                                <input name="upLoginFormusername" id="upLoginFormusername" class="form-control" type="text"
+                                    maxlength="50" required="" placeholder="" formControlName="username" required
+                                    tabindex="1" #username>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-xs-11">
+                                <label>Password</label>
+                                <input name="upLoginFormpassword" id="upLoginFormpassword" class="form-control" type="password"
+                                    maxlength="50" required="" placeholder="" formControlName="password" required
+                                    #password tabindex="2" autocomplete="new-password">
+                            </div>
+                        </div>
+                        <div class="form-group text-right m-t-20">
+                            <div class="col-xs-11">
+                                <button tabindex="3" id="login_submit" class="login-btn" type="submit"
+                                    [class.btn_disabled]="disableLoginSubmit == true " [disabled]="disableLoginSubmit">Login</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-11">
+                                <input id="remember_me" formControlName="remember_me" type="checkbox">
+                                <label for="remember_me" class="color_white">
+                                    Remember me
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group m-t-15">
+                            <div class="col-sm-12 forget-pass">
+                                <a href="javascript:void(0);" (click)="forgotPassword()" class="forget-text">
+                                    <i class="fa fa-lock m-r-5"></i>Forgot password?</a>
+                            </div>
+                        </div>
+                    </form>
+
+                    <form [formGroup]="upForgotPwdForm" *ngIf="showForgotPwd == true" (ngSubmit)="ForgotPwd_up(upForgotPwdForm)"
+                        class="form-horizontal m-t-10" novalidate autocomplete="off">
+
+                        <div class="form-group">
+                            <div class="col-xs-11">
+                                <label>Email</label>
+                                <input type="email" required formControlName="Email" maxlength="40" class="form-control"
+                                    placeholder="mail@domain.com">
+                            </div>
+                        </div>
+
+                        <div class="form-group text-right m-t-20">
+                            <div class="col-xs-11">
+                                <button class="login-btn" type="submit">Submit</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group m-t-15">
+                            <div class="col-sm-12 forget-pass">
+                                <a href="javascript:void(0);" (click)="returnLoginForm()" class="forget-text">
+                                    <i class="fa fa-lock m-r-5"></i>Return Login Page?</a>
+                            </div>
+                        </div>
+
+                    </form>
+                    <form [formGroup]="resetPwdForm" *ngIf="showResetPassForm == true" (ngSubmit)="ResetPwd_up(resetPwdForm)"
+                        class="form-horizontal m-t-10" novalidate autocomplete="off">
+                        <div class="form-group">
+                            <div class="col-xs-11">
+                                <label>User Name</label>
+                                <input type="text" required minlength="6" maxlength="20" formControlName="Username"
+                                    class="form-control" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-11">
+                                <label>Password</label>
+                                <input type="password" required minlength="6" maxlength="20" formControlName="Password"
+                                    class="form-control" placeholder="" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-11">
+                                <label>Confirm Password</label>
+                                <input type="password" required minlength="6" maxlength="20" formControlName="ConfirmPassword"
+                                    class="form-control" placeholder="" autocomplete="off">
+                                <input type="hidden" required formControlName="Token" class="form-control" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group text-right m-t-20">
+                            <div class="col-xs-11">
+                                <button class="login-btn" type="submit">Submit</button>
+                            </div>
+                        </div>
+                        <div class="form-group m-t-15">
+                            <div class="col-sm-12 forget-pass">
+                                <a href="javascript:void(0);" (click)="backLoginForm()" class="forget-text">
+                                    <i class="fa fa-lock m-r-5"></i>Return Login Page?</a>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- </div> -->
+                </div>
+                <div class="login-wrapper-rgt">
+                    <h3>Welcome to Intellimodz</h3>
+                    <h2>The most flexible enterprise asset management system in the market</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div  *ngIf="showForgetPwd == true" class="topbar-login top-headerbanner">
+                <div class="container">
+                    <div class="wrapper-page login-wrapper">
+                        <p-growl [life]=3000 [(value)]="msgs"></p-growl>
+                        <div class="text-left">
+                            <h3><i class="fa fa-user-circle"></i> Member Login </h3>
+                        </div>
+                           
+                        <form [formGroup]="upLoginForm" (ngSubmit)="Login_up(upLoginForm)" class="form-horizontal m-t-10" novalidate autocomplete="off">
+    
+                            <div class="form-group">
+                                <div class="col-xs-11">
+                                    <label>Username</label>
+                                    <input class="form-control" type="text" required="" placeholder="" formControlName="username" required #username>
+                                </div>
+                            </div>
+    
+                            <div class="form-group">
+                                <div class="col-xs-11">
+                                    <label>Password</label>
+                                    <input class="form-control" type="password" required="" placeholder="" formControlName="password" required #password>
+                                </div>
+                            </div>
+                            <div class="form-group text-right m-t-20">
+                                <div class="col-xs-11">
+                                     <button class="login-btn"  type="submit"  >Login</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-11">
+                                    <div class="checkbox checkbox-primary">
+                                        <input id="checkbox-signup" type="checkbox">
+                                        <label for="checkbox-signup">
+                                  Remember me
+                                </label>
+                                    </div>
+    
+                                </div>
+                            </div>
+                            <div class="form-group m-t-15">
+                                <div class="col-sm-12 forget-pass">
+                                    <a href="javascript:void(0);" class="forget-text"><i class="fa fa-lock m-r-5"></i>Forgot password?</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="login-wrapper-rgt">
+                        <h3>Welcome to Intellimodz</h3>
+                        <h2>The most flexible enterprise asset management system in the market</h2>
+                    </div>
+                </div>
+            </div> -->
+
+    </div>
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="custom-modals">
+
+        <!-- /.modal-dialog -->
+    </div>
+    <div id="login-page" class="content-page">
+        <!-- Start content -->
+
+        <div class="service-pad">
+            <div class="container">
+                <h2>Our Services</h2>
+                <p> Our professionals can advise on how to best modularize your business organization. </p>
+                <ul>
+                    <li>
+                        <a (click)="showservicemodel('knowledge_display')" href="javascript:void(0);">
+                            <div class="img-txt-pad">
+                                <span class="img-txt km-icon"> </span>
+                            </div>
+                            <div class="value-txt">Knowledge Management</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a (click)="showservicemodel('process_display')" href="javascript:void(0);">
+                            <div class="img-txt-pad">
+                                <span class="img-txt pm-icon"> </span>
+                            </div>
+                            <div class="value-txt">Process Management</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a (click)="showservicemodel('org_display')" href="javascript:void(0);">
+                            <div class="img-txt-pad">
+                                <span class="img-txt od-icon"> </span>
+                            </div>
+                            <div class="value-txt">Organization Design</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a (click)="showservicemodel('emp_display')" href="javascript:void(0);">
+                            <div class="img-txt-pad">
+                                <span class="img-txt em-icon"> </span>
+                            </div>
+                            <div class="value-txt">Employee Management</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a (click)="showservicemodel('performa_display')" href="javascript:void(0);">
+                            <div class="img-txt-pad">
+                                <span class="img-txt prm-icon"> </span>
+                            </div>
+                            <div class="value-txt">Performance Management</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a (click)="showservicemodel('enterprise_display')" href="javascript:void(0);">
+                            <div class="img-txt-pad">
+                                <span class="img-txt ei-icon"> </span>
+                            </div>
+                            <div class="value-txt">Enterprise Integration</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a (click)="showservicemodel('external_display')" href="javascript:void(0);">
+                            <div class="img-txt-pad">
+                                <span class="img-txt ek-icon"> </span>
+                            </div>
+                            <div class="value-txt">External Knowledge</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a (click)="showservicemodel('future_display')" href="javascript:void(0);">
+                            <div class="img-txt-pad">
+                                <span class="img-txt fc-icon"> </span>
+                            </div>
+                            <div class="value-txt">Future Capabilities
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- end container -->
+
+        </div>
+        <!-- end content -->
+
+        <!-- START carousel-->
+        <div class="latest-news">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <p-carousel styleClass="latest_newsslider" headerText="Latest News" [value]="latestNews"
+                            [circular]="true" autoplayInterval="5000">
+                            <ng-template let-item pTemplate="item">
+                                <div class="slider_img">
+                                    <img src="{{ item.imgurl }}" width="60" />
+                                </div>
+                                <div class="news-cont">
+                                    <p>Fathium announces the launch of a new enterprise asset management product called
+                                        Intellimodz.
+                                    </p>
+                                </div>
+                            </ng-template>
+                        </p-carousel>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END carousel-->
+
+        <footer class="footer text-right">
+            <div class="container">
+                <div class="foot-left">
+                    <p>Social Links</p>
+                    <ul>
+                        <li>
+                            <a href="javascript:void(0);">
+                                <i class="fa fa-facebook-square"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);">
+                                <i class="fa fa-twitter-square"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);">
+                                <i class="fa fa-rss-square"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="foot-right">
+                    <ul>
+                        <li>
+                            <a href="javascript:void(0);" [routerLink]="['/user-login']">Home</a>
+                        </li>
+                        <span>|</span>
+                        <li>
+                            <a href="javascript:void(0);" [routerLink]="['/services']">Services</a>
+                        </li>
+                        <span>|</span>
+                        <li>
+                            <a href="javascript:void(0);">Resources</a>
+                        </li>
+                        <span>|</span>
+                        <li>
+                            <a href="javascript:void(0);">About Us</a>
+                        </li>
+                        <span>|</span>
+                        <li>
+                            <a href="javascript:void(0);" [routerLink]="['/support']">Support</a>
+                        </li>
+                    </ul>
+                    <div class="foot-btm">
+                        Copyright &copy; 2018 IntellimodzTM | All Rights Reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+</div>
+<p-dialog header="Knowledge Management" [(visible)]="knowledge_display" [dismissableMask]="true" [modal]="true"
+    [responsive]="true" width="700" appendTo="body">
+    <div class="modal-body">
+        <img class="img-rounded img-thumbnail" src="assets/images/tab-img.jpg">
+        <p>Robust, leading edge, flexible knowledge management system designed to capture organizational knowledge,
+            from business
+            unit objectives to individual documents. Link anything in the business to anything else. </p>
+        <hr>
+        <ul>
+            <li>
+                <i class="fa fa-caret-left  green_color"></i> Securely capture your business knowledge</li>
+            <li>
+                <i class="fa fa-caret-left  green_color"></i> Share business knowledge as broadly or narrowly as
+                desired</li>
+            <li>
+                <i class="fa fa-caret-left  green_color"></i> Improve knowledge transfer and retention</li>
+        </ul>
+    </div>
+
+</p-dialog>
+<p-dialog header="Process Management" [(visible)]="process_display" [responsive]="true" [dismissableMask]="true"
+    [modal]="true" width="700" appendTo="body">
+    <div class="modal-body">
+        <img class="img-rounded img-thumbnail" src="assets/images/tab-img1.jpg">
+        <p>Document and consolidate all business processes into one flexible portfolio management system.</p>
+        <hr>
+        <ul>
+            <li>
+                <i class="fa fa-arrow-left green_color"></i> Map business processes into a user-friendly, comprehensive
+                portfolio</li>
+            <li>
+                <i class="fa fa-arrow-left green_color"></i> Model organization value chains</li>
+            <li>
+                <i class="fa fa-arrow-left green_color"></i> Make business processes transparent, including process
+                inputs and outputs </li>
+        </ul>
+    </div>
+
+</p-dialog>
+<p-dialog header="Organization Design" [(visible)]="org_display" [responsive]="true" [dismissableMask]="true" [modal]="true"
+    width="700" appendTo="body">
+    <div class="modal-body">
+        <img class="img-rounded img-thumbnail" src="assets/images/tab-img2.jpg">
+        <p>Map the organizational structure, capturing critical information for all to see and navigate.</p>
+        <hr>
+        <ul>
+            <li>
+                <i class="fa fa-arrow-left green_color"></i> Make the organization chart editable and visible for all
+                to see</li>
+            <li>
+                <i class="fa fa-arrow-left green_color"></i> Capture critical information associated with individual
+                business units</li>
+            <li>
+                <i class="fa fa-arrow-left green_color"></i> Document and disseminate goals, objectives, performance
+                metrics, SWOT analyses of the business</li>
+        </ul>
+    </div>
+</p-dialog>
+<p-dialog header="Employee Management" [(visible)]="emp_display" [responsive]="true" width="700" [dismissableMask]="true"
+    [modal]="true" appendTo="body">
+    <!-- <p-header>
+        <h4 class="modal-title" id="custom-width-modalLabel">Employee Management</h4>
+    </p-header> -->
+    <div class="modal-body">
+        <img class="img-rounded img-thumbnail" src="assets/images/tab-img3.jpg">
+        <p>Capture and retain individual employee information for secure but easy access to help improve insight into
+            human
+            resources assets and capabilities.</p>
+        <hr>
+        <ul>
+            <li>
+                <i class="fa fa-arrow-left green_color"></i> Identify and track employee competencies</li>
+            <li>
+                <i class="fa fa-arrow-left green_color"></i> Standardize annual reviews</li>
+            <li>
+                <i class="fa fa-arrow-left green_color"></i> Capture individual goals and objectives</li>
+            <li>
+                <i class="fa fa-arrow-left green_color"></i> Represent reporting relationships and contact information</li>
+        </ul>
+    </div>
+</p-dialog>
+<p-dialog header="Performance Management" [(visible)]="performa_display" [responsive]="true" width="700"
+    [dismissableMask]="true" [modal]="true" appendTo="body">
+    <div class="modal-body">
+        <img class="img-rounded img-thumbnail" src="assets/images/tab-img4.jpg">
+        <p>Establish metrics and performance dashboards for all aspects of the business.</p>
+        <hr>
+        <ul>
+            <li>
+                <i class="fa fa-arrow-left green_color"></i> Establish performance metrics for all business units</li>
+            <li>
+                <i class="fa fa-arrow-left green_color"></i> Establish performance metrics for all business process</li>
+            <li>
+                <i class="fa fa-arrow-left green_color"></i> Customize performance dashboards to meet the needs of key
+                decision makers</li>
+        </ul>
+    </div>
+</p-dialog>
+<p-dialog header="Enterprise Integration" [(visible)]="enterprise_display" [responsive]="true" width="700"
+    [dismissableMask]="true" [modal]="true" appendTo="body">
+    <div class="modal-body">
+        <img class="img-rounded img-thumbnail" src="assets/images/tab-img5.jpg">
+        <p>Enhanced power and insight is unleashed as the key relationships between enterprise assets, people,
+            processes, knowledge
+            and business units are linked.</p>
+        <hr>
+        <ul>
+            <li>
+                <i class="fa fa-arrow-left green_color"></i> Standardize operations</li>
+            <li>
+                <i class="fa fa-arrow-left green_color"></i> Facilitate education and training</li>
+            <li>
+                <i class="fa fa-arrow-left green_color"></i> Highlight value chains and business models</li>
+            <li>
+                <i class="fa fa-arrow-left green_color"></i> Expose key business inputs and outputs</li>
+        </ul>
+    </div>
+</p-dialog>
+<p-dialog header="External Knowledge" [(visible)]="external_display" [responsive]="true" width="700" [dismissableMask]="true"
+    [modal]="true" appendTo="body">
+    <div class="modal-body">
+        <img class="img-rounded img-thumbnail" src="assets/images/tab-img6.jpg">
+        <p>Capture knowledge about the industry and competitive environment.</p>
+        <hr>
+        <ul>
+            <li>
+                <i class="fa fa-arrow-left green_color"></i> Track competitors</li>
+            <li>
+                <i class="fa fa-arrow-left green_color"></i> Track suppliers</li>
+            <li>
+                <i class="fa fa-arrow-left green_color"></i> Document customer information</li>
+        </ul>
+    </div>
+</p-dialog>
+<p-dialog header="Future Capabilities" [(visible)]="future_display" [responsive]="true" width="700" [dismissableMask]="true"
+    [modal]="true" appendTo="body">
+    <div class="modal-body">
+        <img class="img-rounded img-thumbnail" src="assets/images/tab-img7.jpg">
+
+        <ul>
+            <li>
+                <i class="fa fa-arrow-left green_color"></i> Improved customer management through CRM functionality</li>
+            <li>
+                <i class="fa fa-arrow-left green_color"></i> Enhanced management of technologies and projects</li>
+            <li>
+                <i class="fa fa-arrow-left green_color"></i> Integration with other business systems, such as e-mail,
+                project Management, and document processing.</li>
+            <li>
+                <i class="fa fa-arrow-left green_color"></i> Integration with business systems to capture and compare
+                operational data with organizational goals
+                and objectives.</li>
+        </ul>
+    </div>
+</p-dialog>

@@ -1,0 +1,323 @@
+.workflow_component
+{
+    background: #e4e5e6;
+}
+#taskcomp-pg .custom_scrollpane
+{
+    background: #e4e5e6 !important; 
+}
+#board_container  .board_scrollbar
+{
+    background: #e4e5e6 !important; 
+}
+.workflow_scrollpanel
+{
+    width: 100%;
+    /* height: calc( 60vh ); */
+}
+.workflow_container
+{
+    font-size: 13px;
+    padding: 0px !important;
+    margin: 0px !important;
+    background: #e4e5e6;
+    height: 100%;
+}
+.workflow_container .sub_taskitems 
+{
+    margin: 5px 5px 10px 5px;
+    clear: both;
+    /* -webkit-tap-highlight-color: rgba(0, 0, 0, 0); */
+}
+.checkList-items-container .ui-widget-content{
+    border: none !important;
+}
+.workflow_container div.inprogress .ui-widget-content:not(.checkList-items-container .ui-widget-content) {
+    /* border: 1px solid #45d4d8;
+    background: #40cace;
+    color: #ffffff; */
+    /* background-color: #ffffff;
+    -webkit-box-shadow: 0 0px 0px rgba(121, 120, 120, 0.1), 0 0 0 1px rgba(167, 167, 167, 0.1);
+    box-shadow: 0 0px 0px rgba(121, 120, 120, 0.1), 0 0 0 1px rgba(167, 167, 167, 0.1);
+    color: #363636; */
+    /* border: solid 1px #c1bfbf; */
+    background-color: #fdfdfd;
+    -webkit-box-shadow: 0px 1px 2px 1px rgb(207, 228, 245), 0px 1px 0px 0px rgba(207, 228, 245);
+    box-shadow: 0px 1px 2px 1px rgb(207, 228, 245), 0px 1px 0px 0px rgba(207, 228, 245);
+    color: #363636;
+    border-top: solid 1px #cfe4f5;
+    border-right: solid 1px #cfe4f5;
+    border-bottom: solid 1px #cfe4f5;
+}
+.workflow_container div.inprogress .ui-widget-header {
+    /* border-bottom: 1px solid rgb(40, 165, 169); */
+    background-color: #ffffff;
+    color: #363636;
+    font-weight: normal;
+}
+.workflow_container div.completed .ui-widget-content {
+    border: 1px solid #45d4d8;
+    background: rgb(39, 182, 186);
+    color: #ffffff;
+    -webkit-box-shadow: 0px 1px 2px 1px rgb(39, 182, 186), 0px 1px 0px 0px rgba(210, 250, 251);
+    box-shadow: 0px 1px 2px 1px rgb(39, 182, 186), 0px 1px 0px 0px rgba(210, 250, 251);
+    color: #363636;
+    border-top: solid 1px #64e7ea;
+    border-right: solid 1px #46c0c3;
+    border-bottom: solid 1px #29b5b9;
+}
+.workflow_container div.completed{
+    
+}
+.workflow_container div.completed .ui-widget-header {
+    border-bottom: 1px solid rgb(40, 165, 169);
+    background: rgb(39, 182, 186);
+    color: #090a0a;
+    font-weight: normal;
+}
+.workflow_container div.completed .task_statusdate
+{
+color: #ffff;
+}
+.workflow_container div.overdue  .ui-widget-header {
+    /* border-bottom: 1px #bcbcbd; */
+    background: #f6f7f9;
+    color: #2f353a;
+    font-weight: normal;
+}
+.workflow_container .ui-panel-titlebar-icon.ui-panel-titlebar-toggler
+{
+    border: none !important;
+    background: transparent !important;
+}
+.workflow_container .task_statusdate
+{
+text-align: center;
+}
+.workflow_container .ui-toolbar
+{
+    background: transparent !important;
+    color: #090a0a;
+    font-weight: normal;
+    border: none !important;
+}
+.filter_taskmenu .ui-dropdown
+{
+    width: 200px !important;
+    float: right;
+}
+.filter_taskmenu
+{
+    float: right;
+    position: absolute;
+    top: 70px;
+    right: 50px;
+    width: 100%;
+}
+.filter_taskmenu .top_taskmenu_button
+{
+    float: right;
+    margin:0px 5px;
+}
+.workflow_container .taskSet1{
+    min-width: 2000px;
+    /* overflow: auto; */
+    margin-left: 0px;
+    margin-top: 10px;
+    height: calc( 66vh );
+}
+.custom_scroll {
+    white-space: nowrap; /* [1] */
+    overflow: auto; /* [2] */
+    -webkit-overflow-scrolling: touch; /* [3] */
+    -ms-overflow-style: -ms-autohiding-scrollbar; /* [4] */ 
+}
+  
+  /* [5] */
+  .custom_scroll::-webkit-scrollbar {
+    /* display: none;  */
+}
+.workflow_container .taskSet1 .drag_items
+{
+    width: 225px;
+    margin: 2px;
+}
+.workflow_container .taskSet1 .drag_items:first-of-type
+{
+   margin-left:15px;
+}
+.workflow_container .panel_innerheader
+{
+    width: 100%;
+    min-height: 30px;
+    max-height: 110px;
+    float: left;
+    padding: 5px 5px;
+    border-bottom: solid 1px #e4edf5;
+    
+}
+.workflow_container .panel_innerheader .ui-panel-title
+{
+    font-size: 12px;
+    display: inline-block;
+    margin-top: 2px;
+    width: 175px;
+    /* text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis; */
+    overflow: auto;
+    min-height: 20px;
+    white-space: initial;
+    max-height: 100px;
+}
+.subtask_title
+{
+    min-height: 20px;
+    white-space: initial;
+    max-height: 100px;
+    overflow: auto;
+    font-weight: 600 !important;
+}
+.workflow_container .workflow_task
+{
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
+    border-radius: 0px;
+    -webkit-transition: all 0.3s ease-in;
+    background: #ffffff;
+    border: none !important;
+}
+.workflow_container .workflow_task > .ui-panel-titlebar.ui-widget-header.ui-helper-clearfix
+{
+padding : 0 !important;
+border-bottom: 1px solid #fafdff;
+margin: 0 !important;
+}
+.dashed
+{
+    text-decoration: line-through;
+}
+.workflow_container .workflow_task .ui-panel-content:first-child
+{
+    padding: 2px 2px 0px 2px !important;
+    margin: 0;
+}
+.workflow_container .workflow_task .sub_task
+{
+    background: #ffffff;
+    color: #222222;
+    -webkit-box-shadow: 0 0px 0px rgba(121, 120, 120, 0.1), 0 0 0 1px rgba(167, 167, 167, 0.1);
+    box-shadow: 1px 2px 2px 0px rgba(223, 241, 255, 0.98), 1px 3px 0 0px rgba(219, 228, 234);
+    border-right: none;
+    border-top: none;
+    border-bottom: none;
+    border-radius: 0%;
+}
+    /* border: 1px solid #D5D5D5; */
+
+.workflow_container .workflow_task .sub_task .ui-panel-titlebar.ui-widget-header 
+{
+    padding: 2px 2px !important;
+    font-size: 11px;
+    background: #cff5fc !important;
+}
+.empty_addtaskcart
+{
+    height: 50px;
+    border-style: dashed;
+    border-color: #c1def5;
+    cursor: pointer;
+    clear: both;
+    /* position: absolute;
+    top: 50px;
+    margin-left: 10px; */
+}
+.empty_addtaskcart .activetaskflag
+{
+
+}
+.empty_addtaskcart .emptycard_btn
+{
+    text-align: center;
+    line-height: 40px;
+    color: #9dc1de;
+    font-weight: bold;
+}
+.tasksidebar
+{
+    width: calc( 60vw ) !important;
+    top: 105px;
+}
+.workflow_container .tasktoolbar
+{
+    font-size: 12px;
+}
+.workflow_container .task_statusdate
+{
+    font-size: 13px;
+}
+.workflow_container .ui-progressbar.ui-progressbar-determinate .ui-progressbar-value
+{
+    background: #00d1b2 !important;
+}
+.workflow_container .ui-progressbar-determinate .ui-progressbar-label {
+    font-size: 10px;
+}
+.custom_primetabview .ui-tabview .ui-tabview-nav > li.ui-state-active
+{
+    margin-top: -1px;
+}
+.custom_primetabview .ui-tabview .ui-tabview-nav > li.ui-state-active a {
+    border-left: solid 1px #106ab0 !important;
+    border-right: solid 1px #106ab0 !important;
+    border-top: solid 1px #106ab0 !important;
+    border-bottom: none !important;
+    background: #116bb0;
+    color: #ffffff;
+}
+.custom_primetabview .ui-tabview-panels
+{
+    border-top: 4px solid #106ab0;
+}
+.custom_primetabview .ui-tabview .ui-tabview-nav > li {
+    margin: 0px 0px;
+}
+.custom_primetabview .ui-tabview.ui-tabview-top>.ui-tabview-nav
+{
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+.disable_drag
+{
+    touch-action: none;
+    /* user-select: none; */
+    -webkit-user-drag: none;
+     -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+    /* pointer-events: none; */
+}
+.activetaskflag
+{
+    background: #c1def5;
+    padding: 2px 5px;
+}
+.dummy_subtask_container 
+{
+    height: 10px;
+    margin: 5px 0px 0px 0px !important;
+    padding-bottom: 0;
+    overflow: hidden;
+}
+.dummy_subtask
+{
+    visibility: hidden; 
+}
+.h-25
+{
+    height: 25px;
+    clear: both;
+}

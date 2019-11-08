@@ -1,0 +1,215 @@
+.resize_grabber {
+    position: absolute;
+    bottom: 0;
+    cursor: e-resize;
+    /* height: calc(100vh - 65px); */
+    height: 100%;
+    width: 7px;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    float: right;
+    right: 0px;
+    background: #188ae2 url(assets/images/vgrabber.gif) no-repeat scroll center center;
+    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.26), 0 0 0 2px rgba(0, 0, 0, 0.18);
+    -webkit-box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.26), 0 0 0 2px rgba(0, 0, 0, 0.18);
+    transition: all 0.3s ease-in;
+    -webkit-transition: all 0.3s ease-in;
+}
+
+#sidemenuHolder {
+    /* min-height: 1px; */
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: #2d3b55;
+    position: fixed;
+    z-index: 999;
+    width: 200px;
+}
+
+.hide_customsidebar {
+    margin-left: -200px;
+}
+
+.sidebar-inner {
+    flex: 1 1 auto;
+    min-height: 1px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.logo {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 10px;
+    color: #98b0bc;
+    font-size: 24px;
+    font-weight: 100;
+    letter-spacing: 2px;
+}
+
+.close-icon {
+    padding: 0 10px;
+    display: inline-flex;
+    align-items: center;
+    color: #9bb2bc;
+}
+
+.close-icon:hover {
+    cursor: pointer;
+    color: white;
+}
+
+.sidebar-header {
+    display: flex;
+    flex-shrink: 0;
+    height: 40px;
+    justify-content: flex-end;
+}
+
+.sidebar-body {
+    margin: 0;
+    padding: 0;
+}
+
+.sidebarmodule-list-header {
+    color: #98b0bc;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    line-height: 28px;
+    padding: 0 10px 0 10px;
+}
+
+.add-sidebarmodule {
+    color: #44545d;
+    font-size: 20px;
+}
+
+.add-sidebarmodule:hover {
+    cursor: pointer;
+    color: #9bb2bc;
+}
+
+.sidebarmodule-link {
+    color: #fff;
+    font-weight: 200;
+    text-decoration: none;
+    float: left;
+    display: table-cell;
+    padding: .27rem 1rem .55rem .3rem;
+    overflow: hidden;
+    display: block;
+    white-space: nowrap;
+    position: absolute;
+    width: 74%;
+    left: 15px;
+    /* text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis; */
+    display: block;
+    white-space: nowrap;
+}
+
+.sidebar_icon {
+    width: 20px;
+    float: left;
+}
+
+.sidebar_icon img {
+    margin: 8px 5px 5px 0px;
+    max-width: 15px;
+    max-height: 15px;
+    float: right;
+}
+
+.sidebarmodule_expandcollapse {
+    float: right;
+    font-size: 10px;
+    color: #fff;
+    width: 27px;
+    margin: 0px;
+    padding: 0.6rem 0rem 0.45rem 0rem;
+    cursor: pointer;
+}
+
+.sidebarmodule_link_holder {
+    height: initial;
+    clear: both;
+}
+
+.sidebarmodule-listitem>.sidebarmodule_link_holder:hover>a.sidebarmodule-link {
+    color: #8bccff;
+}
+
+li.sidebarmodule-listitem>.sidebarmodule_link_holder.active {
+    height: auto;
+    background-color: #2182ce;
+    display: block;
+    clear: both;
+    min-height: 35px;
+}
+
+.sidebarmodule-link:hover {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.sidebarmodule-link.active {
+    background-color: #222c3e;
+}
+
+.sidebar-body .sidebarmodule-list .sidebarmodule-list-body ul.moduledropdown-items {
+    max-height: 0;
+    padding: 0;
+    margin: 0;
+    /* overflow-y: hidden; */
+    transition: max-height .3s ease-in-out;
+    list-style: none;
+    clear: both;
+}
+
+.sidebar-body .sidebarmodule-list .sidebarmodule-list-body>li {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    display: block;
+}
+
+.sidebar-body .sidebarmodule-list .sidebarmodule-list-body li {
+    position: relative;
+    margin: 0;
+    display: block;
+    height: 30px;
+    clear: both;
+}
+
+.sidebarmodule_expanded .icons {
+    display: none;
+}
+
+.sidebarmodule_expanded .icon-arrow-down {
+    display: block;
+}
+
+.sidebarmodule_expanded .icon-arrow-up {
+    display: none;
+}
+
+.sidebarmodule_collapsed .icon-arrow-up {
+    display: block;
+}
+
+.sidebarmodule_collapsed .icon-arrow-down {
+    display: none;
+}
+
+.sidebarmodule_child_holder {
+    margin: 0px 0px 0px 5px;
+}

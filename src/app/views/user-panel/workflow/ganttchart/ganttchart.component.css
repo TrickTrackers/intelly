@@ -1,0 +1,133 @@
+ /* @import "../../../../../../node_modules/dhtmlx-gantt/codebase/dhtmlxgantt.css"; */
+
+ :host {
+     display  : block;
+     /* height: 600px; */
+     height   : calc(80vh);
+     position : relative;
+     width    : 100%;
+ }
+
+  .ganttchart_option label,
+ .ganttchart_option .ui-radiobutton-label {
+     margin-bottom: 0px !important;
+     /* font-size:14px !important; */
+ }
+
+ .ui-g-12 .ui-md-12 .no-padding .ng-star-inserted {
+     height: 800px !important;
+ }
+
+ .ganttfullWidthpopup {
+     width : 100%;
+     height: calc(70vh);
+ }
+
+ .gantt-demo-header {
+     border-top  : 1px solid #cecece;
+     border-left : 1px solid #cecece;
+     border-right: 1px solid #cecece;
+ }
+
+ .gantt-controls {
+     background-color   : #f5f5f5;
+     /* font-size          : 14px; */
+     font-size          : 12px;
+     list-style-type    : none;
+     margin             : 0;
+     overflow           : visible;
+     padding            : 0;
+     text-align         : left;
+     -webkit-user-select: none;
+     -moz-user-select   : none;
+     -ms-user-select    : none;
+     user-select        : none;
+ }
+
+ .gantt-menu-item {
+     display           : inline-block;
+     -webkit-box-sizing: border-box;
+     -moz-box-sizing   : border-box;
+     box-sizing        : border-box;
+
+     position : relative;
+     overflow : visible;
+     /*padding:0 10px;*/
+ }
+
+ .gantt-menu-item-right {
+     float: right;
+ }
+
+ .gantt-menu-item img {
+     margin-right  : 8px;
+     vertical-align: middle;
+ }
+
+ .gantt-menu-item a {
+     display        : block;
+     cursor         : pointer;
+     color          : #3d3d3d;
+     text-align     : center;
+     line-height    : 40px;
+     padding        : 0 10px;
+     text-decoration: none;
+ }
+
+ .gantt-menu-item a:hover {
+     background-color: #e2e2e2;
+ }
+
+ .gantt-controls .gantt-controls {
+     display: none;
+ }
+
+ .gantt-menu-item:hover .gantt-controls {
+     display : block;
+     left    : 0;
+     padding : 5px 0;
+     position: absolute;
+     top     : 41px;
+     z-index : 1;
+ }
+
+ .gantt-menu-item .menu-item-active {
+     background-color: #dadada !important;
+ }
+
+ .gantt-menu-item .menu-item-disabled {
+     color         : #818181 !important;
+     pointer-events: none;
+ }
+
+ .gantt-menu-item:hover .gantt-controls li {
+     width: 100%;
+ }
+
+ .gantt-menu-item:hover .gantt-controls a {
+     white-space: nowrap;
+     text-align : left;
+ }
+
+ .gantt-menu-item:hover .gantt-controls::before {
+     position  : absolute;
+     top       : -7px;
+     width     : 100%;
+     content   : " ";
+     height    : 10px;
+     background: transparent;
+     left      : 0;
+     z-index   : 1;
+ }
+
+ .gantt-menu-item-last {
+     border-right: 1px solid #cecece;
+ }
+ .gantt-menu-item-first {
+    border-left: 1px solid #cecece;
+}
+
+ /* .ganttchart_option label, .ganttchart_option .ui-radiobutton-label {
+    margin-bottom: 0px !important;
+    font-size: 14px !important;
+} */

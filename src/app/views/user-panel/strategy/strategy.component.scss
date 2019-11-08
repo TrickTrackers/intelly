@@ -1,0 +1,22 @@
+.ui-tabview.ui-widget-content {
+    border: 1px solid #D5D5D5 !important;
+}
+
+.ui-tabview.ui-tabview-top>.ui-tabview-nav li {
+    border-bottom: 1 !important;
+}
+
+.ui-tabview .ui-tabview-nav>li.ui-state-active {
+    border-bottom: 0 !important;
+}
+
+app-strategy {
+    .cke_contents {
+        min-height: 100% !important;
+    }
+}
+
+.allow-drag {
+    padding: 5px 30px;
+    cursor : pointer;
+}

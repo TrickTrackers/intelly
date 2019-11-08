@@ -1,0 +1,178 @@
+.doctree_expanded .icons {
+    display: none;
+  }
+ .doctree_expanded .icon-arrow-down {
+   font-size: 10px;
+   color: black;
+   width: 10%;
+   margin: 0px;
+    display: block;
+ }
+ .doctree_expanded .icon-arrow-up {
+    display: none;
+ }
+ .doctree_collapsed .icon-arrow-up {
+   font-size: 10px;
+   color: black;
+   width: 10%;
+   margin: 0px;
+    display: block; 
+ }
+ .doctree_collapsed .icon-arrow-down {
+    display: none;
+ }
+ .doc_child_holder ul li 
+ {
+    list-style: none;
+    line-height: 20px;
+ }
+ .doc_child_holder ul {
+   padding: 0px 2px;
+   margin: 0px 5px;
+ }
+ .doc_link_holder
+ {
+   height: inherit;
+   clear: both;
+   max-width: 200px;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   -ms-text-overflow: ellipsis;
+   -o-text-overflow: ellipsis;
+   white-space: nowrap;
+ }
+ .doc_child_holder
+ {
+   margin: 0px 0px 0px 5px;
+ }
+ .documentmodule_expandcollapse
+  {
+    float: right;
+    font-size: 10px;
+    color: black;
+    width: 10%;
+    margin: 0px;
+    /* padding: 0.6rem 0rem 0.45rem 0rem; */
+    cursor: pointer; margin-top: 6px;
+  }
+
+  .doc-listitem 
+  {
+    list-style: none;
+  }
+  .doc-listitem  > .doc_link_holder:hover > a.doc-link
+  {
+    color: #8bccff;
+    list-style: none;
+  }
+li.doc-listitem > .doc_link_holder.active
+  {
+    height: auto;
+    /* background-color: #2182ce; */
+    display: block;
+    clear: both;
+    min-height: 35px;
+    width: 300px;
+  }
+
+  .tree-body {
+    margin: 0;
+    padding: 0;
+  }
+
+  .sidebar-inner1 {
+    flex: 1 1 auto;
+    min-height: 1px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  #documentholder {
+    min-height: 1px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    /* background: #2d3b55; */
+    position: fixed;
+    z-index: 999;
+    width: 200px;
+  }
+
+  .tree-body .doctree-list .doctree-list-body ul.moduledropdown-items {
+   max-height: 0;
+   padding: 0;
+   margin: 0;
+   /* overflow-y: hidden; */
+   transition: max-height .3s ease-in-out;
+   list-style: none;
+}
+ .tree-body .doctree-list .doctree-list-body > li{
+   margin: 0;
+   padding: 0;
+   position: relative;
+   display: block;
+ }
+ .tree-body .doctree-list .doctree-list-body  li{
+   position: relative;
+   margin: 0;
+   display: block;
+   height: 30px;
+   clear: both;
+ }
+
+ .doctree-listitem  > .doc_link_holder:hover > a.doc-link
+  {
+    color: #8bccff;
+  }
+li.doctree-listitem > .doc_link_holder.active
+  {
+    height: auto;
+    /* background-color: #2182ce; */
+    display: block;
+    clear: both;
+    min-height: 35px;
+  }
+
+  .doc_dropdown_width
+  {
+    width:50px;
+  }
+
+  .hide_tab {
+    visibility: hidden !important;
+  }
+  /* in-flight clone */
+.gu-mirror {
+  position: fixed !important;
+  margin: 0 !important;
+  z-index: 9999 !important;
+  opacity: 0.8;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  filter: alpha(opacity=80);
+  pointer-events: none;
+}
+/* high-performance display:none; helper */
+.gu-hide {
+  left: -9999px !important;
+}
+/* added to mirrorContainer (default = body) while dragging */
+.gu-unselectable {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+/* added to the source element while its mirror is dragged */
+.gu-transit {
+  opacity: 0.2;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+  filter: alpha(opacity=20);
+}
+/* .documenttree_container .ui-treetable-tablewrapper table tbody.ui-treetable-data div.ui-treetable-row:first-child{
+  display: none !important;
+} */
+
+input[type=text]::-ms-clear {
+  display: none;
+  /* The cross can be hidden by setting the display attribute as "none" */
+} 

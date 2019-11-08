@@ -1,0 +1,72 @@
+/* #details_tabs ul.nav-tabs > li.nav-item.disabled{
+display: none;
+}
+
+#stab_details_managefiltertags.nav-tabs{
+    display: none;
+  } */
+
+[hidden] {
+  display: none !important;
+}
+
+.current_user {
+  background-color: #116bb0 !important;
+  color           : #ffffff !important;
+}
+
+.current_user_link {
+  font-weight: bold !important;
+  color      : #116bb0 !important;
+}
+
+.not_current_user_link {
+  /* font-weight: bold !important; */
+  color         : #116bb0 !important;
+}
+
+.upload-btn-wrapper input[type=file] {
+  /* font-size: 100px; */
+  position    : absolute;
+  left        : 0;
+  top         : 0;
+  opacity     : 0;
+}
+
+.custom-file-upload {
+  border : 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor : pointer;
+  margin : 15px 0px 0px 0px;
+}
+
+.nav-tabs .nav-link.disabled {
+  visibility: hidden !important;
+}
+
+#details-pg .nav-tabs li.nav-item.nav-link.disabled {
+  visibility: hidden !important;
+}
+
+input[type=text]::-ms-clear {
+  display: none;
+  /* The cross can be hidden by setting the display attribute as "none" */
+}
+
+.div_top_btn .save_topbtn {
+  float       : right;
+  margin-top  : -39px !important;
+  margin-right: 58px !important;
+  /* position : absolute;
+    right     : 53;
+    top       : 75px;
+    right     : 60px;
+    left      : auto; */
+}
+
+.div_top_btn {
+  z-index : 999;
+  position: absolute;
+  right   : 5px;
+}

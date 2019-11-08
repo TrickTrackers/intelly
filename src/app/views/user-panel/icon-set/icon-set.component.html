@@ -1,0 +1,37 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+        <!-- <p-fileUpload name="myfile[]" url="./upload.php"  accept="image/*" maxFileSize="1000000" auto="auto"
+        url="./upload.php" customUpload="true" (uploadHandler)="myUploader($event)"></p-fileUpload> -->
+        <!-- <p-fileUpload #fubauto mode="basic" name="uploadedicon[]" url="http://localhost:52718/api/Lego/GetDirectoryIconList" accept="image/*" maxFileSize="1000000" (onUpload)="onBasicUploadAuto($event)" auto="true" chooseLabel="Browse"></p-fileUpload> -->
+        <input type="file" accept="image/*" (change)="inputChange(input)" #input>
+        <button type="button" (click)="iconChange()" class="btn btn-primary" style="float: right; margin-right: 50px;">Save</button>
+      </div>
+    
+  <div class="ui-g-12" *ngIf="iconList" class="icon_container">
+      <p-selectButton [options]="iconList" [(ngModel)]="selectedIcon">
+          <ng-template let-item>
+            <div style="padding: .5em 1em">
+              <img style="vertical-align: middle; margin-right: .5em" class="icon_img" [src]="_DomSanitizationService.bypassSecurityTrustResourceUrl(iconPath + item.value)" />
+            </div>
+          </ng-template>
+        </p-selectButton>
+  </div>
+</div>
+<!-- <div class="animated fadeIn">
+
+  <div class="card card-default">
+    <div class="card-header">
+      <i class="fa fa-picture-o"></i> Simple Line Icons
+    </div>
+    <div class="card-body">
+      <div class="row text-center icon_container" *ngIf="iconList">
+        
+        <ul class="grid">
+          <li *ngFor="let icon of iconList;">
+            <img [src]="_DomSanitizationService.bypassSecurityTrustResourceUrl(iconPath + icon.value)" />
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div> -->

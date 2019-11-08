@@ -1,0 +1,82 @@
+/* body.pinmodule
+{
+
+} */
+body.pinmodule .custom_toggler
+{
+    display: none;
+}
+
+body.pinmodule .main_header
+{
+    display: none;
+}
+body.pinmodule .header_search_icon
+{
+    display: none;
+}
+body.pinmodule #header_chat_iconli
+{
+    display: none;
+}
+body.pinmodule #main_viewpoint
+{
+    margin-left: 0px !important;
+}
+body.pinmodule #stab_preference-link{
+    display: none !important; 
+}
+body.pinmodule #sidemenuHolder
+{
+    display: none;
+}
+body.pinmodule  .breadcrumb_container 
+{
+    display: none;
+}
+body.pinmodule #main_tab_container ul  li:last-child{
+    display: none;
+}
+body.pinmodule  #tab_submodule
+{
+    display: none;
+}
+body.pinmodule  #tab_workflow
+{
+    display: none;
+}
+body.pinmodule  #tab_connections
+{
+    display: none;
+}
+body.pinmodule  #tab_documents
+{
+    display: none;
+}
+body.pinmodule  #tab_strategy
+{
+    display: none;
+}
+body.pinmodule  #tab_assessment
+{
+    display: none;
+}
+body.pinmodule  #tab_performance
+{
+    display: none;
+}
+body.pinmodule  #tab_collaborations
+{
+    display: none;
+}
+body.pinmodule  #tab_details
+{
+    display: none;
+}
+body.pinmodule  #stab_document_Add
+{
+    display: none;
+}
+body.pinmodule #nav_search_id {
+    display: block;
+}

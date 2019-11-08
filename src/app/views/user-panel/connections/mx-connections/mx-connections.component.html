@@ -1,0 +1,101 @@
+<div id="connection-pg" class="content-page component_holder">
+    <!-- Start content -->
+    <div class="content">
+        <div class="container no-padding" *ngIf="hasRights">
+            <div class="topbutton_section">
+                <div style="float:right">
+
+                    <button [disabled]=" operationalRights != 'Unrestricted' || isRefModule == true "
+                        *ngIf="!graphEditable" class="btn btn-sm btn-primary m-r-5" (click)="AddNewDoc()">
+                        <i class="fa fa-plus">&nbsp;<b>Add</b></i></button>
+                </div>
+            </div>
+            <div *ngIf="!graphEditable" id="connections_panels">
+                <p-scrollPanel [style]="{width: '100%'}" styleClass="custom_scrollpane">
+                    <div class="ui-g">
+                        <div *ngFor="let connection of connectionList;trackBy:index;let i = index"
+                            class="ui-g-12 ui-md-3 connection_gridlist">
+                            <p-panel styleClass="green_panel">
+                                <p-header>
+                                    <div class="ui-helper-clearfix">
+                                        <span class="ui-panel-title"
+                                            style="font-size:12px;display:inline-block;margin-top:3px">
+                                            {{ connection.connection_name }}
+                                        </span>
+                                        <span *ngIf="operationalRights == 'Unrestricted' && !isRefModule"
+                                            (click)="deleteConnection(connection)" class="pull-right iconholder cursor-pointer">
+                                            <i class="fa fa-close"></i>
+                                        </span>
+                                    </div>
+                                </p-header>
+                                <iframe class="iframe" width="100%" height="100%" [src]="connection.htmlurl"></iframe>
+                                <p-footer>
+                                    <div class="custom_panelfooter" style="min-height: 20px;">
+                                        <span class="cursor-pointer" *ngIf="operationalRights == 'Unrestricted' && !isRefModule" (click)="edit_chart(connection)">Created by <b>{{ connection.employee }}</b> on
+                                            <b>{{ connection.createddate }}</b></span>
+                                        <span (click)="display_fullscreen(connection)" class="pull-right iconholder cursor-pointer">
+                                            <i class="fa fa-expand"></i>
+                                        </span>
+                                        <span *ngIf="operationalRights == 'Unrestricted' && !isRefModule"
+                                            (click)="edit_chart(connection)" class="pull-right iconholder cursor-pointer">
+                                            <i class="fa fa-pencil"></i>
+                                        </span>
+                                    </div>
+                                </p-footer>
+                            </p-panel>
+                        </div>
+                    </div>
+                </p-scrollPanel>
+            </div>
+            <div *ngIf="graphEditable" class="ui-g">
+                <div class="col-md-12 col-lg-12 col-sm-12 no-padding">
+                    <div class="ui-g-11 ui-md-11 ui-sm-10 no-padding">
+                        <div class="d-flex no-padding breadcrumb">
+                            <div class="flex-fill">
+                                <ol class="breadcrumb navigation_breadcrumb border-0">
+                                    <li class="breadcrumb-item">
+                                        <a (click)="close_editorGraph()" href="javascript:void(0)">Back</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        <span tabindex="0">{{ drawingname }}</span>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-g-1 ui-md-1 ui-sm-2 no-padding ">
+                        <button class="btn btn-sm btn-primary float-right" (click)="close_editorGraph()">
+                            <i class="fa fa-minus">&nbsp;<b>Exit</b></i></button>
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-md-12 no-padding">
+                    <div id="Diagram_tool">
+                        <img src="./assets/images/loader.gif" width="31px" height="31px" id="iframe_loader"
+                            style="margin:auto auto;" />
+                        <iframe (load)="hideLoader()" id="Dia_chart" class="iframe" width="100%"
+                            style="height: calc( 80vh );" [src]="mxeditor_url"></iframe>
+                    </div>
+                    <div id='Connection_con' style='display:block;overflow:auto;'></div>
+                </div>
+            </div>
+        </div>
+        <div class="container no-padding" *ngIf="!hasRights">
+            <div class="ui-g">
+                <div class="ui-g-12 no-padding" style="height: 800px">
+                    <div class="page-restricted">
+                        <span>Access to this page is restricted</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle" width="425"></p-confirmDialog> -->
+<p-dialog [header]="temp_connectionName" [(visible)]="showiframe_popup" [modal]="true" [responsive]="true" appendTo="body">
+    <div *ngIf="iframe_popup_url" style="width: calc( 95vh );height:calc( 85vh )">
+        <iframe class="iframe" width="100%" height="100%" [src]="iframe_popup_url" class='ifa_f' webkitallowfullscreen
+            mozallowfullscreen allowfullscreen></iframe>
+    </div>
+
+</p-dialog>
+ 

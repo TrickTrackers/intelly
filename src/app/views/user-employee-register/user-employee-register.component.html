@@ -1,0 +1,554 @@
+<div class="login-page-pad" style="background: #fff;">
+    <div class="login-page-pad" style="background: #fff;"></div>
+
+    <!-- Top Bar Start -->
+    <div class="">
+        <div class="topbar-login top-headernavbar no-padding">
+            <div class="container">
+
+                <!-- LOGO -->
+                <div class="topbar-left">
+                    <div class="text-center">
+                        <a href="javascript:void(0);" [routerLink]="['/user-login']" class="logo logo-big">
+                            <img src="assets/images/logo_sm.png" alt="logo">
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Navbar -->
+                <div class="navbar navbar-default service-navbar" role="navigation" style="display:flex !important;">
+                    <div id="navigation" class="navbar-right-pad">
+                    </div>
+                    <!-- end #navigation -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+
+    <div>
+        <!-- Start content -->
+
+        <div class="services_tab_container">
+            <p-growl [(value)]="msgs"></p-growl>
+            <div class="col-md-12">
+                <div class="title_box">
+                    <h4 style="color:#116bb0">USER REGISTRATION</h4>
+                </div>
+            </div>
+            <!-- One "tab" for each step in the form: -->
+            <div *ngIf="showAccountInfo == true">
+                <form [formGroup]="empEnrollForm" (ngSubmit)="onSubmitEmpEnrollment(empEnrollForm.value)" novalidate
+                    autocomplete="off">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <b>User Registration</b>
+                        </div>
+
+                        <div class="panel-body">
+                            <p-scrollPanel [style]="{width: '100%', height: '300px'}">
+                                <div style="padding:1em;line-height:1.5">
+                                    <div class="ui-g ">
+                                        <div class="ui-g-12 ui-md-12 ui-lg-12">
+                                            <div class=" padding_1 card ui-g-6 ui-md-6">
+                                                <p-panel header="COMPANY DETAILS" styleClass="blue_panel customTitleBar">
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                                            <div class="form-group row">
+                                                                <label for="lbl_user_name" class="col-sm-5 col-form-label required_label">CompanyID</label>
+                                                                <div class="col-sm-12">
+                                                                    <input required formControlName="companyID"
+                                                                        maxlength="20" class="form-control" type="text"
+                                                                        id="companyId">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                                            <div class="form-group row">
+                                                                <div class="col-sm-12">
+                                                                    <p></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                                            <div class="form-group row">
+                                                                <div class="col-sm-12">
+                                                                    <p>
+                                                                        This feature is to create new user accounts for
+                                                                        your Company.
+                                                                        Before using this enrollment, a Company Account
+                                                                        must have been created using “Create Account”
+                                                                        and you must have the unique “Company ID” sent
+                                                                        to the administrator who created the Company
+                                                                        Account.
+                                                                        If you don’t have this unique Company ID,
+                                                                        contact your administrator
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </p-panel>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p-scrollPanel>
+                            <div style="overflow:auto; margin-bottom:10px; margin-top:13px;">
+                                <div style="float:right;">
+                                    <button type="submit" class="btn btn-sm btn-primary" id="companybtn">Next</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- Employee Account Details tab -->
+            <div *ngIf="showEmpAccountDetails == true" style="margin: 0px 10px;">
+                <form [formGroup]="empAccountDetailsForm" (ngSubmit)="onSubmitEmployeeDetails(empAccountDetailsForm.value)"
+                    novalidate autocomplete="off">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <b>Account Information</b>
+                        </div>
+
+                        <div class="panel-body">
+                            <p-scrollPanel [style]="{width: '100%', height: '410px'}">
+                                <div style="padding:1em;line-height:1.5">
+                                    <div class="ui-g ">
+                                        <div class="card-columns">
+                                            <div class=" padding_1 card">
+                                                <p-panel header="PRIMARY CONTACT" styleClass="customTitleBar blue_panel">
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                                            <div class="form-group row">
+                                                                <label for="lbl_user_name" class="col-sm-5 col-form-label required_label">First
+                                                                    Name</label>
+                                                                <div class="col-sm-7">
+                                                                    <input pInputText required
+                                                                        formControlName="FirstName" maxlength="100"
+                                                                        class="form-control" placeholder="" type="text"
+                                                                        id="txtFirstName">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                                            <div class="form-group row ">
+                                                                <label for="lbl_pwd" class="col-sm-5 col-form-label required_label">Last
+                                                                    Name</label>
+                                                                <div class="col-sm-7">
+                                                                    <input pInputText required
+                                                                        formControlName="LastName" maxlength="100"
+                                                                        class="form-control" placeholder="" type="text">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                                            <div class="form-group row ">
+                                                                <label for="lbl_master_pwd" class="col-sm-5 col-form-label required_label">Address
+                                                                    1</label>
+                                                                <div class="col-sm-7">
+                                                                    <input required formControlName="PermanentAddress1"
+                                                                        class="form-control" maxlength="100"
+                                                                        placeholder="" type="text">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                                            <div class="form-group row ">
+                                                                <label for="lbl_master_pwd" class="col-sm-5 col-form-label">Address
+                                                                    2</label>
+                                                                <div class="col-sm-7">
+                                                                    <input formControlName="PermanentAddress2" class="form-control"
+                                                                        maxlength="100" placeholder="" type="text">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                                            <div class="form-group row ">
+                                                                <label for="lbl_master_pwd" class="col-sm-5 col-form-label required_label">City</label>
+                                                                <div class="col-sm-7">
+                                                                    <input pInputText required
+                                                                        formControlName="PermanentCity" maxlength="100"
+                                                                        class="form-control" placeholder="" type="text">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                                            <div class="form-group row ">
+                                                                <label for="lbl_master_pwd" class="col-sm-5 col-form-label required_label">State</label>
+                                                                <div class="col-sm-7">
+                                                                    <!-- <p-dropdown [options]="stateList" [filter]="true"
+                                                                        formControlName="PermanentState" [style]="{'width':'100%'}"
+                                                                        optionLabel="name" appendTo="body"></p-dropdown> -->
+                                                                    <p-autoComplete formControlName="PermanentState"
+                                                                        [suggestions]="selectedstateSuggestion" [style]="{'width':'100%'}"
+                                                                         [autoHighlight]="true"
+                                                                        (completeMethod)="filterResponsibilityMultiple($event)"
+                                                                        placeholder="select state" field="name" [size]="21"
+                                                                        [minLength]="1" appendTo="body">
+                                                                    </p-autoComplete>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                                            <div class="form-group row ">
+                                                                <label for="lbl_master_pwd" class="col-sm-5 col-form-label required_label">Zip</label>
+                                                                <div class="col-sm-7">
+                                                                    <input pInputText pKeyFilter="num" maxlength="5"
+                                                                        required formControlName="PermanentZipcode"
+                                                                        class="form-control" placeholder="" type="text">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                                            <div class="form-group row ">
+                                                                <label for="lbl_master_pwd" class="col-sm-5 col-form-label required_label">Mobile</label>
+                                                                <div class="col-sm-7">
+                                                                    <!-- <input  class="form-control" placeholder="" type="text"> -->
+                                                                    <p-inputMask styleClass="full_width" required
+                                                                        formControlName="PermanentPhoneNo" mask="(999) 999-9999"
+                                                                        placeholder="(999) 999-9999"></p-inputMask>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- <div class="col-lg-12 col-sm-12 col-md-12">
+                                                            <div class="form-group row ">
+                                                                <label for="lbl_master_pwd" class="col-sm-5 col-form-label">Mobile</label>
+                                                                <div class="col-sm-7">
+                                                                    <p-inputMask formControlName="CommunicationPhoneNo"
+                                                                        styleClass="full_width" mask="(999) 999-9999"
+                                                                        placeholder="(999) 999-9999"></p-inputMask>
+                                                                </div>
+                                                            </div>
+                                                        </div> -->
+                                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                                            <div class="form-group row ">
+                                                                <label for="lbl_master_pwd" class="col-sm-5 col-form-label required_label">Email</label>
+                                                                <div class="col-sm-7">
+                                                                    <input type="email" required formControlName="Email"
+                                                                        maxlength="50" class="form-control" placeholder="mail@domain.com">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </p-panel>
+                                            </div>
+                                            <div class=" padding_1 card" style="padding-right: 10px !important;">
+                                                <p-panel header="COMMUNICATION INFORMATION" styleClass="customTitleBar blue_panel">
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                                            <div class="form-group row">
+                                                                <label for="lbl_user_name" class="col-sm-5 col-form-label">Address</label>
+                                                                <div class="col-sm-7">
+                                                                    <label style="font-size: 12px !important;">
+                                                                        <input class="" type="checkbox" [checked]="false"
+                                                                            formcontrolname="chkAddress" (change)="checkboxChanged($event)">
+                                                                            Same As Permanent?
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                                            <div class="form-group row ">
+                                                                <label for="lbl_pwd" class="col-sm-5 col-form-label required_label">Address
+                                                                    1</label>
+                                                                <div class="col-sm-7">
+                                                                    <input class="form-control" placeholder="" name="caddr1"
+                                                                        type="text" value="" required formControlName="communicationAddress1">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                                            <div class="form-group row ">
+                                                                <label for="lbl_master_pwd" class="col-sm-5 col-form-label">Address
+                                                                    2</label>
+                                                                <div class="col-sm-7">
+                                                                    <input class="form-control" placeholder="" type="text"
+                                                                        value="" maxlength="100" formControlName="communicationAddress2">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                                            <div class="form-group row ">
+                                                                <label for="lbl_master_pwd" class="col-sm-5 col-form-label required_label">City</label>
+                                                                <div class="col-sm-7">
+                                                                    <input pInputText  class="form-control"
+                                                                        placeholder="" type="text" value="" maxlength="100"
+                                                                        required formControlName="communicationCity">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                                            <div class="form-group row ">
+                                                                <label for="lbl_master_pwd" class="col-sm-5 col-form-label required_label">State</label>
+                                                                <div class="col-sm-7">
+                                                                    <!-- <p-dropdown [options]="stateList" [filter]="true"
+                                                                        formControlName="communicationState" required
+                                                                        [style]="{'width':'100%'}" optionLabel="name"
+                                                                        appendTo="body"></p-dropdown> -->
+
+                                                                    <p-autoComplete formControlName="communicationState"
+                                                                        [suggestions]="selectedstateSuggestion"
+                                                                         [autoHighlight]="true"
+                                                                        [style]="{'width':'100%'}" (completeMethod)="filterResponsibilityMultiple($event)"
+                                                                        placeholder="" field="name" styleClass="responsibility_autocomplete"
+                                                                        appendTo="body">
+                                                                    </p-autoComplete>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                                            <div class="form-group row ">
+                                                                <label for="lbl_master_pwd" class="col-sm-5 col-form-label required_label">Zip</label>
+                                                                <div class="col-sm-7">
+                                                                    <input pInputText pKeyFilter="num" maxlength="5"
+                                                                        class="form-control" placeholder="" type="text"
+                                                                        value="" required formControlName="communicationZipcode">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                                            <div class="form-group row ">
+                                                                <label for="lbl_master_pwd" class="col-sm-5 col-form-label required_label">Mobile</label>
+                                                                <div class="col-sm-7">
+                                                                    <p-inputMask styleClass="full_width" mask="(999) 999-9999"
+                                                                        placeholder="(999) 999-9999" required
+                                                                        formControlName="communicationPhoneNo"></p-inputMask>
+                                                                    <!-- <input  class="form-control" placeholder="" type="text" value="(971)221-5552"> -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                                            <div class="form-group row ">
+                                                                <label for="lbl_master_pwd" class="col-sm-5 col-form-label required_label">Email</label>
+                                                                <div class="col-sm-7">
+                                                                    <input class="form-control" placeholder="" type="text"
+                                                                        value="" maxlength="50" required
+                                                                        formControlName="communicationEmail">
+                                                                    <!-- <input  class="form-control" placeholder="" type="text" value="(971)221-5552"> -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </p-panel>
+                                            </div>
+                                            <div class=" padding_1 card" style="padding-right: 10px !important;">
+                                                <p-panel header="ACCOUNT" styleClass="customTitleBar blue_panel">
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                                            <div class="form-group row">
+                                                                <label for="lbl_user_name" class="col-sm-5 col-form-label required_label">Username</label>
+                                                                <div class="col-sm-7">
+                                                                    <input required minlength="6" maxlength="30"
+                                                                        formControlName="UserName" class="form-control"
+                                                                        placeholder="" type="text">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                                            <div class="form-group row ">
+                                                                <label for="lbl_pwd" class="col-sm-5 col-form-label required_label">Password</label>
+                                                                <div class="col-sm-7">
+                                                                    <input required minlength="6" maxlength="30"
+                                                                        formControlName="Password" class="form-control"
+                                                                        placeholder="" type="password" autocomplete="off">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12 col-sm-12 col-md-12">
+                                                            <div class="form-group row ">
+                                                                <label for="lbl_master_pwd" class="col-sm-5 col-form-label required_label">Confirm
+                                                                    Password</label>
+                                                                <div class="col-sm-7">
+                                                                    <input class="form-control" required
+                                                                        formControlName="ConfirmPassword" maxlength="30"
+                                                                        placeholder="" type="password" autocomplete="off">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </p-panel>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p-scrollPanel>
+                            <div style="overflow:auto; margin-bottom:10px; margin-top:13px;">
+                                <div style="float:right;">
+                                    <button type="button" class="btn btn-sm btn-primary" id="FathiumPrevious" (click)="onEmpAccountPrevious()">Previous</button>
+                                    <button type="submit" class="btn btn-sm btn-primary" id="nextBtn">Next</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!--Show Employee Aggreement-->
+            <div *ngIf="showEmpAgreeLic == true" style="margin: 0px 10px;">
+                <form [formGroup]="EmployeeLicenseForm" novalidate autocomplete="off">
+                    <div class="panel panel-default blue_panel">
+                        <div class="panel-heading blue_panel">
+                            <b>Fathium License Agreement </b>
+                        </div>
+                        <p-scrollPanel [style]="{width: '100%', height: '325px'}" styleClass="custom">
+                            <!-- <div style="padding:1em;line-height:1.5"> -->
+                            <div class="panel-body">
+
+                                <div class="ui-g ">
+                                    <div class="ui-g-12 ui-md-12 ui-lg-12">
+                                        <div [innerHtml]="employee_aggrement"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </p-scrollPanel>
+                    </div>
+                    <div style="overflow:auto;margin-top: -15px;">
+                        <div style="float:left;">
+                            <label for="txtTerms"><input formControlName="TermsandCondition" id="txtTerms" type="checkbox"
+                                    style="width:50px !important;" [checked]="empAgree_check" (change)="AgreeTermsCondition($event)" />
+                                I Have read to agreement & Accept all the Terms and Conditions</label>
+                        </div>
+                        <div style="float:right; margin-bottom:30px;margin-right: 30px;">
+                            <button type="button" class="btn btn-sm btn-primary" id="FathiumPrevious" (click)="onEmpAgreePrevious()">Previous</button>
+                            <button type="button" class="btn btn-sm btn-primary" id="nextBtn" [disabled]="!Visiblebtn"
+                                (click)="onSubmitEmpRegister()">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- Employee Account Created form: -->
+            <div id="success" *ngIf="showEmpAccountcreated  == true">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <b>Congratulations Your Account has been created...</b>
+                        <!-- <button style="float:right;" type="button" (click)="OnclickBack()" class="btn btn-sm btn-primary" id="nextBtn">Goto Home</button> -->
+                    </div>
+                    <div class="panel-body">
+                        <form id="AccountCreated" [formGroup]="EmpAccountCreatedForm" novalidate autocomplete="off">
+                            <div class="ui-g ">
+                                <div class=" padding_1 card">
+
+                                    <div class=" padding_1 card ui-g-12 ui-md-12 ui-lg-12">
+                                        <p-panel header="LOGIN INFORMATION" styleClass="blue_panel customTitleBar">
+                                            <div class="row">
+                                                <div class="col-lg-12 col-sm-12 col-md-12">
+                                                    <div class="form-group row">
+                                                        <p style="margin-left:10px;">Your Registration has completed.
+                                                            Your UserName is below : </p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12 col-sm-12 col-md-12">
+                                                    <div class="form-group row">
+
+                                                        <label for="lbl_user_name" class="col-sm-5 col-form-label">User
+                                                            Name</label>
+                                                        <div class="col-sm-7">
+                                                            <input formControlName="UserName" disabled [(ngModel)]="upUserName"
+                                                                style="border:#fff; color:black;" class="form-control"
+                                                                placeholder="" type="text">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </p-panel>
+                                    </div>
+                                </div>
+                                <div style="float:right; margin-bottom:30px;margin-right: 30px;">
+                                    <button type="button" class="btn btn-sm btn-primary" (click)="CloseAccount()">Close</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align:center;" id="router">
+                <!-- <span class="step"></span>
+                    <span class="step"></span>
+                    <span class="step"></span>
+                    <span class="step"></span>               -->
+            </div>
+        </div>
+        <!-- end content -->
+
+        <!-- START carousel-->
+
+        <!-- END carousel-->
+
+        <footer class="footer text-right" style="left:0 !important; width:100%;">
+            <div class="container">
+                <div class="foot-left">
+                    <p>Social Links</p>
+                    <ul>
+                        <li>
+                            <a href="javascript:void(0);">
+                                <i class="fa fa-facebook-square"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);">
+                                <i class="fa fa-twitter-square"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);">
+                                <i class="fa fa-rss-square"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="foot-right">
+                    <ul>
+                        <li>
+                            <a href="javascript:void(0);" [routerLink]="['/user-login']">Home</a>
+                        </li>
+                        <span>|</span>
+                        <li><a href="javascript:void(0);" [routerLink]="['/sales']">Sales</a></li> <span>|</span>
+                        <li>
+                            <a href="javascript:void(0);" [routerLink]="['/services']">Services</a>
+                        </li>
+                        <span>|</span>
+                        <li>
+                            <a href="javascript:void(0);">Resources</a>
+                        </li>
+                        <span>|</span>
+                        <li>
+                            <a href="javascript:void(0);">About Us</a>
+                        </li>
+                        <span>|</span>
+                        <li>
+                            <a href="javascript:void(0);" [routerLink]="['/support']">Support</a>
+                        </li>
+                    </ul>
+                    <div class="foot-btm">
+                        Copyright &copy; 2018 IntellimodzTM | All Rights Reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+<style>
+    .ui-button-text>.ui-clickable {
+        padding-bottom: 6px !important;
+        padding-top: 6px !important;
+    }
+
+    .ui-inputtext.ui-state-focus,
+    .ui-inputtext:focus {
+        -webkit-box-shadow: 0px 0px 5px #b5cfe0 !important;
+        box-shadow: 0px 0px 5px #b5cfe0 !important;
+    }
+</style>

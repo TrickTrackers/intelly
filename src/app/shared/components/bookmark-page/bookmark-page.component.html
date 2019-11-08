@@ -1,0 +1,60 @@
+<div>
+    <!-- <li class="nav-item" dropdown #dropdown="bs-dropdown" [autoClose]="false">
+        <a class="nav-link " dropdownToggle style="cursor:pointer" (click)="bookmarkEvent()">
+            <i class="fa fa-bookmark fa-lg mt-3 mr-1"></i> Bookmark</a>
+        <ul id="dropdown-triggers-manual list-group" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-triggers-manual"
+            style="width: 400px !important;">
+            <li role="menuitem list-group-item">
+                
+                <i class="close fa fa-close" style="padding: 10px 16px 0px 0px; font-size: 14px;" (click)="dropdown.hide()"></i>
+            </li>
+            <li role="menuitem" style="padding-left: 15px; padding-right: 15px !important;">
+                <label>Description [optional]</label>
+                <div class="input-group">
+                    <input type="text" maxlength="25" class="form-control" style="height: 25px; margin: 5px 0px 0px 0px;"
+                        placeholder="" aria-describedby="basic-addon2" [(ngModel)]="bookmark_description"> &nbsp;&nbsp;
+                    <button class="input-group-addon btn btn-sm btn-primary" id="basic-addon2" style="height: 25px; margin: 5px 0px 0px 0px;"
+                        (click)="addBookmark();dropdown.hide()">Add Bookmark</button>
+                    <button (click)="bookmarkHomePage();dropdown.hide()" class="input-group-addon btn btn-sm btn-success"
+                        style="height: 25px; margin: 5px 0px 10px 4px;" id="basic-addon2">
+                        <i class="fa fa-home"></i>
+                    </button>
+                </div>
+            </li>
+            
+            <li class="divider dropdown-divider"></li>
+            <li style="max-height: 250px; overflow-y: scroll;">
+                <div class="list-group-item" style="line-height: 15px !important;cursor:pointer" *ngFor="let bm of bookmark;let i = index; ">
+                    <i class="fa fa-info" style="font-size: 16px;" tooltip="details" aria-hidden="true"></i>&nbsp;
+                    <span (click)="bookmarkPage(bm);dropdown.hide()">{{ bm.legoName }} {{ bm.description}}</span>
+                    <i class="close fa fa-trash fa-xs" style="font-size: 16px;" (click)="removeBookmark(bm)"></i>
+                    
+                </div>
+            </li>
+        </ul>
+    </li> -->
+    <li class="nav-item waves-effect waves-light" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+        <a class="nav-link " dropdownToggle style="cursor:pointer" (click)="bookmarkEvent($event,op3)">
+            <i class="fa fa-bookmark fa-lg mt-3 mr-1 headermenu-icon"></i>
+            <span class="headermenu_txt">Bookmark</span> </a>
+    </li>
+
+    <p-overlayPanel #op3 [style]="{'top': '50px !important'}" [showCloseIcon]="true">
+        <!-- <label>Description [optional]</label> -->
+        <div class="input-group">
+            <input type="text" maxlength="25" class="form-control" style="height: 25px; margin: 5px 0px 0px 0px;" placeholder="Description [optional]" aria-describedby="basic-addon2" [(ngModel)]="bookmark_description"> &nbsp;&nbsp;
+            <button class="input-group-addon btn btn-sm btn-primary" id="basic-addon2" style="height: 25px; margin: 5px 0px 0px 0px;" (click)="addBookmark();"><i class="fa fa-plus"></i>&nbsp;Add Bookmark</button>
+            <button (click)="bookmarkHomePage();op3.hide()" class="input-group-addon btn btn-sm btn-success" style="height: 25px; margin: 5px 0px 10px 4px;" id="basic-addon2">
+                <i class="fa fa-home"></i>
+            </button>
+        </div>
+        <div style="max-height:200px;overflow-y:scroll">
+            <div class="list-group-item" style="line-height: 15px !important;cursor:pointer" *ngFor="let bm of bookmark;let i = index; ">
+                <i class="fa fa-info pull-left" style="font-size: 16px;" tooltip="details" aria-hidden="true"></i>&nbsp;
+                <span class="pull-left" style="width:85%;" (click)="bookmarkPage(bm);op3.hide()">{{ bm.legoName }} {{ bm.description}}</span>
+                <i class="close fa fa-trash fa-xs" style="font-size: 16px;" (click)="removeBookmark(bm)"></i>
+
+            </div>
+        </div>
+    </p-overlayPanel>
+</div>

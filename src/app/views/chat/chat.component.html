@@ -1,0 +1,515 @@
+<div class="ui-g chat-component">
+  <div class="ui-g-12 no-padding">
+    <p-tabView #chatTabview (onChange)="onTabChange($event)">
+      <p-tabPanel header="Private">
+        <div class="messaging">
+          <div class="inbox_msg">
+            <div class="inbox_people width_30per">
+              <div class="headind_srch">
+                <div class="recent_heading">
+                  <h4>Users</h4>
+                </div>
+                <!-- <div class="srch_bar">
+                  <div class="stylish-input-group">
+                    <input type="text" class="search-bar" [(ngModel)]="searchusername" name="searchusername"
+                      placeholder="Search">
+                    <span class="searchicon-addon">
+                      <button type="button"> <i class="fa fa-search" aria-hidden="true"></i> </button>
+                    </span>
+                  </div>
+                </div> -->
+              </div>
+              <p-scrollPanel [style]="{width: '100%', height: 'calc( 77vh )'}">
+                <div class="inbox_chat" id="private_chat">
+                  <div (click)="OnPrivatechatChange(gi)" *ngFor="let user of onlineUserList; let gi = index;"
+                    class="chat_list " [ngClass]="{ 'active_chat': gi == selectedTabIndex }"
+                    [attr.id]="'pvtUserHeader_' + user.userId">
+                    <div class="chat_people">
+                      <div class="chat_img">
+                        <img [src]="getUserPhoto(user.photoStringByte)" alt="">
+                        <span
+                          [ngClass]="{ 'badge-success': user.isOnline == true,'badge-secondary' :user.isOnline == false }"
+                          class="avatar-status"></span>
+                      </div>
+                      <span *ngIf="user.notificationCount > 0 && gi != selectedTabIndex"><span
+                          class="badge badge-pill badge-danger">{{
+                          user.notificationCount }}</span></span>
+                      <div class="chat_ib">
+                        <h5>{{ user.displayName }} <span class="chat_date">ID : #{{user.userId }}</span></h5>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </p-scrollPanel>
+
+            </div>
+            <div class="width_68per empty_chatpanel empty_pvtchatpanel pull-right"
+              *ngIf=" (selectedprivateTabIndex == -1)">
+              <img src="./assets/images/empty-chat-icon.png" />
+            </div>
+            <!-- <ng-template #privateChatLayout> -->
+            <div *ngIf="(selectedprivateTabIndex > -1) " class="mesgs width_68per">
+              <div *ngIf="(showPvtMessages == true)" id="pvtUser_panel">
+                <div class="contact-profile">
+                  <img [src]="getUserPhoto(selectedPrivateUser.photoStringByte)" alt="">
+                  <p class="usernameLabel">{{ selectedPrivateUser.displayName }}</p>
+                </div>
+                <div class="msg_history">
+                  <!-- <p-scrollPanel [style]="{width: '100%', height: 'calc( 67vh )'}"> -->
+                  <div class="msg_body_outer">
+                    <!-- <div #scrollMe [scrollTop]="scrollMe.scrollHeight" *ngFor="let msg of user.messages" class="incoming_msg msg_body_inner"
+                        [ngClass]="{ 'sent': msg.sender === true,'replies' : msg.sender === false }"> -->
+                    <div *ngFor="let msg of selectedPrivateUser.messages;" class="incoming_msg msg_body_inner"
+                      [ngClass]="{ 'sent': msg.fromId == myemployeeId,'replies' : msg.fromId != myemployeeId }">
+                      <div class=" incoming_msg_img">
+                        <img [src]="getUserPhoto('',true,msg)" alt="" />
+                      </div>
+                      <div class="received_msg">
+                        <span class="received_username"> {{ msg.displayName }}</span>
+                        <div class="received_withd_msg">
+
+                          <p class="messageContent">{{ msg.messageContent }}</p>
+                          <span class="time_date"> {{ msg.createdDate }}</span>
+                        </div>
+                      </div>
+
+                    </div>
+                    <div id="#pvt_msg_scrollTarget"></div>
+                  </div>
+                  <!-- </p-scrollPanel> -->
+                  <div class="type_msg">
+                    <div class="input_msg_write">
+                      <input type="text" class="write_msg" [(ngModel)]="PrivateMessageContent"
+                        name="PrivateMessageContent" placeholder="Type a message"
+                        (keyup.enter)="sendPrivateMessage(selectedPrivateUser)" />
+                      <button (click)="sendPrivateMessage(selectedPrivateUser)" class="msg_send_btn" type="button"><i
+                          class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+                    </div>
+                  </div>
+                  <!-- <div class="outgoing_msg">
+                                      <div class="sent_msg">
+                                          <p>Test which is a new approach to have all
+                                              solutions</p>
+                                          <span class="time_date"> 11:01 AM | June 9</span>
+                                      </div>
+                                  </div> -->
+                </div>
+
+              </div>
+            </div>
+            <!-- </ng-template> -->
+          </div>
+        </div>
+      </p-tabPanel>
+      <p-tabPanel header="Groups">
+        <div class="messaging">
+          <div class="inbox_msg">
+            <div class="inbox_people width_30per">
+              <div class="headind_srch">
+                <div class="recent_heading">
+                  <h4>Groups</h4>
+                </div>
+                <!-- <div class="srch_bar">
+                  <div class="stylish-input-group">
+                    <input type="text" class="search-bar" [(ngModel)]="searchgroupname" name="searchgroupname"
+                      placeholder="Search">
+                    <span class="searchicon-addon">
+                      <button type="button"> <i class="fa fa-search" aria-hidden="true"></i> </button>
+                    </span>
+                  </div>
+                </div> -->
+              </div>
+              <p-scrollPanel [style]="{width: '100%', height: 'calc( 70.6vh )'}">
+                <!-- <div class="inbox_chat"> -->
+                <div (click)="OnGroupChange(gi)" *ngFor="let group of groupList; let gi = index" class="chat_list "
+                  [ngClass]="{ 'active_chat': gi === selectedGroupTabIndex }">
+                  <div class="chat_people">
+                    <div class="chat_img"> <i class="fa icon-group"></i>
+                    </div>
+                    <div class="chat_ib">
+                      <h5>{{ group.labelName }}</h5>
+                      <!-- <h5>{{ group.labelName }} <span class="chat_date">ID : #{{group.groupId }}</span></h5> -->
+                    </div>
+                  </div>
+                </div>
+                <div class="m-b-20"></div>
+                <!-- </div> -->
+              </p-scrollPanel>
+              <div class="bottom-bar">
+                <div class="add-group-container">
+                  <input type="text" class="groupname-input" [(ngModel)]="groupname" name="groupname"
+                    (keydown.enter)="CreateGroup()" placeholder="Group Name" maxlength="30">
+                  <div class="btn-add-group" (click)="CreateGroup()">
+                    <i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <div class="width_68per empty_chatpanel empty_groupchatpanel pull-right"
+              *ngIf=" (selectedGroupTabIndex == -1); else groupChatLayout ">
+              <img src="./assets/images/empty-chat-icon.png" />
+            </div>
+            <ng-template #groupChatLayout>
+              <div class="mesgs width_68per">
+                <div class="contact-profile">
+                  <div class="ui-g-5 left_block">
+                    <ng-template [ngIf]="selectedGroup.isEditable == true" [ngIfElse]="displayGroupName">
+                      <input style="width:80%;" pinputtext="" placeholder="Group Name" type="text" maxlength="30"
+                        [(ngModel)]="selectedGroup.labelName" [attr.id]="'renamegroup_' + selectedGroup.groupId"
+                        (keyup.enter)="EditGroup(selectedGroup)" (focusout)="EditGroup(selectedGroup)"
+                        class="ui-inputtext ui-corner-all ui-state-default ui-widget">
+                      <button (click)="EditGroup(selectedGroup)"
+                        class="ui-button-success ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"
+                        icon="fa-close" pbutton="" type="button" [style]="{'min-width':'25px'}">
+                        <span class="ui-button-icon-left ui-clickable fa fa-fw fa-save"></span>
+                        <span class="ui-button-text ui-clickable">ui-btn</span>
+                      </button>
+                    </ng-template>
+                    <ng-template #displayGroupName>
+                      <!-- <i class="fas fa-users"></i> -->
+                      <span class="fa fa-fw fa-users usergroup_icon"></span>
+                      <!-- <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt=""> -->
+                      <p class="usernameLabel">{{ selectedGroup.labelName }}</p>
+                    </ng-template>
+
+                  </div>
+                  <div class="ui-g-6 center_block" style="overflow:auto; max-height:55px;">
+                    <span class="ui-fluid">
+                      <p-autoComplete #autocompleteGroupUsers [(ngModel)]="selectedGroup.groupMembers"
+                        [suggestions]="filteredUserMultiple" (completeMethod)="filterUserMultiple($event,selectedGroup)"
+                        [minLength]="1" placeholder="Users" field="displayName" [multiple]="true"
+                        (onSelect)="addRemoveGroupUsers(true,$event,selectedGroup)" appendTo="body"
+                        (onUnselect)="addRemoveGroupUsers(false,$event,selectedGroup)"
+                        (onFocus)="onFocusAutocomplete(autocompleteGroupUsers)" [dropdown]="true">
+                        <ng-template let-user pTemplate="item">
+                          <div class="ui-helper-clearfix">
+                            {{user.displayName}}
+                          </div>
+                        </ng-template>
+                      </p-autoComplete>
+                    </span>
+
+                  </div>
+                  <div class="ui-g-1 right_block">
+                    <a *ngIf="selectedGroup.groupOwnerId == userInfo.EmployeeId"
+                      class="ng-tns-c14-0 ui-sidebar-close trashbtn ui-corner-all " href="javascript:void(0)"
+                      (click)="deleteGroup(selectedGroup)">
+                      <span class="fa fa-fw fa-trash"></span>
+                    </a>
+                    <a *ngIf="selectedGroup.groupOwnerId == userInfo.EmployeeId"
+                      class="ng-tns-c14-0 ui-sidebar-close trashbtn ui-corner-all " href="javascript:void(0)"
+                      (click)="EditGroupsetFocus(selectedGroup)">
+                      <span class="fa fa-fw fa-pencil"></span>
+                    </a>
+                  </div>
+
+                </div>
+                <div class="msg_history" id="grpchat_panel">
+                  <!-- <p-scrollPanel [style]="{width: '100%', height: 'calc( 66.5vh )'}"> -->
+                  <div class="msg_body_outer">
+                    <div *ngFor="let msg of selectedGroup.messages;" class="incoming_msg msg_body_inner">
+                      <ng-container *ngTemplateOutlet="messageList; context:{ $implicit: msg,TabType : 'GRP_MSG'}">
+                      </ng-container>
+                      <!-- <div class=" incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="">
+                        </div>
+                        <div class="received_msg">
+                          <div class="received_withd_msg">
+                            <span class="received_username"> {{ msg.fromName }}</span>
+                            <p class="messageContent">{{ msg.messageContent }}</p>
+                            <span class="time_date">{{ msg.createdDate }} </span>
+                          </div>
+                        </div> -->
+
+                    </div>
+                  </div>
+                  <!-- </p-scrollPanel> -->
+                  <div class="type_msg">
+                    <div class="input_msg_write">
+                      <input type="text" class="write_msg" [(ngModel)]="MessageContent" name="MessageContent"
+                        placeholder="Type a message" (keyup.enter)="sendGroupMessage(selectedGroup)" />
+                      <button (click)="sendGroupMessage(selectedGroup)" class="msg_send_btn" type="button"><i
+                          class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </p-tabPanel>
+      <p-tabPanel #SysteimTabPane header="">
+        <div class="messaging">
+          <div class="inbox_msg">
+            <div class="inbox_people width_25per border_none">
+              <div class="chatsidebar" style="height: calc( 84vh ); overflow-y: auto;">
+                <!-- <p-panelMenu id="sidebar_panelmenu" [model]="sidebarMenuitems" [style]="{'width':'300px'}"></p-panelMenu> -->
+                <div *ngFor="let sidebarItem of sidebarMenuitems;">
+                  <div class="sidebar_header">
+                    {{ sidebarItem.label }}
+                  </div>
+                  <p-scrollPanel [style]="{width: '100%', height: '200px'}">
+                    <ul class="nav">
+                      <li *ngFor="let item of sidebarItem.items;let in = index" class="nav-item">
+                        <a [ngClass]="{ 'active' : (currentTab == item.id)}" (click)="onselectSystemTab($event,item,in)"
+                          class="nav-link sidebar_navlink" href="javascript:void(0)">
+                          <i [ngClass]="item.icon" class="fa"></i> {{ item.label }}
+                        </a>
+                      </li>
+                    </ul>
+                  </p-scrollPanel>
+                  <div *ngIf="sidebarItem.label == 'Tags' " class="ui-g-12 ui-md-12 clear-fix"
+                    style="background: #dcefff;">
+                    <div class="ui-inputgroup">
+                      <input type="text" [(ngModel)]="selectedTagName" style="width: 90%;" name="selectedTagName"
+                        pInputText placeholder="Add Tag" maxlength="30" (keyup.enter)="TagOperation(1,null)">
+                      <button pButton type="button" icon="fa fa-plus" class="ui-button-success"
+                        (click)="TagOperation(1,null)"></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf=" currentTab != null" class="mesgs width_73per">
+              <!-- <div class="contact-profile">
+                <div class="ui-g-5">
+                  <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="">
+                  <p class="usernameLabel">{{ systemTabChatGroups[currentTab].labelName }}</p>
+                </div>
+              </div> -->
+              <div class="msg_history">
+                <div *ngIf="TabType == 'SYS_TAB' ">
+                  <div [ngClass]="{'replychat':this.isreply == true ,'chat':this.isreply == false }"
+                    class="msg_body_outer" *ngIf="systemTabChatGroups[currentTab].messages"
+                    (scroll)="lazyLoadMessages($event,'SYS_TAB')" id="systemMessagePanel">
+
+                    <div *ngFor="let messages of systemTabChatGroups[currentTab].messages;"
+                      class="incoming_msg msg_body_inner">
+                      <ng-container *ngTemplateOutlet="messageList; context:{ $implicit: messages,TabType : 'SYS_TAB'}">
+                      </ng-container>
+                    </div>
+                    <div style="    height: 15px;clear:both;"> </div>
+                  </div>
+                  <div class="type_msg">
+                    <div *ngIf="showsystemTabReplyMsg" class="ReplyMsg_container">
+                      <div class=" incoming_msg_img"> <img [src]="getUserPhoto('',true,selectedReplyToSysTabMsg)"
+                          alt="">
+                      </div>
+                      <div class="received_msg">
+                        <div class="received_withd_msg">
+                          <span class="received_username"> {{ selectedReplyToSysTabMsg.fromName }}</span>
+                          <p class="messageContent" [contextMenu]="chatRightMenu" [contextMenuSubject]="msg">
+                            {{ selectedReplyToSysTabMsg.messageContent }}
+                          </p>
+                          <span class="time_date">{{ selectedReplyToSysTabMsg.createdDate }} </span>
+                        </div>
+                      </div>
+                      <span class="fa fa-fw fa-close" (click)="closeReplyMsg()"></span>
+                    </div>
+                    <div class="input_msg_write">
+                      <input type="text" class="write_msg" [(ngModel)]="systemTabMessageContent"
+                        name="systemTabMessageContent" id="systemTabMessageContent" placeholder="Type a message"
+                        (keyup.enter)="sendSystemGroupMessage(2)" />
+                      <button (click)="sendSystemGroupMessage(2)" class="msg_send_btn" type="button"><i
+                          class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="TabType == 'CUS_TASKS' ">
+                  <div style=" height: calc( 76vh );overflow: auto;" class="msg_body_outer" class="msg_body_outer"
+                    *ngIf="selectedTaskIndex > -1" (scroll)="lazyLoadMessages($event,'CUS_TASKS')">
+                    <div *ngFor="let messages of sidebarMenuitems[1].items[selectedTaskIndex].messages;"
+                      class="incoming_msg msg_body_inner">
+                      <ng-container
+                        *ngTemplateOutlet="messageList; context:{ $implicit: messages, TabType : 'CUS_TASKS'}">
+                      </ng-container>
+                    </div>
+                    <div style="height: 15px;clear:both;"> </div>
+                  </div>
+                  <div class="type_msg">
+                    <div *ngIf="showsystemTabReplyMsg" class="ReplyMsg_container">
+                      <div class=" incoming_msg_img"> <img [src]="getUserPhoto('',true,selectedReplyToSysTabMsg)"
+                          alt="">
+                      </div>
+                      <div class="received_msg">
+                        <div class="received_withd_msg">
+                          <span class="received_username"> {{ selectedReplyToSysTabMsg.fromName }}</span>
+                          <p class="messageContent" [contextMenu]="chatRightMenu" [contextMenuSubject]="msg">
+                            {{ selectedReplyToSysTabMsg.messageContent }}
+                          </p>
+                          <span class="time_date">{{ selectedReplyToSysTabMsg.createdDate }} </span>
+                        </div>
+                      </div>
+                      <span class="fa fa-fw fa-close" (click)="closeReplyMsg()"></span>
+                    </div>
+                    <div class="input_msg_write">
+                      <input type="text" class="write_msg" [(ngModel)]="systemTabMessageContent"
+                        name="systemTabMessageContent" placeholder="Type a message"
+                        (keyup.enter)="sendSystemGroupMessage(3)" />
+                      <button (click)="sendSystemGroupMessage(3)" class="msg_send_btn" type="button"><i
+                          class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="TabType == 'CUS_TAG' ">
+                  <div class="msg_body_outer_tag">
+                    <div class="contact-profile">
+                      <div class="ui-g-8 left_block" style="padding: 2px 0px 0px 10px;">
+                        <ng-template [ngIf]="selectedTagInfo.isEditable == true" [ngIfElse]="displayTagName">
+                          <input style="width:80%;" pinputtext="" placeholder="Tag Name" type="text" maxlength="30"
+                            [(ngModel)]="selectedTagInfo.label" [attr.id]="'renametag_' + selectedTagInfo.id"
+                            (keyup.enter)="EditTag(selectedTagInfo)" (focusout)="EditTag(selectedTagInfo)"
+                            class="ui-inputtext ui-corner-all ui-state-default ui-widget">
+                          <button (click)="EditTag(selectedTagInfo)"
+                            class="ui-button-success ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"
+                            icon="fa-close" pbutton="" type="button" [style]="{'min-width':'25px'}">
+                            <span class="ui-button-icon-left ui-clickable fa fa-fw fa-save"></span>
+                            <span class="ui-button-text ui-clickable">ui-btn</span>
+                          </button>
+                        </ng-template>
+                        <ng-template #displayTagName>
+                          <p class="usernameLabel">{{ selectedTagInfo.label }}</p>
+                        </ng-template>
+                      </div>
+                      <div class="ui-g-0 right_block">
+                        <a class="ng-tns-c14-0 ui-sidebar-close trashbtn ui-corner-all"
+                          (click)="deleteTag(selectedTagInfo)" href="javascript:void(0)">
+                          <span class="fa fa-fw fa-trash"></span>
+                        </a>
+                        <a class="ng-tns-c14-0 ui-sidebar-close trashbtn ui-corner-all " (click)="EditTagProcess()"
+                          href="javascript:void(0)">
+                          <span class="fa fa-fw fa-pencil"></span>
+                        </a>
+                      </div>
+                    </div>
+                    <div *ngFor="let messages of taggedMessageDetails;" class="incoming_msg msg_body_inner">
+                      <ng-container *ngTemplateOutlet="messageList; context:{ $implicit: messages,TabType : 'CUS_TAG'}">
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </p-tabPanel>
+    </p-tabView>
+  </div>
+</div>
+<ng-template #messageList let-messages let-TabType='TabType'>
+  <div class=" incoming_msg_img"> <img [src]="getUserPhoto('',true,messages)" alt="">
+  </div>
+  <div class="received_msg">
+    <div class="received_withd_msg">
+      <div class="ui-g-5 no-padding">
+        <span class="received_username"> {{ messages.fromName }}</span>
+      </div>
+      <div class="ui-g-7 no-padding">
+        <button *ngIf=" TabType != 'GRP_MSG' " pButton type="button"
+          (click)="getdisplayMessageTag(messages,tagOverlayPanel,$event)" icon="fa fa-bookmark"
+          class="ui-button-raised ui-button-secondary pull-right border_none"></button>
+        <button (click)="deletemessage(messages,TabType)" pButton type="button" icon="fa fa-trash"
+          class="ui-button-raised ui-button-secondary pull-right border_none"></button>
+
+        <button *ngIf=" TabType != 'GRP_MSG' " pButton type="button" (click)="setReplyTo(messages)"
+          icon="fa fa-mail-reply" class="ui-button-raised ui-button-secondary pull-right border_none"></button>
+      </div>
+      <p class="messageContent">
+        {{ messages.messageContent }}
+      </p>
+      <span class="time_date">{{ messages.createdDate }} </span>
+    </div>
+
+    <div *ngFor="let rp_msg of messages.replyMsgs;" class="received_withd_msg replytoMsgs">
+      <div class="replyTomsgcontainer">
+        <div class=" incoming_msg_img reply_msg_user"> <img [src]="getUserPhoto('',true,rp_msg)" alt="">
+        </div>
+        <div class="reply_msg_content">
+          <span class="received_username"> {{ rp_msg.fromName }}</span>
+          <p class="messageContent">
+            {{ rp_msg.messageContent }}
+          </p>
+          <span class="time_date">{{ rp_msg.createdDate }} </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<div class="chatbox_rightmenu"
+  style="position:fixed;top:35px;height:100%;width:100%;display:table; border-collapse: collapse;border:none;outline:none; pointer-events: none">
+  <div style="display: table-cell;width:200px;vertical-align: top">
+    <div style="position:absolute; top: 20px;">
+      <div style="position:fixed;top:200px;left:-200px">
+        <context-menu #chatRightMenu>
+          <ng-template *ngFor="let action of chatRightMenuAction;" contextMenuItem let-item [visible]="action.visible"
+            [enabled]="action.enabled" [divider]="action.divider" (execute)="action.click($event)">
+            <div [innerHTML]="action.html(item)"></div>
+          </ng-template>
+        </context-menu>
+
+      </div>
+    </div>
+  </div>
+  <p-overlayPanel #tagOverlayPanel [dismissable]="true" appendTo="body" styleClass="hight-zindex">
+    <p-table [value]="this.sidebarMenuitems[2].items" selectionMode="single" [(selection)]="AddSelectedTag"
+      (onRowSelect)="OnSelectTagMessage($event,tagOverlayPanel)" [style]="{width: '250px'}">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>
+            Tag List
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData>
+        <tr [pSelectableRow]="rowData">
+          <td>
+            {{ rowData.label }}
+          </td>
+        </tr>
+      </ng-template>
+      <!-- <p-column styleClass="col-button"  [style]="{'width':'100%'}">
+      <ng-template pTemplate="header">
+        <span class="ui-column-title">Delete</span>
+      </ng-template>
+      <ng-template let-selectedTag="rowData" let-ridx="rowIndex" pTemplate="body">
+        <button (click)="AddMesssgeTag(selectedTag)" type="button" class="btn btn-danger btn-sm">
+          <i class="fa fa-times-circle"></i>
+        </button>
+      </ng-template>
+    </p-column> -->
+    </p-table>
+  </p-overlayPanel>
+  <p-dialog header="Title" [(visible)]="display_addMessageTag" [responsive]="true" model="false" appendTo="body"
+    [width]="300">
+    <div class="ui-g-12 ui-md-12">
+      <p-table [value]="this.sidebarMenuitems[2].items" selectionMode="single" [(selection)]="AddSelectedTag">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>
+              Tag Name
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData>
+          <tr [pSelectableRow]="rowData">
+            <td>
+              {{ rowData.label }}
+            </td>
+          </tr>
+        </ng-template>
+        <!-- <p-column styleClass="col-button"  [style]="{'width':'100%'}">
+          <ng-template pTemplate="header">
+            <span class="ui-column-title">Delete</span>
+          </ng-template>
+          <ng-template let-selectedTag="rowData" let-ridx="rowIndex" pTemplate="body">
+            <button (click)="AddMesssgeTag(selectedTag)" type="button" class="btn btn-danger btn-sm">
+              <i class="fa fa-times-circle"></i>
+            </button>
+          </ng-template>
+        </p-column> -->
+      </p-table>
+    </div>
+  </p-dialog>
+</div>

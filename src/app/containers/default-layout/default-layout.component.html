@@ -1,0 +1,782 @@
+<p-blockUI [blocked]="ScreenBlocked">
+    <p-card [style]="{position: 'absolute',top: '25%',left: '40%'}">
+        <i _ngcontent-c2="" class="fa fa-lock fa-5x"></i>
+        <div style="font-size: 18px;font-weight: 700;color: #000;width: 85%;float: right;">Your session has expired.
+            Please
+            <a style="color: #028df9" href="javascript:void(0);" (click)="redirectToLogin()">log in</a> again</div>
+    </p-card>
+</p-blockUI>
+<!-- (window:resize)="windowonResize($event)" [Inactivity]="inactiveTimeoutValue" (InactivityCallback)="handleInactivityCallback()" -->
+<div id="app_main_container" class="app_main_container" [Inactivity]="inactiveTimeoutValue" (InactivityCallback)="handleInactivityCallback()">
+    <app-header [fixed]="true"
+        [navbarBrandFull]="{src: 'assets/images/logo_sm.png',height: 45, alt: 'Intelli Module Logo'}"
+        [navbarBrandMinimized]="{src: 'assets/images/logo-sm.png',  height: 40, alt: 'Intelli Logo'}"
+        [sidebarToggler]="false" [mobileSidebarToggler]="false" [asideMenuToggler]="false"
+        [mobileAsideMenuToggler]="false">
+        <span *ngIf="queryparams.mode != 'E' && queryparams.mode != 'D'" (click)="togglesidebarMenu()"
+            class="custom_toggler">
+            <i class="icon-menu icons font-2xl d-block"></i>
+        </span>
+        <!-- USER PANEL MENU STARTS -->
+        <ul class="nav navbar-nav d-md-down-none main_header">
+            <li *ngIf="!isHome" class="nav-item " dropdown>
+                <a class="nav-link " dropdownToggle style="cursor:pointer">
+                    <i class="fa fa-files-o fa-lg mt-3 mr-1 headermenu-icon"></i>
+                    <span class="headermenu_txt">Models</span> </a>
+                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                    <li role="menuitem" style="cursor:pointer">
+                        <a class="dropdown-item" (click)="show_modal_dialog()" style="line-height: 15px !important">
+                            <i class="fa fa-angle-double-right" aria-hidden="true"></i>Create New Model</a>
+                    </li>
+                    <li class="divider dropdown-divider"></li>
+                    <li role="menuitem" class="dropdown-submenu" style="line-height: 15px !important;cursor:pointer">
+                        <a class="dropdown-item custom-dropdown" data-toggle="dropdown">
+                            <i class="fa fa-angle-double-right" aria-hidden="true"></i>Open Model</a>
+                        <ul class="dropdown-menu">
+                            <li style="line-height: 15px !important;cursor:pointer"
+                                *ngFor="let lego of modelList; let i = index">
+                                <a [class.selectedopenedModel]="companyDfMdls == lego.legoId" class="dropdown-item"
+                                    (click)="openModel(lego)"> {{lego.legoName}}</a>
+                            </li>
+                            <!-- <li style="line-height: 15px !important;cursor:pointer"><a href="#">Another action</a></li> -->
+                        </ul>
+                    </li>
+                    <!-- <li class="divider dropdown-divider"></li> -->
+                    <li role="menuitem" style="line-height: 15px !important;cursor:pointer">
+                        <button class="dropdown-item" (click)="deleteModel()"
+                            [disabled]="isDefaultModel == companyModel">
+                            <i class="fa fa-angle-double-right" aria-hidden="true"></i>Delete Current Model</button>
+                    </li>
+                    <li class="divider dropdown-divider"></li>
+
+                </ul>
+            </li>
+
+
+            <li class="nav-item waves-effect waves-light">
+                <a class="nav-link" href="javascript:void(0)" (click)="replica()">
+                    <i class="fa fa-copy fa-lg mt-3 mr-1 headermenu-icon"></i>
+                    <span class="headermenu_txt">Replica</span> </a>
+            </li>
+            <!-- <li class="nav-item  waves-effect waves-light" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+                <a class="nav-link" href="javascript:void(0)" (click)="showDialog()">
+                    <i class="fa fa-cog  fa-lg mt-3 mr-1"></i> Preferences</a>
+            </li> -->
+            <app-preference-menu></app-preference-menu>
+            <app-bookmark-page></app-bookmark-page>
+            <li class="nav-item  waves-effect waves-light">
+                <a class="nav-link" href="javascript:void(0)" (click)="DocumentRedirect()">
+                    <i class="fa fa-folder fa-lg mt-3 mr-1 headermenu-icon"></i>
+                    <span class="headermenu_txt">Doc Library</span> </a>
+            </li>
+            <li class="nav-item  waves-effect waves-light">
+                <a class="nav-link" href="javascript:void(0)" (click)="EmployeeRedirect()">
+                    <i class="fa fa-users fa-lg mt-3 mr-1 headermenu-icon"></i>
+                    <span class="headermenu_txt">Employee</span> </a>
+            </li>
+            <app-report-page></app-report-page>
+
+            <li class="nav-item " dropdown>
+                <a class="nav-link " dropdownToggle style="cursor:pointer">
+                    <i class="fa fa-info-circle fa-lg mt-3 mr-1 headermenu-icon"></i>
+                    <span class="headermenu_txt">Help</span>
+                </a>
+                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                    <li role="menuitem">
+                        <a class="dropdown-item" style="line-height: 15px !important">Email Support:
+                            Support@Fathium.com</a>
+                    </li>
+                    <li class="divider dropdown-divider"></li>
+                    <li role="menuitem" style="line-height: 15px !important">
+                        <a class="dropdown-item" target="_blank" href="./assets/Intellimodz_User_Manual.pdf">
+                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i>IntelliModz User Manual</a>
+                        <!-- <a class="dropdown-item" target="_blank" routerLink="/user-manual">
+                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i>IntelliModz User Manual</a> -->
+
+                    </li>
+                    <li class="divider dropdown-divider"></li>
+
+                </ul>
+            </li>
+
+        </ul>
+        <!-- USER PANEL MENU ENDS -->
+
+        <ul class="nav navbar-nav ml-auto">
+            <li class="nav-item d-md-down-none header_search_icon" style="display:flex; ">
+                <div id="nav_search_id" class="search-form open-form">
+                    <form id="search-form">
+                        <input autocomplete="off" style="cursor:pointer;"
+                            (keyup.enter)="navigateRoute('/search', 'overallsearch')" class="search-field"
+                            id="search-text" name="search" type="text" [(ngModel)]="searchstring" />
+                        <input style="display: none;" type="submit"
+                            (click)="navigateRoute('/search', 'overallsearch')" />
+                    </form>
+                </div>
+            </li>
+            <li class="nav-item  dropdown sm-remove-icon" dropdown placement="bottom right">
+                <a style="margin-top : 15px; margin-left: 5px;" class="nav-link" data-toggle="dropdown"
+                    href="javascript:void(0)" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle
+                    (click)="openChatPanel()">
+                    <i class="fa fa-lg fa-wechat"></i>
+                    <span *ngIf=" unreadMsgCount > 0 " class="badge badge-pill badge-danger">{{ unreadMsgCount }}</span>
+                </a>
+                <!-- <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
+                  <a class="dropdown-item" (click)="chatbar_display=true" href="javascript:void(0)"><i class="fa fa-bell-o"></i> Group 1<span class="badge badge-info">55</span></a>
+                  <a class="dropdown-item" href="#"><i class="fa fa-envelope-o"></i> User 1<span class="badge badge-success">2</span></a>
+                  <a class="dropdown-item" href="#"><i class="fa fa-envelope-o"></i> User 2<span class="badge badge-success">5</span></a>
+                  <a class="dropdown-item" href="#"><i class="fa fa-envelope-o"></i> User 3<span class="badge badge-success">10</span></a>
+                  <a class="dropdown-item" href="#"><i class="fa fa-envelope-o"></i> User 4<span class="badge badge-success">5</span></a>
+                  <a class="dropdown-item" href="#"><i class="fa fa-envelope-o"></i> User 5<span class="badge badge-success">1</span></a>
+                  <a class="dropdown-item" href="#"><i class="fa fa-envelope-o"></i> User 6<span class="badge badge-success">2</span></a>
+                  <a class="dropdown-item" href="#"><i class="fa fa-envelope-o"></i> User 7<span class="badge badge-success">5</span></a>
+                  <a class="dropdown-item" href="#"><i class="fa fa-envelope-o"></i> User 1<span class="badge badge-success">27</span></a>
+                  <a class="dropdown-item" href="#"><i class="fa fa-tasks"></i> Tasks<span class="badge badge-danger">5</span></a>
+                </div> -->
+            </li>
+            <!-- <li class="nav-item d-md-down-none">
+                <a class="nav-link" href="#">
+                    <i class="icon-bell"></i>
+                    <span class="badge badge-pill badge-danger">5</span>
+                </a>
+                </li> -->
+            <!-- <li class="nav-item d-md-down-none">
+                    <a class="nav-link" href="#">
+                        <i class="icon-list"></i>
+                    </a>
+                    </li>
+                    <li class="nav-item d-md-down-none">
+                    <a class="nav-link" href="#">
+                        <i class="icon-location-pin"></i>
+                    </a>
+                    </li> -->
+            <li class="nav-item dropdown" dropdown placement="bottom right">
+                <a class="nav-link header_welcomelink sm-remove-icon" data-toggle="dropdown" href="#" role="button"
+                    aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false"
+                    style="line-height: 45px;">
+                    <span class="welcome_quote">Welcome {{userinfo.displayName}}</span>
+                    <i class="fa fa-user-o fa-lg img-avatar headermenu-icon"></i>
+                </a>
+                <!--  <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
+                        <div class="dropdown-header text-center">
+                        <strong>Account</strong>
+                        </div>
+                        <a class="dropdown-item" href="#">
+                        <i class="fa fa-user"></i> Profile</a>
+                        <a class="dropdown-item" href="#">
+                        <i class="fa fa-wrench"></i> Setting</a>
+                        
+                        <div class="divider"></div>
+                        <a class="dropdown-item" href="#">
+                        <i class="fa fa-shield"></i> Lock account</a>
+                        <a class="dropdown-item" routerLink="/cp-login" *ngIf="isControlLogin == true">
+                        <i class="fa fa-lock"></i> Logout</a>
+                        <a class="dropdown-item" routerLink="/mp-login" *ngIf="isControlLogin == false">
+                            <i class="fa fa-lock"></i> Logout</a>
+                    </div> -->
+            </li>
+            <li class="nav-item waves-effect waves-light logout_list">
+                <a (click)="logout()" class="nav-link waves-effect waves-light">
+                    <i class="fa fa-sign-out fa-lg "></i>
+                </a>
+            </li>
+
+        </ul>
+    </app-header>
+    <div class="app-body">
+        <ng-template [ngIf]="moduleItems != null && !isHome && queryparams.mode != 'E'">
+            <custom-sidebar></custom-sidebar>
+            <!-- <app-sidebar [fixed]="true" [display]="'lg'">
+                <app-sidebar-nav #appsidebarnav [contextMenu]="sideRightMenu" [(navItems)]="moduleItems" [perfectScrollbar] [disabled]="sidebarMinimized"></app-sidebar-nav>
+                <app-sidebar-minimizer [contextMenu]="sideRightMenu"></app-sidebar-minimizer>
+            </app-sidebar> -->
+        </ng-template>
+        <!-- Main content -->
+        <main class="main" id="main_viewpoint">
+            <!-- Breadcrumb -->
+            <div *ngIf="isHome == false" class="row breadcrumb_container">
+                <div class="col-md-4 col-lg-4 col-sm-12 no-padding breadscrumb_mainMod">
+                    <span class="breadscrumb_mainMod_title1 bold">Module : </span>
+                    <span *ngIf="SelectedModule" [tooltip]="SelectedModule.legoName" container="body" placement="bottom"
+                        class="breadscrumb_mainMod_title2">{{ SelectedModule.legoName }}
+                        <span *ngIf="queryparams.mode == 'E' && queryparams.t != 'stab_details_uemplist'"
+                            class="custom-breadcrumb-span"><i class="fa fa-angle-double-right"><span
+                                    id='empname'></span></i></span>
+                    </span>
+                </div>
+                <div class="col-md-8 col-lg-8 col-sm-12 no-padding">
+                    <ol class="breadcrumb navigation_breadcrumb ng-star-inserted pull-right">
+                        <li class="breadcrumb-item">
+                            <a [routerLink]="['/home']" class="ng-star-inserted">Home</a>
+                        </li>
+                        <li *ngFor="let m of module_levels;trackBy:index;let i = index; " class="breadcrumb-item"
+                            ng-reflect-klass="breadcrumb-item">
+                            <a href="javascript:void(0)" (click)="redirectToSelectedModule(m)" class="ng-star-inserted">
+                                {{ m.legoName }}
+                                <span class="breadscrumb_lvl">lvl - {{ m.legoLevel }}</span>
+                            </a>
+                        </li>
+                    </ol>
+                </div>
+
+
+
+            </div>
+            <div class="container-fluid full_height" id="default_tabsection">
+                <p-growl [life]=10000 [(value)]="msgs"></p-growl>
+                <div *ngIf="isHome == false" id="root_tabcontainer" class="animated fadeIn inside_modules">
+
+                    <div class="row">
+                        <div class="col-md-12 mb-12" id="main_tab_holder">
+                            <div class="topbutton_section">
+                                <button class="btn btn-sm btn-primary" *ngIf="queryparams.mode == 'E'"
+                                    (click)="Exit_processInfo()">
+                                    <i class="fa fa-close"></i> Exit</button>
+                            </div>
+                            <!-- Nav tabs -->
+                            <tabset #moduleTabset id="main_tab_container" (selectTab)="onSelectTab($event)">
+                                <tab [active]="false" id="tab_submodule" class="tab_pane_container ">
+                                    <div *tabHeading class="dropdown sub_tab_dropdown">
+                                        <a class="main_tab_link" (click)="navigateRoute('/submodule', 'submodules')">
+                                            SubModules</a>
+                                    </div>
+                                </tab>
+                                <tab [active]="false" id="tab_workflow" class="tab_pane_container ">
+                                    <div *tabHeading class="dropdown sub_tab_dropdown">
+                                        <a class="main_tab_link" (click)="goDefaultworkflowNavigation()">
+                                            Workflow
+                                        </a>
+                                        <div class="dropdown-content" style="    min-width: 101px;">
+
+                                            <a class="main_subtab_link" (click)="navigateRoute('/workflow', 'tasks')">
+                                                Tasks</a>
+                                            <div class="sub_menu_border"></div>
+                                            <a class="main_subtab_link" (click)="navigateRoute('/workflow', 'boards')">
+                                                Boards</a>
+                                        </div>
+                                    </div>
+                                </tab>
+                                <tab [active]="false" id="tab_connections" class="tab_pane_container ">
+                                    <div *tabHeading class="dropdown sub_tab_dropdown">
+                                        <a class="main_tab_link" (click)="navigateRoute('/connections', 'connections')">
+                                            Connections</a>
+                                    </div>
+                                </tab>
+
+                                <tab [active]="false" id="tab_documents" class="tab_pane_container ">
+                                    <div *tabHeading class="dropdown sub_tab_dropdown">
+                                        <a class="main_tab_link"
+                                            (click)="navigateRoute('/documents', 'stab_view_document')">
+                                            Documents
+                                        </a>
+
+                                        <div class="dropdown-content" style="min-width: 114px;">
+
+                                            <a class="main_subtab_link"
+                                                (click)="navigateRoute('/documents', 'stab_document_Add')">
+                                                Add Document</a>
+                                            <div class="sub_menu_border"></div>
+                                            <a class="main_subtab_link"
+                                                (click)="navigateRoute('/documents', 'stab_document_link')">
+                                                Link Document</a>
+                                        </div>
+                                    </div>
+                                </tab>
+                                <tab [active]="false" id="tab_strategy" class="tab_pane_container  ">
+                                    <div *tabHeading class="dropdown sub_tab_dropdown">
+                                        <a class="main_tab_link"
+                                            (click)="navigateRoute('/strategy', 'stab_strategy_summary')">
+                                            Strategy
+                                        </a>
+
+                                        <div class="dropdown-content" style="min-width: 95px;">
+
+                                            <a class="main_subtab_link"
+                                                (click)="navigateRoute('/strategy', 'stab_strategy_summary')">
+                                                Summary</a>
+                                            <div class="sub_menu_border"></div>
+                                            <a class="main_subtab_link"
+                                                (click)="navigateRoute('/strategy', 'stab_strategy_mission')">
+                                                Mission</a>
+                                            <div class="sub_menu_border"></div>
+                                            <a class="main_subtab_link"
+                                                (click)="navigateRoute('/strategy', 'stab_strategy_vision')">
+                                                Vision</a>
+                                            <div class="sub_menu_border"></div>
+                                            <a class="main_subtab_link"
+                                                (click)="navigateRoute('/strategy', 'stab_strategy_strategy')">
+                                                Strategy</a>
+                                            <div class="sub_menu_border"></div>
+                                            <a class="main_subtab_link"
+                                                (click)="navigateRoute('/strategy', 'stab_strategy_goals')">
+                                                Goals</a>
+
+                                        </div>
+                                    </div>
+                                </tab>
+                                <tab [active]="false" id="tab_assessment" class="tab_pane_container  ">
+                                    <div *tabHeading class="dropdown sub_tab_dropdown">
+                                        <!-- <a class="main_tab_link" [routerLink]="['/assessment']" [queryParams]="{ t: 'summary'}" >
+                                            Assessment
+                                        </a> -->
+                                        <!-- <a class="main_tab_link" [routerLink]="['/assessment']" [queryParams]="{ t: 'summary', 'm':queryparams}" >
+                                            Assessment
+                                        </a>  -->
+                                        <a class="main_tab_link"
+                                            (click)="navigateRoute('/assessment', 'stab_assessment_summary')">
+                                            Assessment
+                                        </a>
+
+                                        <div class="dropdown-content" style="min-width: 120px;">
+
+                                            <a class="main_subtab_link"
+                                                (click)="navigateRoute('/assessment', 'stab_assessment_summary')">
+                                                Summary</a>
+                                            <div class="sub_menu_border"></div>
+                                            <a class="main_subtab_link"
+                                                (click)="navigateRoute('/assessment', 'stab_assessment_strength')">
+                                                {{assessment_sub_tab.Strength}}</a>
+                                            <div class="sub_menu_border"></div>
+                                            <a class="main_subtab_link"
+                                                (click)="navigateRoute('/assessment', 'stab_assessment_weakness')">
+                                                {{assessment_sub_tab.Weaknesses}}</a>
+                                            <div class="sub_menu_border"></div>
+                                            <a class="main_subtab_link"
+                                                (click)="navigateRoute('/assessment', 'stab_assessment_opportunities')">
+                                                {{assessment_sub_tab.Opportunities}}</a>
+                                            <div class="sub_menu_border"></div>
+                                            <a class="main_subtab_link"
+                                                (click)="navigateRoute('/assessment', 'stab_assessment_threats')">
+                                                {{assessment_sub_tab.Threats}}</a>
+                                            <a *ngIf="performanceStatus" class="main_subtab_link"
+                                                (click)="navigateRoute('/assessment', 'stab_assessment_reviewer')">
+                                                Performance Reviewer</a>
+                                        </div>
+                                    </div>
+                                </tab>
+                                <tab [active]="false" id="tab_performance" class="tab_pane_container  ">
+                                    <div *tabHeading class="dropdown sub_tab_dropdown">
+                                        <a class="main_tab_link"
+                                            (click)="navigateRoute('/performance', 'stab_performance_metrics')">
+                                            Performance
+                                        </a>
+
+                                        <div class="dropdown-content" style="min-width: 124px;">
+
+                                            <a class="main_subtab_link"
+                                                (click)="navigateRoute('/performance', 'stab_performance_metrics')">
+                                                Metric</a>
+                                            <div class="sub_menu_border"></div>
+                                            <a class="main_subtab_link"
+                                                (click)="navigateRoute('/performance', 'stab_performance_strategyexe')">
+                                                Strategy Execution</a>
+                                        </div>
+                                    </div>
+                                </tab>
+                                <tab [active]="false" id="tab_collaborations" class="tab_pane_container  ">
+                                    <div *tabHeading class="dropdown sub_tab_dropdown">
+                                        <a class="main_tab_link"
+                                            (click)="navigateRoute('/collaboration', 'stab_collaboration_notes')">
+                                            Collaboration
+                                        </a>
+
+                                        <div class="dropdown-content" style="min-width: 126px;">
+
+                                            <!-- <a class="main_subtab_link" (click)="navigateRoute('/collaboration', 'stab_collaboration_forum')">
+                                                Discussion Forum</a>
+                                            <div class="sub_menu_border"></div> -->
+                                            <a class="main_subtab_link"
+                                                (click)="navigateRoute('/collaboration', 'stab_collaboration_notes')">
+                                                Notes</a>
+                                            <div class="sub_menu_border"></div>
+                                            <a class="main_subtab_link" (click)="openmail()">Module Owner</a>
+
+                                        </div>
+                                    </div>
+                                </tab>
+                                <tab [active]="false" id="tab_details" class="tab_pane_container">
+                                    <div *tabHeading class="dropdown sub_tab_dropdown">
+                                        <a class="main_tab_link"
+                                            (click)="navigateRoute('/details', detailsDefaultRedirection)">
+                                            Details
+                                        </a>
+
+                                        <div class="dropdown-content" style="min-width: 155px;">
+                                            <a class="main_subtab_link"
+                                                (click)="navigateRoute('/details', 'stab_details_uemplist')">
+                                                {{details_sub_tab.stab_details_uemplist}}</a>
+                                            <div class="sub_menu_border"></div>
+
+                                            <a class="main_subtab_link"
+                                                (click)="navigateRoute('/details', 'stab_details_processinfo')">
+                                                {{ details_sub_tab.stab_details_processinfo}}</a>
+                                            <div class="sub_menu_border"></div>
+
+                                            <a class="main_subtab_link"
+                                                (click)="navigateRoute('/details', 'stab_details_managefiltertags')">
+                                                {{details_sub_tab.stab_details_managefiltertags}}</a>
+                                            <div class="sub_menu_border"></div>
+                                            <a *ngIf="changelogPermission == true" class="main_subtab_link"
+                                                (click)="navigateRoute('/details', 'stab_details_changelogs')">
+                                                {{details_sub_tab.stab_details_changelogs}}</a>
+                                            <div class="sub_menu_border"></div>
+                                            <a class="main_subtab_link"
+                                                (click)="navigateRoute('/details', 'stab_details_submchangelogs')">
+                                                {{details_sub_tab.stab_details_submchangelogs}}</a>
+                                            <div class="sub_menu_border"></div>
+                                            <a class="main_subtab_link"
+                                                (click)="navigateRoute('/details', 'stab_details_accessrights')">
+                                                {{details_sub_tab.stab_details_accessrights}}</a>
+                                        </div>
+                                    </div>
+                                </tab>
+                                <tab [disabled]="true" [active]="false" id="tab_reporting" class="tab_pane_container ">
+                                    <div *tabHeading class="dropdown sub_tab_dropdown">
+                                        <a class="main_tab_link" (click)="navigateRoute('/reporting', 'reporting')">
+                                            Reporting</a>
+                                    </div>
+                                </tab>
+                                <!-- <tab id="stab_pinmodule" [active]="false" class="tab_pane_container" *ngIf="pinmodule_active">
+                  <div *tabHeading>
+                    
+                  </div>
+                  
+                </tab> -->
+                                <!-- <tab id="stab_preference" [active]="false" class="tab_pane_container">
+                                    <div *tabHeading class="dropdown sub_tab_dropdown">
+                                        <a class="main_tab_link" (click)="navigateRoute('/preference', 'stab_preferece')">
+                                            Preferences
+                                        </a>
+                                    </div>
+                                </tab> -->
+                            </tabset>
+                            <a id="pinmodule_tag" *ngIf="pinmodule_active" class="pinmodule_tag"
+                                (click)="SavePinmodule(pinmodule);">
+                                <!-- <i class="fa fa-thumb-tack fa-lg"></i> -->
+                                <i class="icon-pin icons  d-block mt-0"></i>
+                            </a>
+                            <a target="_blank" style="display:none" #pinmodule rel=""
+                            [href]="CLICKONCE_URL"></a>
+                            <a id="gotooriginal_tag" *ngIf="isReferenceModule"
+                                (click)="redirectToSelectedModule(OrginalModuleData)" [routerLink]="['./']"
+                                [queryParams]="OrginalModuleData.params" class="gotooriginal_tag">Goto Original</a>
+                        </div>
+                        <!--/.col-->
+                    </div>
+                </div>
+                <router-outlet></router-outlet>
+
+            </div>
+            <!-- /.container-fluid -->
+
+
+        </main>
+
+    </div>
+    <app-footer>
+        <div class="footer_content">
+            2019 &copy; Intellimodz</div>
+    </app-footer>
+</div>
+<!-- <p-dialog header="Preferences" [(visible)]="display" [modal]="true" [responsive]="true" appendTo="body">
+    <div id="Preference_content">
+        <a href="#" onclick="close_preference();" id="btn_exit" style="float: right;margin-right: -36px;margin-top: -12px;" class="btn_exit_12"></a>
+        <div style="text-align:left;">
+            <label style="font-weight:bold">General</label>
+            <br>
+            <input id="chkdrag" name="chkdrag" onclick="single_click()" type="checkbox"> When selected, modules can be single
+            clicked to open. Drag and Drop is still enabled.
+
+            <input id="chknavi" name="chknavi" onclick="eliminate_leftpane(event)" type="checkbox"> Hide the left side Modules
+            List.
+            <br>
+
+
+            <p style="width:500px;"> Select the applications used to open documents. Google applications will allow direct
+                open, edit and save to the Library, PC applications will allow direct open and edit but will not allow direct
+                saving to the Library</p>
+
+            <input id="Gchk" name="Gchk" type="checkbox"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Google applications
+            <br>
+            <input id="Pchk" name="Pchk" type="checkbox"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PC applications (MS Word, Excel,etc.)
+            <br>
+            <br>
+            <div id="google_translate_element" style="text-align: left;">Select Language
+                <div class="skiptranslate goog-te-gadget" dir="ltr" style="">
+                    <div id=":0.targetLanguage" class="goog-te-gadget-simple" style="white-space: nowrap;">
+                        <img src="https://www.google.com/images/cleardot.gif" class="goog-te-gadget-icon" alt="" style="background-image: url('https://translate.googleapis.com/translate_static/img/te_ctrl3.gif'); background-position: -65px 0px;">
+                        <span style="vertical-align: middle;">
+                            <a aria-haspopup="true" class="goog-te-menu-value" href="javascript:void(0)">
+                                <span>Select Language</span>
+                                <img src="https://www.google.com/images/cleardot.gif" alt="" width="1" height="1">
+                                <span style="border-left: 1px solid rgb(187, 187, 187);">&#8203;</span>
+                                <img src="https://www.google.com/images/cleardot.gif" alt="" width="1" height="1">
+                                <span aria-hidden="true" style="color: rgb(118, 118, 118);">▼</span>
+                            </a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align:left;">
+            <br>
+            <label style="font-weight:bold">Module Defaults</label>
+            <br>
+            <input id="Lego_Add" value="Select" class="Button_pre" type="button">
+            <input id="Lego_clear" value="Clear" class="Button_pre cancel_pre" type="button"> &nbsp;&nbsp;&nbsp;Make the
+            Current Module become the Home Module when I sign in each time
+            <br>
+            <div id="divTopRoot" style="float: left; font-size: 12px; color: Black;"></div>
+
+            <label>Default Tab</label>
+            <select name="dtab" id="pre_dtab" style="width:121px;" onchange="save_preference()">
+                <option value="1">SubModule</option>
+                <option value="2">Workflow</option>
+                <option value="3">Plan</option>
+                <option value="4">Documents</option>
+                <option value="5">Assessment</option>
+                <option value="6">Performance</option>
+                <option value="7">Connection</option>
+                <option value="8">Collaboration</option>
+                <option value="9">Detail</option>
+
+            </select>
+            <br>
+        </div>
+        <div style="text-align:left;">
+
+            <label style="font-weight:bold">Task Defaults</label>
+            <input id="pre_reorder" name="reorder" type="checkbox"> &nbsp;Reorder using Priority
+            <br>
+            <input id="pre_drag" name="drag" type="checkbox" checked="checked" style="display:none">
+
+
+            <input id="def_boards" name="boardsdef" type="checkbox"> &nbsp;Default to Boards
+            <br>
+            <label>Task Dropdown default</label>
+            <select name="taskdefault" id="taskfilterdef" style="width:121px;" onchange="save_preference()">
+                <option value="All">All</option>
+                <option value="Pending">Pending</option>
+                <option value="Completed">Completed</option>
+                <option value="Archived">Archived</option>
+            </select>
+        </div>
+
+    </div>
+
+
+</p-dialog> -->
+<!-- context menu basic template start -->
+<div
+    style="position:fixed;top:35px;height:100%;width:100%;display:table; border-collapse: collapse;border:none;outline:none; pointer-events: none">
+    <div style="display: table-cell;width:200px;vertical-align: top">
+        <div style="position:absolute; top: 20px;">
+            <div style="position:fixed;top:200px;left:-200px">
+                <context-menu #sideRightMenu [disabled]="disableBasicMenu" style="pointer-events:all">
+                    <ng-template contextMenuItem (execute)="showMessage('Hi, ' + $event.item.label)">
+                        <div class="context-items">
+                            <span class="context-icon">
+                                <i class="fa fa-hand-rock-o"></i>
+                            </span>
+                            <span class="context-title">Select Icon 11222</span>
+                        </div>
+                    </ng-template>
+                    <!-- <ng-template *ngFor="let action of MenuRightMenuActions" contextMenuItem let-item [visible]="action.visible" [enabled]="action.enabled"
+                            [divider]="action.divider" (execute)="action.click($event)">
+                            <div [innerHTML]="action.html(item)"></div>
+                    </ng-template> -->
+
+                </context-menu>
+            </div>
+        </div>
+    </div>
+</div>
+<p-sidebar [(visible)]="chatbar_display" position="right" [style]="{ 'width' : '60%','visibility' : 'hidden' }"
+    id="chat_sidebar" [ngClass]="{ 'chatbar_display': chatbar_display == true }">
+    <app-chat [currentTab]="activeTab"></app-chat>
+</p-sidebar>
+<!-- context menu basic end  -->
+<p-dialog header="Create New Model" [(visible)]="modal_dialog" [modal]="true" [responsive]="true" appendTo="body"
+    [closable]="false">
+    <div class="form-group">
+        <label for="lbl_user_name" class="col-form-label">Please Enter new Model Name</label>
+        <input id="create_model_textbox" maxlength="80" type="text" class="form-control" (keyup.enter)="createModel()"
+            [(ngModel)]="model_name">
+    </div>
+    <p-footer>
+        <button type="button" class="btn btn-sm btn-primary" (keyup.enter)="createModel()" (click)="createModel()"><i
+                class="fa fa-plus"></i>&nbsp;Add</button>
+        <button type="button" class="btn btn-sm btn-primary" (click)="modal_dialog=false">Exit</button>
+    </p-footer>
+</p-dialog>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle" width="425" [closable]="false">
+</p-confirmDialog>
+
+<p-dialog header="Title" [showHeader]="false" [positionLeft]="760" [positionTop]="50" [(visible)]="browserMessage"
+    [modal]="true" [responsive]="true" [closable]="true" appendTo="body" [draggable]="false" [minWidth]="250"
+    minHeight="100" [width]="352">
+    <h6>The browser version being used is not supported. You can continue using Intellimodz, but please be aware that
+        there are features which may not work as expected. We recommend you upgrade your browser to a supported version.
+        See Help for the listing
+        of supported browsers</h6>
+    <div class="float-right">
+        <p-button icon="fa fa-fw fa-check" (click)="browserMessage=false;" label="Ok" styleClass="ustom_btn"></p-button>
+    </div>
+</p-dialog>
+
+<style>
+    ul.bookmarks {
+        list-style: none;
+    }
+
+    ul.bookmarks li {
+        margin-bottom: 5px;
+        border-bottom: 1px solid #ddd;
+        padding: 5px;
+    }
+
+    ul.bookmarks a {
+        margin-right: 10px;
+    }
+
+    .icon-trash {
+        color: #c6c6c6;
+        cursor: pointer;
+    }
+
+    .icon-trash:hover {
+        color: #666;
+    }
+
+    .Button_pre {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 0 14px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        margin: 4px 2px;
+        cursor: pointer;
+        font-family: "Geogrotesque-Regular";
+    }
+
+    .goog-te-gadget {
+        font-family: arial;
+        font-size: 11px;
+        color: #666;
+        white-space: nowrap;
+    }
+
+    .close {
+        font-size: 1rem !important;
+    }
+</style>
+<!-- main nav -->
+<!-- <ul class="nav">
+        <ng-template ngFor let-navitem [ngForOf]="navItems">
+            <li *ngIf="isDivider(navitem)" class="nav-divider"></li>
+            <ng-template [ngIf]="isTitle(navitem)">
+                <app-sidebar-nav-title [title]='navitem'></app-sidebar-nav-title>
+            </ng-template>
+            <ng-template [ngIf]="!isDivider(navitem)&&!isTitle(navitem)">
+                <app-sidebar-nav-item [item]='navitem'></app-sidebar-nav-item>
+            </ng-template>
+        </ng-template>
+    </ul> -->
+<!-- nav item -->
+<!-- <li *ngIf="!isDropdown(); else dropdown" [ngClass]="hasClass() ? 'nav-item ' + item.class : 'nav-item'">
+        <app-sidebar-nav-link [link]='item'></app-sidebar-nav-link>
+    </li>
+    <ng-template #dropdown>
+        <li (click)="setSelectedModule(item)" [ngClass]="hasClass() ? 'nav-item nav-dropdown ' + item.class : 'nav-item nav-dropdown'"
+            [class.open]="isActive()" [class.selected]="isSelected()" routerLinkActive="open" appNavDropdown>
+            <app-sidebar-nav-dropdown [link]='item'></app-sidebar-nav-dropdown>
+        </li>
+    </ng-template> -->
+<!-- nav link -->
+
+<!-- <a *ngIf="!isExternalLink(); else external" (click)="setSelectedModule(link)" [ngClass]="hasVariant() ? 'nav-link nav-link-' + link.variant : 'nav-link'"
+        routerLinkActive="active" [routerLink]="[link.url]" (click)="hideMobile()">
+        <i *ngIf="isIcon()" class="nav-icon {{ link.icon }}"></i>
+        {{ link.name }}
+        <span *ngIf="isBadge()" [ngClass]="'badge badge-' + link.badge.variant">
+            {{ link.badge.text }}
+        </span>
+    </a>
+    <ng-template #external>
+        <a (click)="setSelectedModule(link)" [ngClass]="hasVariant() ? 'nav-link nav-link-' + link.variant : 'nav-link'" href="{{link.url}}">
+            <i *ngIf="isIcon()" class="nav-icon {{ link.icon }}"></i>
+            {{ link.name }}
+            <span *ngIf="isBadge()" [ngClass]="'badge badge-' + link.badge.variant">
+                {{ link.badge.text }}</span>
+        </a>
+    </ng-template> -->
+<div id="session_expireId" class="ui-blockui sessionexpire-overlay ui-blockui-document" style="    background: #000;opacity: .70;z-index: 8888; display: none;">
+        <div class="ui-card ui-widget ui-widget-content ui-corner-all"
+            style="position: absolute; top: 25%; left: 40%;">
+            <div class="ui-card-body">
+                <div class="ui-card-content">
+                    <i class="fa fa-lock fa-5x"></i>
+                    <div style="font-size: 18px;font-weight: 700;color: #000;width: 85%;float: right;">
+                        Your session has expired. Please
+                        <a href="javascript:void(0);" style="color: #028df9">log in</a> again</div>
+                </div>
+            </div>
+        </div>
+
+</div>
+
+<style>
+    .dropdown-submenu {
+        position: relative;
+    }
+
+    .dropdown-submenu>.dropdown-menu {
+        top: 0;
+        left: 100%;
+        margin-top: -6px;
+        margin-left: -1px;
+        -webkit-border-radius: 0 6px 6px 6px;
+        -moz-border-radius: 0 6px 6px;
+        border-radius: 0 6px 6px 6px;
+    }
+
+    .dropdown-submenu:hover>.dropdown-menu {
+        display: block;
+        max-height: 300px;
+        overflow: auto;
+    }
+
+    .dropdown-submenu>a:after {
+        display: block;
+        content: " ";
+        float: right;
+        width: 0;
+        height: 0;
+        border-color: transparent;
+        border-style: solid;
+        border-width: 5px 0 5px 5px;
+        border-left-color: #ccc;
+        margin-top: 5px;
+        margin-right: -10px;
+    }
+
+    .dropdown-submenu:hover>a:after {
+        border-left-color: #fff;
+    }
+
+    .dropdown-submenu.pull-left {
+        float: none;
+    }
+
+    .dropdown-submenu.pull-left>.dropdown-menu {
+        left: -100%;
+        margin-left: 10px;
+        -webkit-border-radius: 6px 0 6px 6px;
+        -moz-border-radius: 6px 0 6px 6px;
+        border-radius: 6px 0 6px 6px;
+    }
+</style>

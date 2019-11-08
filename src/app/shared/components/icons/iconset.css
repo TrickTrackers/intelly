@@ -1,0 +1,21 @@
+.tick_holder{ 
+       width: 20px;
+       height: 20px;
+       background: #e6e9ec; 
+       position: absolute;    
+       border: solid 1px #d0cbcb;
+    }
+    .tick{
+            background: #f8f9dc;
+        }
+
+    .tick_holder.tick:before 
+    {    
+        content: \"\\2713\";    
+        color: darkgreen;    
+        font-size: 17px;    
+        font-weight: bold;  
+    }
+    .col-lg-1  {    
+        border: solid 1px #d5e0e4; 
+    }

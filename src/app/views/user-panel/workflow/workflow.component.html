@@ -1,0 +1,214 @@
+<div id="workflow-pg" class="content-page component_holder">
+    <div class="topbutton_section">
+        <div *ngIf="showTab && operationalRights == 'Unrestricted'" style="float:right" class="workflow_board_btn">
+            <button class="btn btn-sm btn-primary" (click)="addBoard()" *ngIf="hasRights == true">
+                <i class="fa fa-plus"></i> Add New Board</button>
+        </div>
+        <!-- <div *ngIf="showTaskTab"  class="" style="float:right">
+                <button class="btn btn-sm btn-primary" (click)="AddMainTask()">
+                                <i class="fa fa-plus"></i> </button>
+                <p-dropdown class="top_taskmenu" [options]="top_taskmenu" [(ngModel)]="selectedtop_taskmenu" placeholder="Select a Filter"
+                        optionLabel="label" [style]="{width: '150px',float:'right'}"></p-dropdown>
+        </div> -->
+    </div>
+    <div>
+        <!-- <ul id="workflow_tab_navigation" class="nav nav-tabs" *ngIf="hasRights == false">
+      <li id="workflow_task_tab" (click)="updateTabNavigation('tasks')" class="nav-item ">
+        <a [ngClass]="{'active':(showTaskTab === true)}" class="nav-link active" href="javascript:void(0);"> <span>Tasks</span>
+        </a>
+      </li>
+      <li id="workflow_board_tab" (click)="updateTabNavigation('boards')" [ngClass]="{'active':(showTab === true)}"
+        class="nav-item">
+        <a class="nav-link" href="javascript:void(0);"> <span>Boards</span> </a>
+      </li>
+      <li id="workflow_boardtask_tab" *ngIf="showWorkflowTaskTab == true" [ngClass]="{'active':(showWorkflowTaskTab === true)}"
+        class="nav-item">
+        <a class="nav-link" href="javascript:void(0);"> <span>Board Task</span></a>
+      </li>
+      <li id="workflow_ganttchart_tab" (click)="showGanttChart()" [ngClass]="{'active':( showGanttchartTab === true)}"
+        class="nav-item ">
+        <a class="nav-link" href="javascript:void(0);"> <span>Gantt Chart</span></a>
+      </li>
+    </ul> -->
+        <ul id="workflow_tab_navigation" class="nav nav-tabs" *ngIf="hasRights == true">
+            <li id="workflow_task_tab" (click)="updateTabNavigation('tasks')" class="nav-item ">
+                <a [ngClass]="{'active':(showTaskTab === true)}" class="nav-link active" href="javascript:void(0);">
+                    <span>Tasks</span>
+                </a>
+            </li>
+            <li id="workflow_board_tab" (click)="updateTabNavigation('boards')"
+                [ngClass]="{'active':(showTab === true)}" class="nav-item">
+                <a class="nav-link" href="javascript:void(0);"> <span>Boards</span> </a>
+            </li>
+            <li id="workflow_boardtask_tab" *ngIf="showWorkflowTaskTab == true"
+                [ngClass]="{'active':(showWorkflowTaskTab === true)}" class="nav-item">
+                <a class="nav-link" href="javascript:void(0);"> <span> >> {{setBoardName}} </span></a>
+            </li>
+            <li id="workflow_ganttchart_tab" (click)="showGanttChart()"
+                [ngClass]="{'active':( showGanttchartTab === true)}" class="nav-item ">
+                <a class="nav-link" href="javascript:void(0);"> <span>Gantt Chart</span></a>
+            </li>
+            <li id="workflow_tasklist_tab" (click)="loadSpreadsheet()"
+                [ngClass]="{'active':( showTaskListexcelTab === true)}" class="nav-item ">
+                <a class="nav-link" href="javascript:void(0);"> <span>Task List</span></a>
+            </li>
+        </ul>
+        <div id="restricted_display" *ngIf="hasRights == false">
+            <div class="ui-g">
+                <div class="ui-g-12 no-padding">
+                    <div class="page-restricted">
+                        <span>Access to this page is restricted</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-content" *ngIf="hasRights == true">
+            <div *ngIf="showTaskTab == true">
+                <app-task-list (selectedFilterTask)="onFilterTasks($event)" [(addtasklist_input)]="addtasklist_display">
+                </app-task-list>
+            </div>
+            <div *ngIf="showTab == true">
+                <div class="ui-g" id="board_container">
+                    <div class="ui-g-12 ui-md-12 no-padding" id="drag_rootContainer">
+                        <p-scrollPanel [style]="{width: '100%'}" styleClass="board_scrollbar">
+                                <span id="floatingarrow_left" class="floating_arrowicon ">
+                                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                                      </span>
+                                              <span id="floatingarrow_up" class="floating_arrowicon">
+                                        <i class="fa fa-chevron-up" aria-hidden="true"></i>
+                                      </span>
+                            <!-- board_scrollbar -->
+                            <div class="boardgroups row" [sortablejs]="boardList"
+                                [sortablejsOptions]="SortableBoardoptions" style="margin-left:0px !important;">
+
+                                <p-card [contextMenu]="CommonModuleRightMenu" [contextMenuSubject]="board"
+                                    Class="board_card" *ngFor="let board of boardList;trackBy:index;trackBy: trackByBoardListFn;let lastboard:last"
+                                    (dblclick)="setBoard(board,modulesubTabset,$event)"
+                                    (click)="setBoard(board,modulesubTabset,$event)"
+                                    [class.st_draggable]="operationalRights == 'Unrestricted' ">
+                                    <p-header>
+                                        <div>{{ triggerboardAutoHeight(lastTaskElement) }}</div>
+                                        <div *ngIf="board.iseditable ==false" (dblclick)="renameBoard(board)"
+                                            class="board-card-title"
+                                            [class.board_card_active]="operationalRights == 'Unrestricted' ">
+                                            <div class="title"> {{board.board_title}}</div>
+                                            <span *ngIf=" operationalRights == 'Unrestricted' " class="board_options">
+                                                <i (click)="renameBoard(board)"
+                                                    class="fa fa-pencil-square-o  pull-right edit_board"
+                                                    style="padding-top: 5px;font-size: 11px;"></i>
+                                                <i (click)="deleteBoard(board)"
+                                                    class="fa fa-trash  pull-right delete_board"
+                                                    style="padding-top: 5px;font-size: 11px;"></i>
+                                            </span>
+                                        </div>
+
+                                        <input *ngIf="board.iseditable == true"  placeholder="Name"
+                                            type="text" [(ngModel)]="board.board_title"
+                                            [attr.id]="'renameboardlist_' + board.b_id"
+                                            (mousedown)="disableDrag($event)" (keyup.enter)="updateBoard(board,$event)"
+                                            (focusout)="updateBoard(board,$event)"
+                                            class="ui-inputtext ui-corner-all ui-state-default ui-widget disable_drag"
+                                            maxlength="80">
+                                        <button (click)="updateBoard(board,$event)" *ngIf="board.iseditable ==true"
+                                            class="ui-button-success ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"
+                                            icon="fa-close" pbutton="" type="button" [style]="{'min-width':'25px'}">
+                                            <span class="ui-button-icon-left ui-clickable fa fa-fw fa-save"></span>
+                                            <span class="ui-button-text ui-clickable">ui-btn</span>
+                                        </button>
+                                    </p-header>
+                                    <p-footer>
+                                        <div class="board-card-footer">
+                                            <i class="fa fa-user"></i> Created By <b>{{board.createby_name}}</b></div>
+                                    </p-footer>
+                                </p-card>
+                            </div>
+                            <span id="floatingarrow_right" class="floating_arrowicon ">
+                                    <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                                  </span>
+                                          <span id="floatingarrow_down" class="floating_arrowicon ">
+                                    <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                                  </span>
+                            <!-- <hotTable [data]="data" [colHeaders]="colHeaders" [columns]="columns" [options]="options_setting"></hotTable> -->
+                        </p-scrollPanel>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="showWorkflowTaskTab == true">
+                <app-task-list [isBoardTask]="1" [selectedBoard]="selectedBoard" [selectedBoardId]="selectedBoardId"
+                    (selectedFilterTask)="onFilterTasks($event)" [(addtasklist_input)]="addtasklist_display">
+                </app-task-list>
+            </div>
+        </div>
+    </div>
+
+
+    <p-dialog header="Gantt Chart" [(visible)]="ganttChart_display" [modal]="true" [resizable]="true"
+        [responsive]="true" (onHide)="closeGantChart()" styleClass="fullWidthpopup">
+        <div class="ui-g no-padding">
+            <div *ngIf="ganttChart_display == true " class="ui-g-12 ui-md-12 no-padding">
+                <app-ganttchart [ganttExternalChanges]="ganttExternalChanges"></app-ganttchart>
+            </div>
+        </div>
+    </p-dialog>
+
+    <!-- Task List Popup spread sheet Viewer header="Task List" (onHide)="closeTaskList_excel()"-->
+    <p-dialog [(visible)]="spreadsheet_display" [modal]="true" [resizable]="true" [responsive]="true"
+        (onHide)="closeTaskList_excel()" styleClass="fullWidthpopup">
+        <p-header>Task List </p-header>
+        <div class="ui-g no-padding">
+            <div *ngIf="spreadsheet_display == true " class="ui-g-12 ui-md-12 no-padding">
+                	<div class="speardsheet-task row">
+                            <div class="col-sm-12 pl-2 pt-1">
+                                <label>Task Filter</label>
+                                <p-dropdown (onChange)="Filter_tasklist(selectedtop_taskmenu.label)" class="top_taskmenu" [options]="this.top_taskmenufilter"
+                                    [(ngModel)]="selectedtop_taskmenu" placeholder="Select a Filter" optionLabel="label"
+                                    [style]="{width: '150px', 'margin-left':'5px'}"></p-dropdown>
+                                <div class="pt-1 pull-right">
+                                    <p-button icon="fa fa-file-excel-o" label="Export To Excel" styleClass="custom_btn"
+                                        (click)="exportAsXLSX()"></p-button>
+                                </div>
+                            </div>
+                        </div>
+                <!-- <hotTable [data]="data" [columns]="columns" [colHeaders]="colHeaders" [colWidths]="colWidths"></hotTable> -->
+                <hotTable [data]="data" id="example1" [colHeaders]="colHeaders" [columns]="columns"
+                    [options]="options_setting">
+                </hotTable> 
+            </div>
+        </div>  
+    </p-dialog>
+
+    <!-- context menu basic template start -->
+    <div
+        style="position:fixed;top:35px;height:100%;width:100%;display:table; border-collapse: collapse;border:none;outline:none; pointer-events: none">
+        <div style="display: table-cell;width:200px;vertical-align: top">
+            <div style="position:absolute; top: 20px;">
+                <div style="position:fixed;top:200px;left:-200px">
+
+                    <context-menu #CommonModuleRightMenu [disabled]="disableBasicMenu" style="pointer-events:all">
+                        <ng-template contextMenuItem (execute)="renameBoard($event.item)">
+                            <div class="context-items">
+                                <span class="context-icon">
+                                    <i class="fa fa-plus"></i>
+                                </span>
+                                <span class="context-title">Rename</span>
+                            </div>
+                        </ng-template>
+                        <ng-template contextMenuItem divider="true"></ng-template>
+                        <ng-template contextMenuItem (execute)="deleteBoard($event.item)">
+                            <div class="context-items">
+                                <span class="context-icon">
+                                    <i class="fa fa-delete"></i>
+                                </span>
+                                <span class="context-title">Delete</span>
+                            </div>
+                        </ng-template>
+
+                    </context-menu>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-confirmDialog></p-confirmDialog>
+<!-- context menu basic end  -->

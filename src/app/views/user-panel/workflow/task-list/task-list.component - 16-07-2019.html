@@ -1,0 +1,1002 @@
+<!-- <div class="topbutton_section">
+        <div style="float:right">
+                <p-dropdown [options]="top_taskmenu" [(ngModel)]="selectedtop_taskmenu" [style]="{'width':'150px'}"> </p-dropdown>
+        </div>
+</div> -->
+<div id="taskcomp-pg">
+    <div id="taskcomp-topdropdown" class="" style="float: right;position: fixed;right: 10px;display:flex;">
+        <button class="btn btn-sm btn-primary" [disabled]="newactivated || operationalRights != 'Unrestricted' " style="margin-right:2px" (click)="AddMainTask()">
+            <i class="fa fa-plus">&nbsp;<b>Add</b></i>
+        </button>
+        <p-dropdown (onChange)="FilterTasks($event)" class="top_taskmenu" appendTo="body" [options]="top_taskmenu" [(ngModel)]="selectedFilterOption" [style]="{'width': '225px','float':'right','margin-left':'3px'}" filter="true">
+            <!-- placeholder="Select a Filter" -->
+            <ng-template let-item pTemplate="item">
+                <div *ngIf="item.value" class="ui-helper-clearfix select-box elipsis_div">
+                    <span class="namebatch_left">{{ item.value.title }} </span>
+                    <span class="idbatch_left">{{ item.value.count }}</span>
+                </div>
+                <div *ngIf="! item.value" class="ui-helper-clearfix select-box elipsis_div">
+                    <span>{{ item.label }}</span>
+                </div>
+            </ng-template>
+            <ng-template let-item pTemplate="selectedItem">
+                <div *ngIf="item.value" class="ui-helper-clearfix select-box elipsis_div">
+                    <span class="namebatch_left">{{ item.value.title }} </span>
+                    <span class="idbatch_left">{{ item.value.count }}</span>
+                </div>
+                <div *ngIf="! item.value" class="ui-helper-clearfix select-box elipsis_div">
+                    <span>{{ item.label }}</span>
+                </div>
+            </ng-template>
+        </p-dropdown>
+    </div>
+    <div class="clearfix"></div>
+    <div class="ui-g">
+        <div class="ui-g-12 ui-md-12 no-padding">
+
+            <!-- <p-scrollPanel [style]="{width: '100%', 'border' : 'none','background' : '#e4e5e6'}" styleClass="custom_scrollpane"> -->
+            <div id="drag_rootContainer" class="container workflow_container custom_scroll">
+                    <span id="floatingarrow_left" class="floating_arrowicon ">
+                            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                          </span>
+                                  <span id="floatingarrow_up" class="floating_arrowicon">
+                            <i class="fa fa-chevron-up" aria-hidden="true"></i>
+                          </span>
+                <div  class="taskSet1 itemgroups row" [sortablejs]="taskList" [sortablejsOptions]="taskDragOptions">
+
+                    <div attr.data-wrkid="{{ item.wrk_id }}" class="drag_items" [class.t_draggable]="operationalRights == 'Unrestricted' " *ngFor="let item of taskList;let i = index" [ngClass]="{'selected_task':(selectedparenttask == item.wrk_id )}">
+                        <p-panel styleClass="workflow_task" expandIcon="fa-expand" collapseIcon="fa-compress" [style]="{'margin-bottom':'5px'}">
+                            <p-header [contextMenu]="mainRightMenu" [contextMenuSubject]="item">
+                                <div [ngStyle]="{'background-color': item.color }" class="panel_innerheader">
+
+                                    <div class="no-padding" style="font-size:12px;display:inline-block;margin-top: -5px;">
+                                        <div class="ui-inputgroup">
+                                            <span *ngIf="item.iseditable ==false" class="ui-panel-title w_100per" (dblclick)="RenameTaskList(item)">{{item.list_title}}
+                                            </span>
+                                            <div *ngIf="item.iseditable ==true">
+                                                <input pinputtext="" placeholder="Name" type="text" maxlength="250" [(ngModel)]="item.list_title" [attr.id]="'renametasklist_' + item.wrk_id" (mousedown)="disableDrag($event,'.drag_items')" (keyup.enter)="closeRenameTaskList(item,false,$event)" (focusout)="closeRenameTaskList(item,false,$event)"
+                                                    class="ui-inputtext ui-corner-all ui-state-default ui-widget disable_drag" />
+                                                <button class="ui-button-danger ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" icon="fa-close" pbutton="" type="button" [style]="{'min-width':'25px'}">
+                                                    <span
+                                                        class="ui-button-icon-left ui-clickable fa fa-fw fa-close"></span>
+                                                    <span class="ui-button-text ui-clickable">ui-btn</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <span style="float:left;margin: 5px 0px;" [tooltip]="addcardTemplate" container="body">
+                                      <i class="fa fa-fw fa-question-circle"></i>
+                                  </span> -->
+                                    <span *ngIf="operationalRights == 'Unrestricted' " style="float:left;margin: 5px 0px;" class="fa fa-fw fa-plus" (click)="addnewSubTask(item)" [tooltip]="addcardTemplate" container="body"></span>
+                                    <span *ngIf="item.expand_status == 0" style="float:right;margin: 5px 0px;" class="fa fa-fw fa-expand" (click)="afterCollpased(item)"></span>
+                                    <span *ngIf="item.expand_status == 1" style="float:right;margin: 5px 0px;" class="fa fa-fw fa-compress" (click)="afterCollpased(item)"></span>
+                                </div>
+                            </p-header>
+                            <div attr.data-wrkid="{{ item.wrk_id }}" *ngIf="item.children" class="submodules" [sortablejs]="item.children" [sortablejsOptions]="stOptions">
+                                <div attr.data-wrkid="{{ item.wrk_id }}" attr.data-wrkflowid="{{ st.workFlowId }}" [class.st_draggable]="operationalRights == 'Unrestricted' && st.workFlowId > 0 " attr.data-wrkflowposition="{{ st.position }}" *ngFor="let st of item.children;let si = index" [ngClass]="{ 'inprogress':(st._status == 0 ), 'completed':(st._status == 1 ),
+                   'overdue':(st._status == 2 ),'dummy_subtask_container' : (st.workFlowId == 0),'draggable' : ( isPriority == false ) }" class="sub_taskitems ">
+                                    <!-- [class.draggable]="(st.workFlowId != 0)" -->
+
+                                    <p-panel [collapsed]="checktaskstatus(st)" (onAfterToggle)="ExpandCollapseSubtask($event,st)" expandIcon="fa-expand" collapseIcon="fa-compress" styleClass="sub_task" [toggleable]="true" [style]="{'border-left-width':'2px'}" [ngClass]="{ 'dummy_subtask' : (st.workFlowId == 0) }">
+                                        
+                                        <p-header *ngIf="(st.workFlowId != 0)">
+                                            <span>
+                                                <p-checkbox [disabled]=" operationalRights != 'Unrestricted' "
+                                                    (onChange)="changeTaskStatus($event,st)" [(ngModel)]="st._status"
+                                                    binary="true"></p-checkbox>
+                                            </span>
+                                            <div class="no-padding subrename_component">
+                                                <div class="ui-inputgroup">
+                                                    <span container="body" *ngIf="st.iseditable == false" (dblclick)="RenameSubTask(st)" class="w_100per subtask_title">{{st.steps}}</span>
+                                                    <input (mousedown)="disableDrag($event,'.sub_taskitems')" style="width:90%;" *ngIf="st.iseditable ==true" pinputtext="" placeholder="Name" type="text" maxlength="250" [(ngModel)]="st.steps" [attr.id]="'renamesubtask_' + st.workFlowId" (keyup.enter)="closeRenameSubTask(st,item,false,$event)"
+                                                        (focusout)="closeRenameSubTask(st,item,false,$event)" class="ui-inputtext ui-corner-all ui-state-default ui-widget disable_drag ">
+                                                    <button (click)="closeRenameSubTask(st,item,true,$event)" *ngIf="st.iseditable ==true" class="ui-button-success ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" icon="fa-close" pbutton="" type="button" [style]="{'min-width':'25px'}">
+                                                        <span
+                                                            class="ui-button-icon-left ui-clickable fa fa-fw fa-save"></span>
+                                                        <span class="ui-button-text ui-clickable">ui-btn</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </p-header>
+                                        <div class="ui-g ui-fluid">
+                                            <div class="panelcolor_ul_holder" id="label_container">
+                                                <ul style="padding:0px;margin:1px;" class="panelcolor_ul list-unstyled">
+                                                    <li *ngFor="let color of st.label_list;" class="panelcolor_li" style="width:10px;height:10px;" [ngStyle]="{backgroundColor:color.labelColor }" [tooltip]="color.labelTitle">
+
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="ui-g-11 ui-md-11" id="subtask_container">
+                                                <div class="ui-g ui-fluid checkList-items-card-container no-padding" style="border-bottom:solid 1px #d6d6d6;">
+                                                    <div class="ui-g-12 ui-md-12 no-padding" style="max-height:250px;overflow-y: auto;overflow-x: hidden;">
+                                                        <div class="ui-g-12 ui-md-12 checkList-items no-padding" *ngFor="let rowData of st.checkList;" [class.hide]="rowData.status == 1 ">
+                                                            <div class="ui-g-10 ui-md-10 checkList-item-block checkList-item-block2 no-padding">
+                                                                <p-inplace [disabled]=" operationalRights != 'Unrestricted' " closable="closable" (onDeactivate)="renameCheckList($event,rowData)">
+                                                                    <div pInplaceDisplay class="checkList-item-break">
+                                                                        <span class="checklist-name">{{rowData.chkname}}</span>
+                                                                        <span class="checklist-edit"><i
+                                                                                class="fa fa-pencil-square-o pull-right"></i></span>
+                                                                    </div>
+                                                                    <span pInplaceContent>
+                                                                        <input type="text" [(ngModel)]="rowData.chkname"
+                                                                            pInputText>
+                                                                    </span>
+                                                                </p-inplace>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="h-25"></div>
+                                                </div>
+
+                                                <div class="task_statusdate " *ngIf=" st._status == 1 " [innerHtml]="getCompletedOn(st)"></div>
+                                                <!-- <div class="task_statusdate " *ngIf=" st._status == 0 ">Inprogress</div> -->
+                                                <div class="task_statusdate " [innerHtml]="getDueOn(st,2)"></div>
+                                                <p-toolbar class="tasktoolbar">
+                                                    <span container="body" (click)="opentaskresources(item,st,0,$event)">
+                                                        <i class="fa fa-bars"></i>
+                                                        <span class="count">{{ st.taskCount }}</span>
+                                                    </span>
+                                                   
+                                                    <span (mouseenter)="getCommentTooltip(st,false)" [tooltip]="assigneeTooltipTemplate" container="body" (click)="opentaskresources(item,st,1,$event)">
+                                                        <i class="fa fa-comment task-comments"></i>
+                                                        <span class="count">{{ st.commentsCount }}</span>
+                                                    </span>
+                                                    <span (click)="opentaskresources(item,st,2,$event)">
+                                                        <i class="fa fa-paperclip task-attachment"></i>
+                                                        <span class="count">{{ st.documentsCount }}</span>
+                                                    </span>
+                                                    <span container="body" [popover]="responsibilitiesTemplate" class="pull-right" triggers="mouseenter:mouseleave">
+                                                        <i class="fa fa-user task-responsibilities"></i>
+                                                        <span class="count" *ngIf="st.responsibilities">{{ st.responsibilityCount ||
+                              getResponsibilitiesCount(st.responsibilities) }}</span>
+                                                    </span>
+                                                    <ng-template #responsibilitiesTemplate>
+                                                        <ol class="responsibility_list">
+                                                            <li *ngFor="let r of st.responsibilities;">
+                                                                <span> {{ r }}</span>
+                                                            </li>
+                                                        </ol>
+                                                    </ng-template>
+                                                    <span *ngIf="operationalRights == 'Unrestricted'" (click)="selectedtask =st; selectedparenttask = item;confirmdelete_display = true">
+                                                        <i class="fa fa-trash task-delete"></i>
+                                                    </span>
+                                                </p-toolbar>
+                                                <div class="ui-g no-padding">
+                                                    <div class="ui-g-10 ui-md-10 no-padding">
+                                                        <p-progressBar [value]="st.complete_per"></p-progressBar>
+                                                    </div>
+                                                    <div class="ui-g-2 ui-md-2 no-padding pull-right">
+                                                        <span style="margin-left: 5px;">
+                                                            <i class="fa fa-exclamation" [ngStyle]="{'color' : '#fff',
+                                     'background-color' : ( (st.priority ==1 ) ? 'red' : (st.priority == 2) ? '#f5b905' : (st.priority == 3) ? 'green' : (st.priority == null || st.priority == '' || st.priority == 0) ? 'black' : 'white' ),
+                                     'border-radius': '50%','padding': '2px 6px' }"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </p-panel>
+                                </div>
+                            </div> 
+                           
+                        </p-panel>
+                    </div>
+                </div>
+                <span id="floatingarrow_right" class="floating_arrowicon ">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                      </span>
+                              <span id="floatingarrow_down" class="floating_arrowicon ">
+                        <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                      </span>
+            </div>
+            <!-- </p-scrollPanel> -->
+        </div>
+    </div>
+    <p-dialog [(visible)]="addtask_display" appendTo="body">
+        <p-header>
+            Add New Card
+        </p-header>
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-inputgroup" style="width: 250px !important;">
+                    <input #txt_taskname type="text" maxlength="30" pInputText placeholder="Task Name" style="width:400px !important">
+                    <button (click)="AddTask(txt_taskname)" pButton type="button" icon="fa-check" class="ui-button-success"></button>
+                </div>
+            </div>
+        </div>
+    </p-dialog>
+    <p-dialog [(visible)]="addtasklist_display" (onHide)="addtasklist_display = false;" appendTo="body">
+        <p-header>
+            Add Task
+        </p-header>
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-inputgroup">
+                    <input #txt_tasklistname type="text" maxlength="30" pInputText placeholder="Task Name">
+                    <button (click)="AddTaskList(txt_tasklistname)" pButton type="button" icon="fa-check" class="ui-button-success"></button>
+                </div>
+            </div>
+        </div>
+    </p-dialog>
+    <p-dialog [(visible)]="display_taskresources" (onHide)="display_taskresources = false;" appendTo="body" styleClass="tasksidebar custom_primetabview" [closeOnEscape]="true" [modal]="true" [draggable]="true" [dismissableMask]="true" [responsive]="true"
+        transitionOptions="400ms cubic-bezier(0.25, 0.8, 0.25, 1)">
+        <div *ngIf="selectedtask" class="ui-g">
+            <div class="ui-g-12 ui-md-12 no-padding">
+                <div class="ui-g-12 ui-md-12 no-padding">
+                    <div class="ui-inputgroup">
+                        <span class="ui-inputgroup-addon">
+                            <p-checkbox [disabled]=" operationalRights != 'Unrestricted' "
+                                (onChange)="changeTaskStatus($event,selectedtask)" [(ngModel)]="selectedtask._status"
+                                binary="true">
+                            </p-checkbox>
+                        </span>
+                        <span *ngIf="task_label_editable ==false" (click)="panelRenameSubtask()" class="ui-inputtext ui-corner-all ui-state-default ui-widget width_50_per"><b>{{selectedtask.steps}}</b></span>
+                        <input *ngIf="task_label_editable ==true" [(ngModel)]="selectedtask.steps" pinputtext="" placeholder="Name" type="text" maxlength="30" (focusout)="task_label_editable=false;closeRenameSubTask(selectedtask,selectedparenttask,false)" (keyup.enter)="task_label_editable=false;closeRenameSubTask(selectedtask,selectedparenttask,false)"
+                            class="ui-inputtext ui-corner-all ui-state-default ui-widget width_50_per">
+                        <button (click)="task_label_editable=false;closeRenameSubTask(selectedtask,selectedparenttask,false);" *ngIf="task_label_editable ==true" class="ui-button-danger ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only" icon="fa-close" pbutton=""
+                            type="button" [style]="{'min-width':'25px'}">
+                            <span class="ui-button-icon-left ui-clickable fa fa-fw fa-close"></span>
+                            <span class="ui-button-text ui-clickable">ui-btn</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-md-12 no-padding" *ngIf="display_taskresources == true">
+                    <div class="ui-corner-all ui-widget m-l-5 m-t-5">
+                        Created By {{ selectedtask.s_createdby_name }} on {{ selectedtask.t_created_date }}
+                    </div>
+                </div>
+
+                <p-tabView [activeIndex]="sidebartab_index">
+                    <p-tabPanel header="Properties">
+                        <div class="ui-g ui-fluid no-padding" *ngIf="display_taskresources == true">
+                            <div class="ui-g-12 no-padding ui-md-12">
+                                <div class="ui-g-12 ui-md-3">
+                                    <i class="fa fa-calendar"></i>Start Date
+                                </div>
+                                <div class="ui-g-12 ui-md-3">
+                                    <!-- <p-calendar [disabled]=" operationalRights != 'Unrestricted' " [(ngModel)]="selectedtask.startdate" 
+                     [showIcon]="true"></p-calendar> -->
+                                    <input [disabled]=" operationalRights != 'Unrestricted' " type="text" #startdate="bsDatepicker" bsDatepicker class="form-control" placeholder="Start Date" [bsConfig]="bsConfig" [(ngModel)]="selectedtask.startdate" (bsValueChange)="onStartDateChange($event,'startdate','enddate')">
+                                </div>
+                                <div class="ui-g-12 ui-md-2">
+                                    <i class="fa fa-calendar"></i>End Date
+                                </div>
+                                <div class="ui-g-12 ui-md-3">
+                                    <input [disabled]=" operationalRights != 'Unrestricted' " type="text" #enddate="bsDatepicker" bsDatepicker class="form-control" placeholder="End Date" [bsConfig]="bsConfig" [(ngModel)]="selectedtask.enddate" (bsValueChange)="onStartDateChange($event,'enddate','startdate')">
+                                </div>
+                            </div>
+                            <div class="ui-g-12 no-padding ui-md-9">
+                                <div class="ui-g-12 ui-md-4">
+                                    <i class="fa fa-users"></i> Responsibility
+                                </div>
+                                <div class="ui-g-12 ui-md-8">
+                                        <p-autoComplete [disabled]=" operationalRights != 'Unrestricted' " [(ngModel)]="selectedResponsibities" pKeyFilter="alpha" [suggestions]="selectedResponsibilitySuggestion" (completeMethod)="filterResponsibilityMultiple($event)" placeholder="" field="employeeName" [multiple]="true"
+                                            styleClass="responsibility_autocomplete" (onSelect)="onSelectResponsibility($event)" (onUnselect)="onUnSelectResponsibility($event)" appendTo="body" [dropdown]="true"  [autoHighlight]="true">
+                                        </p-autoComplete>
+                                </div>
+                            </div>
+                            <div class="ui-g-12 no-padding ui-md-9">
+                                <div class="ui-g-12 ui-md-4">
+                                    <i class="fa  fa-eyedropper"></i> Labels
+                                </div>
+                                <div class="ui-g-12 ui-md-8 custom_multiselect">
+
+                                    <!-- <p-multiSelect [options]="company_label" [(ngModel)]="selectedlabel" [panelStyle]="{minWidth:'22em',margin: '1px 0',padding: '.125em .25em'}" 
+                  [maxSelectedLabels]="15" [selectedItemsLabel]="'fff'" (onPanelHide)="changeColor()"
+                  [filter]="false" optionLabel="labelTitle"></p-multiSelect> -->
+
+                                    <!-- <p-multiSelect [options]="company_label" [(ngModel)]="selectedlabel" [maxSelectedLabels]="15" (onPanelHide)="changeColor()"
+                  [filter]="false" optionLabel="labelTitle" [panelStyle]="{margin: '0rem'}"></p-multiSelect> -->
+
+                                    <!-- <p-multiSelect [disabled]=" operationalRights != 'Unrestricted' " [options]="company_label"
+                    [(ngModel)]="selectedlabel" [filter]="true" [style]="{'max-height':'30px','width': '100%'}"
+                    optionLabel="labelTitle" [showToggleAll]="false" (onChange)="changeWorkFlowLabel($event)"
+                    [panelStyle]="{minWidth:'27em'}"[showHeader] = "true">
+                    
+                    <ng-template let-cmp>
+
+                      <div style="float:right;">{{cmp.labelTitle}}</div>
+                    </ng-template>
+                  </p-multiSelect>  -->
+
+                                    <!-- <ng-select [items]="company_label" [multiple]="true" bindLabel="labelTitle" 
+                    [selectableGroup]="true"  [closeOnSelect]="false" bindValue="labelId"
+                    placeholder="Select label">
+                    <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+                      {{item.labelTitle }}
+                    </ng-template>
+                    <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+
+                      <input id="item-{{index}}" type="checkbox" [(ngModel)]="item$.selected"
+                        [ngModelOptions]="{ standalone : true }" />{{item.labelTitle}}
+                    </ng-template>
+                  </ng-select> -->
+                                    <ng-select [items]="company_label" [closeOnSelect]="false" bindLabel="labelTitle" bindValue="labelId" [multiple]="true" groupBy="labelgroup" (ngModelChange)="changeMultiselectLabel($event)" placeholder="Select Labels" [clearable]="false" [selectableGroup]="false"
+                                        [(ngModel)]="selectedlabel">
+                                        <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+                                            <b>{{item.labelgroup | uppercase}}</b>
+                                        </ng-template>
+                                        <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                                            <!-- <input id="item-{{index}}" type="checkbox" [(ngModel)]="item.selected"/> -->
+                                            <!-- <span style ="min-height:'15px !important'; min-width:'15px !important';" [style.background-color]="item.labelColor">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> {{item.labelTitle}} -->
+                                            <!-- <div class="p-2" style="padding-left: 0px !important;padding-bottom: 10px !important;"> -->
+                                            <p-checkbox id="item-{{index}}" [style]="{'max-height':'30px'}" binary="true" label="{{item.labelTitle}}" [(ngModel)]="item.selected">
+                                            </p-checkbox>
+                                            <span style="min-height:'15px !important'; min-width:'15px !important'; float: 'right !important';">
+                                                <span [style.background-color]="item.labelColor"
+                                                    style="float: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                                </span>
+                                            </span>
+                                            <!-- </div> -->
+                                        </ng-template>
+                                        <!-- <ng-template ng-label-tmp let-item="item">
+                        <b>{{item.labelTitle }}</b>
+                      </ng-template> -->
+                                        <!-- <ng-template >
+                      {{item.labelgroup }}
+                    </ng-template>
+                    
+                    <ng-template ng-option-tmp let-item="item" let-index="index">
+                      <input type = "checkbox" name="groupname" id="item_{{index}}" value="{{item.labelId}}" />
+                      {{item.labelTitle }}
+                    </ng-template> -->
+                                    </ng-select>
+
+                                    <!-- <p-multiSelect [options]="company_label" [(ngModel)]="selectedlabel" [filter]="false">
+                        <ng-template let-cmp pTemplate="selectedlabel"> -->
+                                    <!-- <i [ngStyle]="{'color' : '#fff','background-color' : ( (cmp.labelColor == null || cmp.labelColor == '' || cmp.labelColor == 0) ? 'white' : cmp.labelColor ),
+                            'border-radius': '50%','padding': '5px 5px' , 'width':'24px','display':'inline-block','vertical-align':'middle'}"></i> -->
+                                    <!-- <div style="font-size:14px;float:right">{{cmp.labelTitle}}</div>
+                        </ng-template>
+                    </p-multiSelect> -->
+
+                                    <!-- <button type="button" *ngIf=" operationalRights == 'Unrestricted' " (click)="openlabeldialog()"
+                    label=" Add Label" class="btn btn-sm"><i class="fa fa-plus"></i>
+                    Add Label</button> -->
+
+                                    <button type="button" *ngIf=" operationalRights == 'Unrestricted' " (click)="navigatePreference()" label=" Add Label" class="btn btn-sm"><i
+                                            class="fa fa-plus"></i>
+                                        Add Personal Label</button>
+
+                                </div>
+                                <!-- <div class="ui-g-12 ui-md-5"><span>click add label to create new label or choose the label by selecting caret symbol</span></div> -->
+
+                            </div>
+                            <div class="ui-g-12 no-padding ui-md-9">
+                                <div class="ui-g-12 ui-md-4">
+                                    <i class="fa  fa-eyedropper"></i> Labels
+                                </div>
+                                <div class="ui-g-12 ui-md-8">
+                                    <div class="color_pickercontainer">
+                                        <!-- <div class="color_pickerspan" *ngFor="let color of label_colors">
+                      <span (click)="changeSubtaskColor(color)" class="color_pickerspan_inner"
+                        [ngStyle]="{ 'background-color' : color.hex }"></span>
+                    </div> -->
+                                        <div class="color_pickerspan" *ngFor="let colors of selectedtask.label_list;let i=index">
+
+                                            <!-- <span *ngIf="!colors.isnew">
+                        <p-colorPicker #colorelement (ngModelChange)="onChangeColor($event,i,colors,colorelement)"
+                          [(ngModel)]="colors.name" styleClass="color_pickerspan_inner"
+                          [ngStyle]="{'color':colors.name}"></p-colorPicker>
+                      </span>
+                      <span *ngIf="colors.isnew">
+                        <p-colorPicker (onChange)="setNewcolor($event,i,colors,colorelement)" #labelPicker
+                          styleClass="color_pickerspan_inner" [ngStyle]="{'color':color2}"></p-colorPicker>
+                      </span> -->
+                                            <span>
+                                                <!-- <p-colorPicker #colorelement (ngModelChange)="onChangeColor($event,i,colors,colorelement)"
+                          [(ngModel)]="colors.name" styleClass="color_pickerspan_inner"
+                          [ngStyle]="{'color':colors.name}"></p-colorPicker> -->
+                                                <!-- <span class="color_pickerspan_inner" tooltip="{{ selectedcompanylabel }}" placement="bottom" [style.background]="colors.name" [cpOutputFormat]="'hex'"
+                          [(colorPicker)]="colors.name"
+                          (colorPickerClose)="onChangeColor($event,i,colors,colorelement)">
+                        </span> -->
+                                            <span class="color_pickerspan_inner" [style.background]="colors.labelColor" [tooltip]="colors.labelTitle" container="body">
+                                                </span>
+                                            </span>
+                                            <!-- <span *ngIf="colors.isnew"> -->
+                                            <!-- <p-colorPicker (onChange)="setNewcolor($event,i,colors,colorelement)" #labelPicker
+                          styleClass="color_pickerspan_inner" [ngStyle]="{'color':color2}"></p-colorPicker> -->
+
+                                            <!-- <span class="color_pickerspan_inner" [style.background]="color2" [(colorPicker)]="color2"
+                          (colorPickerClose)="onChangeColor($event,i,colors,colorelement)" [(cpToggle)]="toggle"
+                          [cpIgnoredElements]="[ignoredButton, ignoredInput]" [cpOutputFormat]="'hex'" #ignoredInput>
+                        </span>
+                      </span> -->
+                                        </div>
+
+                                        <!-- <span class="float-right"> -->
+                                        <!-- <button class="color_pickerspan_inner" #ignoredButton (click)="addSubtaskColor();" style="padding-left: 0px; padding-right: 0px; border-bottom-width: 0px; border-top-width: 0px;
+                        border-right-width: 0px; border-left-width: 2px;"><i class="fa fa-plus"></i></button> -->
+                                        <!-- <button class="btn btn-sm btn-primary" (click)="clear_lables()">Clear Labels</button> -->
+                                        <!-- <i class="fa fa-trash" style="cursor:pointer" aria-hidden="true" (click)="clear_lables()"></i>
+                    </span> -->
+                                    </div>
+                                    <!-- <p-selectButton styleClass="label_colorsPicker" [options]="label_colors" [(ngModel)]="selectedCountry">
+                                  <ng-template let-item>
+                                      <div class="task_labelcolor_selector" [tooltip]="item.name" container="body" [ngStyle]="{ 'background-color' : item.name }">
+                                          {{ item.name }}
+                                      </div>
+                                  </ng-template>
+                              </p-selectButton> -->
+                                </div>
+                            </div>
+                            <div class="ui-g-12 no-padding ui-md-9">
+                                <div class="ui-g-12 ui-md-4">
+                                    <i class="fa  fa-exclamation"></i> Priority
+
+                                </div>
+                                <div class="ui-g-12 ui-md-8">
+                                    <p-dropdown [disabled]=" operationalRights != 'Unrestricted' " appendTo="body" styleClass="customdropdown" [options]="task_priority" [(ngModel)]="selectedPriority" [style]="{'width':'100%','height':'30px'}" (onChange)="changePriority($event)">
+                                        <ng-template let-item pTemplate="selectedItem">
+                                            <span style="vertical-align:middle">{{item.label}}</span>
+                                        </ng-template>
+                                        <ng-template let-pri pTemplate="item">
+
+                                            <div style="width:95%;float: left;">{{pri.label}}</div>
+                                            <span>
+                                                <i class="fa fa-exclamation" [ngStyle]="{'color' : '#fff',
+                         'background-color' : ( (pri.value ==1 ) ? 'red' : (pri.value == 2) ? '#f5b905' : (pri.value == 3) ? 'green' : (pri.value == null || pri.value == '' || pri.value == 0) ? 'black' : 'white' ),
+                         'border-radius': '50%','padding': '3px 5px' }"></i>
+                                            </span>
+
+                                        </ng-template>
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                            <div class="ui-g-12 no-padding ui-md-9">
+                                <div class="ui-g-12 ui-md-4">
+                                    Completed
+
+                                </div>
+                                <div class="ui-g-12 ui-md-8">
+                                    <p-slider [disabled]="operationalRights != 'Unrestricted'" (onSlideEnd)="changeCompletedPercent($event)" [(ngModel)]="selectedtask.complete_per" [min]="0" [max]="100"></p-slider>
+                                    <span>{{selectedtask.complete_per}} %</span>
+                                </div>
+                            </div>
+                            <div class="ui-g-12 ui-md-12 checkList-items-container no-padding">
+                                <div class="ui-g-12 ui-md-12 check-list-header">
+                                    <h5 class="check-list-title"> Check List</h5>
+                                </div>
+                                <div *ngIf=" operationalRights == 'Unrestricted' " class="ui-g-12 ui-md-12" style="padding: 5px 0px 0px 5px !important;">
+                                    <div class="ui-inputgroup" style="width:99% !important;">
+                                        <button (click)="addCheckList()" pButton type="button" icon="fa-plus" class="ui-button-success p-l-5 p-r-5"></button>
+                                        <input [(ngModel)]="checklist_name" (keyup.enter)="addCheckList()" style="width:100% !important;" type="text" placeholder="Add check list Item">
+                                    </div>
+                                </div>
+                                <div class="ui-g-12 ui-md-12 no-padding" style="height:calc( 35vh - 100px );overflow:auto;">
+                                    <div class="ui-g-12 ui-md-12" [sortablejs]="selectedtask.checkList" [sortablejsOptions]="chkOptions">
+                                        <div class="ui-g-12 ui-md-12 checkList-items no-padding" *ngFor="let rowData of selectedtask.checkList;" [class.draggable]="operationalRights == 'Unrestricted' ">
+                                            <div class="ui-g-1 ui-md-1  checkList-item-block checkList-item-block1 no-padding">
+                                                <p-checkbox [disabled]=" operationalRights != 'Unrestricted' " pReorderableRowHandle (onChange)="changechecklistStatus(rowData,$event)" [(ngModel)]="rowData.status" binary="true">
+                                                </p-checkbox>
+                                            </div>
+                                            <div class="ui-g-10 ui-md-10 checkList-item-block checkList-item-block2 no-padding">
+                                                <p-inplace [disabled]=" operationalRights != 'Unrestricted' " closable="closable" (onDeactivate)="renameCheckList($event,rowData)" #inplaceElement>
+                                                    <div pInplaceDisplay [class.dashed]="rowData.status == 1 ">
+                                                        {{rowData.chkname}} <i class="fa fa-pencil-square-o pull-right" style="padding-top: 5px;"></i>
+                                                    </div>
+                                                    <span pInplaceContent>
+                                                        <input style="width: 90%;" type="text"
+                                                            [(ngModel)]="rowData.chkname" pInputText
+                                                            (keyup.enter)="renameCheckList($event,rowData,inplaceElement)">
+                                                    </span>
+                                                </p-inplace>
+                                                <div class="completedby_flag" *ngIf="(rowData.status === 1 || rowData.status==true)">
+                                                    Completed by {{ rowData.completeby_name }}
+                                                </div>
+                                            </div>
+                                            <div class="ui-g-1 ui-md-1 checkList-item-block checkList-item-block3 no-padding m-t-5">
+                                                <a *ngIf=" operationalRights == 'Unrestricted' && !this.isRefModule " href="javascript:void(0)" (click)="removeCheckList(rowData,selectedtask)">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- <div class="ui-g-12 no-padding ui-md-12">
+
+                <div class="ui-g-12 ui-md-12  no-padding">
+
+                  <p-table (onEditComplete)="renameCheckList($event)" [value]="selectedtask.checkList" selectionMode="single"
+                    [(selection)]="selectedcheckList" [scrollable]="true" scrollHeight="150px" (onRowReorder)="reorderCheckList($event)">
+                    <ng-template pTemplate="header" let-columns>
+                      <tr>
+                        <th style="width:10%"></th>
+                        <th style="width:70%">
+                          Check List
+                        </th>
+                        <th style="width:20%"></th>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-index="rowIndex">
+                      <tr [pReorderableRow]="index">
+                        <td style="width:10%">
+                          <i class="fa fa-bars" pReorderableRowHandle></i>
+                          <p-checkbox [disabled]=" operationalRights != 'Unrestricted' " pReorderableRowHandle
+                            (onChange)="changechecklistStatus(rowData,$event)" [(ngModel)]="rowData.status" binary="true"></p-checkbox>
+                        </td>
+                        <td [pEditableColumn]="rowData" [pEditableColumnField]="'chkname'" style="width:70%;text-align: left;">
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <input [disabled]=" operationalRights != 'Unrestricted' " type="text" maxlength="30"
+                                [(ngModel)]="rowData['chkname']">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              <i class="fa fa-pencil-square-o pull-right" style="padding-top: 5px;"></i>
+                              <div [ngClass]="{'line-through':(rowData.status === 1 || rowData.status==true)}" class="elipse_text  pull-left"
+                                style="width: 90%">{{rowData.chkname}}</div>
+                              <div class="completedby_flag" *ngIf="(rowData.status === 1 || rowData.status==true)">
+                                Completed by {{ rowData.completeby_name }} on Aug 21 2016 01:45:40 AM
+                              </div>
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <td style="width:20%">
+                          <a *ngIf=" operationalRights == 'Unrestricted' " href="javascript:void(0)" (click)="removeCheckList(rowData,selectedtask)">
+                            <i class="fa fa-trash"></i>
+                          </a>
+                        </td>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="footer" let-columns>
+                      <tr *ngIf=" operationalRights == 'Unrestricted' ">
+                        <td colspan="3">
+                          <div class="ui-g-12 ui-md-12 no-padding">
+                            <div class="ui-inputgroup" style="width:50% !important;">
+                              <button (click)="addCheckList()" pButton type="button" icon="fa-plus" class="ui-button-success"></button>
+                              <input [(ngModel)]="checklist_name" (keyup.enter)="addCheckList()" type="text" maxlength="30"
+                                pInputText placeholder="Add check list Item">
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                </div>
+              </div> -->
+                        </div>
+                    </p-tabPanel>
+                    <p-tabPanel header="Comments">
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <!-- <textarea class="form-control" [(ngModel)]="comment_box" name="textarea-input"
+                                    placeholder="Content.." rows="4"></textarea> -->
+
+                                <ck-editor [readonly]="false" id="comment_box" [config]="config" [(ngModel)]="comment_box">
+                                </ck-editor>
+                            </div>
+                        </div>
+                        <div class="form-group form-actions" *ngIf=" operationalRights == 'Unrestricted'  && !this.isRefModule ">
+                            <button (click)="addTaskComment()" class="btn btn-sm btn-primary" type="button">
+                                <i _ngcontent-c4="" class="fa fa-save"></i>
+                                <ng-template [ngIf]="(selectedComment == null)" [ngIfElse]="updateComment">Save
+                                </ng-template>
+                                <ng-template #updateComment>Update</ng-template>
+                            </button>
+                            <button (click)="ClearTaskComment()" class="btn btn-sm btn-primary" type="button">
+                                <i _ngcontent-c4="" class="fa fa-save"></i>
+                                Cancel
+                            </button>
+                        </div>
+                        <div class="ui-g-12 no-padding ui-md-12">
+
+                            <div class="ui-g-12 ui-md-12  no-padding">
+                                <p-dataTable [(value)]="selectedtask.commentsList" scrollHeight="200px" [scrollable]="true">
+
+                                    <p-column styleClass="col-button text-center">
+                                        <ng-template pTemplate="header">
+                                            Comments
+                                        </ng-template>
+                                        <ng-template let-comment="rowData" pTemplate="body">
+                                            <div class="ui-helper-clearfix">
+                                                <div class="ui-g">
+                                                    <div class="ui-g-10 ui-md-10  no-padding comment_section">
+                                                        <div class="no-padding">
+                                                            <i class="fa fa-user user_icon"></i>
+                                                            <div class="comment_cname">{{ comment.createdby_name }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="clear-fix"></div>
+                                                        <div class="ui-g-12 ui-md-12 comment_content  no-padding" [innerHtml]="comment.comments">
+                                                            <!-- {{ comment.comments }} -->
+                                                        </div>
+                                                    </div>
+                                                    <div *ngIf=" operationalRights == 'Unrestricted' && !this.isRefModule " class="ui-g-2 ui-md-2 comment_options  no-padding">
+                                                        <span (click)="selectToupdateComment(comment)">
+                                                            <i class="fa fa-pencil-square-o "></i>
+                                                        </span>
+                                                        <span (click)="deleteComment(comment)">
+                                                            <i class="fa fa-trash "></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </ng-template>
+                                    </p-column>
+                                </p-dataTable>
+                            </div>
+                        </div>
+                    </p-tabPanel>
+                    <p-tabPanel header="Files & Links">
+                        <div class="row">
+                            <div *ngIf=" operationalRights == 'Unrestricted' && !this.isRefModule " class="col-md-12">
+                                <div class="form-actions">
+                                    <button class="btn btn-primary" type="button" (click)="Adddocument_display=true">
+                                        <i class="fa fa-plus"></i>
+                                        Add Document</button>
+                                    <button class="btn btn-primary" type="button" (click)="showExcluedDocuments();">
+                                        <i class="fa fa-link"></i>
+                                        Link Document</button>
+                                </div>
+                            </div>
+                            <div class="col-md-12 m-t-10" *ngIf="selectedtask.docList">
+                                <p-table class="'transparent_table'" [value]="selectedtask.docList" [scrollable]="true" scrollHeight="600px">
+                                    <ng-template pTemplate="body" let-rowData let-index="rowIndex">
+                                        <tr>
+                                            <td>
+                                                <span style="margin:3px;">
+                                                    <i class="fa fa-link"></i>
+                                                </span>
+                                                <a (click)="downloadDocument(rowData)" href="javascript:void(0)">
+                                                    {{ rowData.linkDoc }}
+                                                </a>
+                                            </td>
+                                            <td width="10%">
+                                                <button (click)="removeDoc(rowData);" pButton type="button" icon="fa-close" class="ui-button-danger"></button>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+
+                    </p-tabPanel>
+                </p-tabView>
+            </div>
+        </div>
+    </p-dialog>
+    <!-- <p-sidebar [(visible)]="display_taskresources" position="right" styleClass="tasksidebar custom_primetabview">
+    
+
+  </p-sidebar> -->
+    <!-- link to board -->
+    <p-dialog [header]="copyorlinktoboardTitle" [(visible)]="linktoboard_display" [modal]="true" [responsive]="true" appendTo="body" [resizable]="false" [width]="300">
+        <div class="ui-g">
+            <div class="ui-g-12  ui-md-12" *ngIf="boardLinkNames && copyorlinktoboard == 'L' ">
+                <p-table [value]="boardLinkNames" [scrollable]="true">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th colspan="2" style="text-align: center;">
+                                Linked Boards
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData>
+                        <tr [pSelectableRow]="rowData">
+                            <td style="width: 90%">
+                                {{ rowData.board_title }}
+                            </td>
+                            <td style="width: 10%">
+                                <a href="javascript:void(0)" (click)="removeBoardLink(rowData)">
+                                    <i class="fa fa-trash task-delete"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+            <div class="ui-g-12  ui-md-12">
+                <label *ngIf="isOptional" class="mb-0"><b>Optional</b></label>
+                <p-dropdown (onChange)="getBoardTaskLinkList($event)" [(ngModel)]="selectedBoardForLink" [options]="tempboardList" [style]="{'width':'100%'}" placeholder="Select Board" appendTo="body">
+                    <!-- <ng-template let-item pTemplate="selectedItem">
+            <span style="vertical-align:middle">{{item.label}}</span>
+          </ng-template> -->
+                    <ng-template let-item pTemplate="selectedItem">
+                        <div *ngIf="item.value" class="ui-helper-clearfix select-box elipsis_div">
+                            <div class="namebatch_left" [innerHtml]="item.value.board_title"></div>
+
+                        </div>
+                        <div *ngIf="! item.value" class="ui-helper-clearfix select-box elipsis_div">
+                            <div class="namebatch_left">{{ item.label }}</div>
+                        </div>
+                    </ng-template>
+                    <ng-template let-item pTemplate="item">
+                        <div *ngIf="item.value" class="ui-helper-clearfix select-box elipsis_div">
+                            <span class="namebatch_left" [innerHtml]="item.value.board_title"> </span>
+                        </div>
+                        <div *ngIf="! item.value" class="ui-helper-clearfix select-box elipsis_div">
+                            <span class="namebatch_left">{{ item.label }}</span>
+                        </div>
+                    </ng-template>
+                </p-dropdown>
+                <div class="ui-g-12  ui-md-12">
+                    <p-table [value]="BoardTaskLinkList" [(selection)]="tempselectedtaskOrder" [scrollable]="true">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th colspan="2" style="text-align: center;">
+                                    Order
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowData>
+                            <tr [pSelectableRow]="rowData">
+                                <td style="width: 3em">
+                                    <p-tableRadioButton [value]="rowData"></p-tableRadioButton>
+                                </td>
+                                <td>
+                                    {{ rowData.taskorder }}
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+
+            </div>
+        </div>
+        <p-footer>
+            <p-button icon="fa fa-fw fa-check" [label]="buttonText" styleClass="custom_btn" (click)="UpdateLinkBoard()">
+            </p-button>
+            <p-button icon="fa fa-fw fa-close" label="Cancel" styleClass="custom_btn" (click)="linktoboard_display=false">
+            </p-button>
+        </p-footer>
+    </p-dialog>
+    <!-- add link document -->
+    <p-dialog header="Link Document" [(visible)]="display_linkdocument" [modal]="true" [responsive]="true" appendTo="body" [width]="600" [closable]="false">
+        <div class="ui-g-12 no-padding ui-md-12">
+            <p-table #docTable [columns]="doc_cols" [(value)]="tempLinkDocument" [(selection)]="selectedtempLinkDocument" [scrollable]="true" scrollHeight="200px" [resizableColumns]="true">
+                <!-- <ng-template pTemplate="caption">
+              <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+              <input type="text" pInputText size="50" placeholder="Global Filter" (input)="docTable.filterGlobal($event.target.value, 'contains')"
+                style="width:auto">
+            </ng-template> -->
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th style="width: 2.55em;">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th *ngFor="let col of columns;">
+                            {{col.header}}
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr [pSelectableRow]="rowData">
+                        <td style="width: 3em">
+                            <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+                        </td>
+                        <td *ngFor="let col of columns;">
+                            {{rowData[col.field]}}
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <p-footer>
+            <button type="button" class="btn btn-sm btn-primary" (click)="AddDocLink();">Add</button>
+            <button type="button" class="btn btn-sm btn-primary" (click)="display_linkdocument=false">Exit</button>
+        </p-footer>
+    </p-dialog>
+    <!-- add document dialog -->
+    <p-dialog header="Add Document" [(visible)]="Adddocument_display" [modal]="true" [responsive]="true" appendTo="body" [closable]="false">
+
+        <div class="container" *ngIf="Adddocument_display == true">
+            <app-add-document (addFileOutput)="uploadDocumentEvent($event)" (exitOutput)="hideAddDoc($event)">
+            </app-add-document>
+        </div>
+
+    </p-dialog>
+    <!-- delete sub task confirmation -->
+    <p-dialog header="Confirm Delete" [(visible)]="confirmdelete_display" appendTo="body" draggable="false">
+        Are you sure you want to delete this Task?
+        <p-footer>
+            <button type="button" pButton icon="fa-check" (click)="deleteSubTask();" label="Yes"></button>
+            <button type="button" pButton icon="fa-close" (click)="confirmdelete_display=false" label="No"></button>
+        </p-footer>
+    </p-dialog>
+    <p-dialog header="Add New Board" [(visible)]="show_linkto_board" [modal]="true" [responsive]="true">
+        <div class="ui-g-12 ui-md-12">
+            <!-- <p-dropdown (onChange)="onBoardSelection($event)" [options]="top_taskmenu" [(ngModel)]="selectedtop_taskmenu"
+        placeholder="Select a Filter" [style]="{'width': '100%','float':'right','margin-left':'3px'}">
+        <ng-template let-item pTemplate="item">
+          <div *ngIf="item.value" class="ui-helper-clearfix select-box elipsis_div">
+            <span class="namebatch_left">{{ item.value.title }} </span>
+            <span class="idbatch_left">{{ item.value.count }}</span>
+          </div>
+          <div *ngIf="! item.value" class="ui-helper-clearfix select-box elipsis_div">
+            <span>{{ item.label }}</span>
+          </div>
+        </ng-template>
+        <ng-template let-item pTemplate="selectedItem">
+          <div *ngIf="item.value" class="ui-helper-clearfix select-box elipsis_div">
+            <span class="namebatch_left">{{ item.value.title }} </span>
+            <span class="idbatch_left">{{ item.value.count }}</span>
+          </div>
+          <div *ngIf="! item.value" class="ui-helper-clearfix select-box elipsis_div">
+            <span>{{ item.label }}</span>
+          </div>
+        </ng-template>
+      </p-dropdown> -->
+        </div>
+
+
+
+        <p-footer>
+            <button type="button" class="btn btn-primary">Save</button>
+
+        </p-footer>
+    </p-dialog>
+    <!-- add company label popup -->
+    <!-- <p-dialog header="Add Label" [(visible)]="Addcompanylabel_display" [modal]="true" [width]="350" [minWidth]="300" [responsive]="true" appendTo="body">
+
+        <div class="form-group row">
+            <label class="col-sm-4 required_label">Lable Title</label>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-12">
+                <input type="text" (keyup.enter)="saveWorkFlowLabel()" class="form-control col-sm-12" [(ngModel)]="labelTitle" placeholder="Label Name">
+            </div>
+        </div>
+        <div class="form-group row"></div>
+        
+        <div class="form-group row">
+            <label for="lbl_user_name" class="col-sm-4 required_label">Select color</label>
+            <div class="col-sm-8">
+                <div class="color_pickercontainer">
+                    <div class="color_pickerspan">
+                        <span class="color_pickerspan_inner" [style.background]="newlabelColor" [cpOutputFormat]="'hex'" [(colorPicker)]="newlabelColor" (colorPickerClose)="onChangelabelColor($event)" [cpPosition]="'bottom'">
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p-footer>
+            <p-button icon="fa fa-fw fa-check" label="Save" styleClass="custom_btn" (click)="saveWorkFlowLabel()">
+            </p-button>
+            <p-button icon="fa fa-fw fa-close" label="Cancel" styleClass="custom_btn" (click)="Addcompanylabel_display=false">
+            </p-button>
+        </p-footer>
+
+    </p-dialog> -->
+
+    <!-- context menu basic template start -->
+    <div style="position:fixed;top:35px;height:100%;width:100%;display:table; border-collapse: collapse;border:none;outline:none; pointer-events: none">
+        <div style="display: table-cell;width:200px;vertical-align: top">
+            <div style="position:absolute; top: 20px;">
+                <div style="position:fixed;top:200px;left:-200px">
+                    <context-menu #mainRightMenu [disabled]="(operationalRights != 'Unrestricted')" style="pointer-events:all">
+                        <ng-template *ngFor="let action of mainRightMenuActions;" contextMenuItem let-item [visible]="action.visible" [enabled]="action.enabled" [divider]="action.divider" (execute)="action.click($event)">
+                            <div [innerHTML]="action.html(item)"></div>
+                        </ng-template>
+                        <ng-template contextMenuItem (execute)="contextmenuExecute($event,9)">
+                            <div class="context-items color_pickerholder" style="min-height: 30px;">
+                                <div class="ui-g-12 ui-md-12 no-padding">
+                                    <div class="color_pickercontainer">
+                                        <div class="color_pickerspan headcolor_picker" *ngFor="let color of header_bgcolor;" tooltip="{{ color.name }}" placement="bottom">
+                                            <span container="body" (click)="selectListColor($event,color)" class="color_pickerspan_inner roundpicker" [ngStyle]="{ 'background-color' : color.hex }"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="context-items color_pickerholder" style="min-height: 30px;">
+                                <div class="ui-g-12 ui-md-12 no-padding">
+                                    <div class="color_pickercontainer">
+                                        <div class="color_pickerspan headcolor_picker" *ngFor="let color of label_colors;" tooltip="{{ color.name }}" placement="bottom">
+                                            <span container="body" (click)="selectListColor($event,color)" class="color_pickerspan_inner roundpicker" [ngStyle]="{ 'background-color' : color.hex }"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </context-menu>
+
+                    <!-- <context-menu #basicMenu [disabled]="disableBasicMenu" style="pointer-events:all">
+            <ng-template contextMenuItem (execute)="contextmenuExecute($event,1)">
+              <div class="context-items">
+                <span class="context-icon">
+                  <i class="fa fa-pencil"></i>
+                </span>
+                <span class="context-title">Rename</span>
+              </div>
+            </ng-template>
+            <ng-template contextMenuItem divider="true"></ng-template>
+            <ng-template contextMenuItem (execute)="contextmenuExecute($event,2)">
+              <div class="context-items">
+                <span class="context-icon">
+                  <i class="fa fa-trash"></i>
+                </span>
+                <span class="context-title">Delete</span>
+              </div>
+            </ng-template>
+            <ng-template contextMenuItem (execute)="contextmenuExecute($event,3)">
+              <div class="context-items">
+                <span class="context-icon">
+                  <i class="fa fa-copy"></i>
+                </span>
+                <span class="context-title">Copy</span>
+              </div>
+            </ng-template>
+            <ng-template contextMenuItem (execute)="contextmenuExecute($event,4)">
+              <div class="context-items">
+                <span class="context-icon">
+                  <i class="fa fa-archive"></i>
+                </span>
+                <span class="context-title">Archive this Section</span>
+              </div>
+            </ng-template>
+            <ng-template contextMenuItem (execute)="contextmenuExecute($event,5)">
+              <div class="context-items">
+                <span class="context-icon">
+                  <i class="fa fa-arrows-alt"></i>
+                </span>
+                <span class="context-title"> Link to Board</span>
+              </div>
+            </ng-template>
+            <ng-template contextMenuItem (execute)="contextmenuExecute($event,6)">
+              <div class="context-items">
+                <span class="context-icon">
+                  <i class="fa fa-expand"></i>
+                </span>
+                <span class="context-title">Expand All</span>
+              </div>
+            </ng-template>
+            <ng-template contextMenuItem (execute)="contextmenuExecute($event,7)">
+              <div class="context-items">
+                <span class="context-icon">
+                  <i class="fa fa-compress"></i>
+                </span>
+                <span class="context-title">Collapse All</span>
+              </div>
+            </ng-template>
+            <ng-template contextMenuItem (execute)="contextmenuExecute($event,8)">
+              <div class="context-items">
+                <span class="context-icon">
+                  <i class="fa fa-bar-chart"></i>
+                </span>
+                <span class="context-title">Add to Gantt chart</span>
+              </div>
+            </ng-template>
+            <ng-template contextMenuItem (execute)="contextmenuExecute($event,9)">
+              <div class="context-items color_pickerholder" style="min-height: 30px;">
+                <div class="ui-g-12 ui-md-12 no-padding">
+                  <div class="color_pickercontainer">
+                    <div class="color_pickerspan headcolor_picker" *ngFor="let color of header_bgcolor">
+                      <span tooltip='color.name' placement="bottom" (click)="selectListColor($event,color)" class="color_pickerspan_inner roundpicker"
+                        [ngStyle]="{ 'background-color' : color.hex }"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </context-menu> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- context menu basic end  -->
+    <!-- tooltip html -->
+    <ng-template #addcardTemplate>
+        <div [innerHtml]="addcardTooltip_content"></div>
+    </ng-template>
+
+    <ng-template #assigneeTooltipTemplate>
+        <div [innerHtml]="tempTooltip"></div>
+    </ng-template>
+    <ng-template #subheaderTooltipTemplate>
+        <ul class="assignee_list">
+            <li>
+                <span>
+                    <i class="fa fa-user"></i>
+                </span> blake 1
+                <div>10/05/2018 </div>
+
+        </ul>
+    </ng-template>
+</div>

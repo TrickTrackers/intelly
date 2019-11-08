@@ -1,0 +1,1084 @@
+<div id="document-pg" class="content-page component_holder">
+    <!-- Start content -->
+    <div class="content">
+
+        <div class="container child_tab_container" style="overflow-y: auto">
+            <div class="topbutton_section">
+                <button class="btn btn-sm btn-primary" *ngIf="queryparams.mode == 'D'" (click)="Exit_document()">
+                    <i class="fa fa-close"></i> Exit</button>
+            </div>
+            <tabset #modulesubTabset class="sub_tab_container" *ngIf="hasRights == false">
+                <tab id="stab_view_document" class="custom_tabs" heading="View Document" (select)="onSelect($event)">
+                </tab>
+                <tab id="stab_document_Add" class="custom_tabs" [active]="false" heading="Add Document" disabled="true">
+                </tab>
+                <!-- <tab id="stab_document_folder" heading="Document Folder Tools" class="custom_tabs" (select)="onSelect($event)"
+          [active]="false"></tab> -->
+                <tab id="stab_document_link" class="custom_tabs" [active]="false" heading="Link Document"
+                    disabled="true">
+
+                </tab>
+                <div class="ui-g">
+                    <div class="ui-g-12 no-padding">
+                        <div class="page-restricted">
+                            <span>Access to this page is restricted</span>
+                        </div>
+                    </div>
+                </div>
+            </tabset>
+            <tabset #modulesubTabset class="sub_tab_container" *ngIf="hasRights == true">
+                <tab id="stab_view_document" class="custom_tabs" heading="View Document" (select)="onSelect($event)">
+                    <div class="ui-g no-padding">
+                        <div class="ui-g-12 ui-md-12 no-padding">
+                            <!-- <p-scrollPanel [style]="{width: '100%', 'border' : 'none'}" styleClass="custom_scrollpane"> -->
+                            <div class="ui-g-12 ui-md-12 no-padding">
+                                <!-- <div class="form-group no-padding">
+                                                <button class="btn btn-sm btn-primary mr-15" (click)="showDialog()">
+                                                    <i class="fa fa-plus"></i> Add Document
+                                                </button>
+                                                <button class="btn btn-sm btn-primary mr-15" (click)="display_linkdocument=true">
+                                                    <i class="fa fa-link"></i> Link Document
+                                                </button>
+                                            </div> -->
+                                <p-panel styleClass="green_panel m-r-20" appendTo="body">
+                                    <p-header>
+                                        <div class="ui-helper-clearfix">
+                                            <span class="ui-panel-title"
+                                                style="display:inline-block;margin-top:2px">Document Modules</span>
+
+                                            <!-- <p-button class="btnMetrics" label="Add Mertrics" (onClick)="showDialog()"></p-button> -->
+                                            <!-- <button style="float:right" class="btn btn-sm btn-primary mr-15">
+                                                    <i class="fa fa-save"></i> Save
+                                                </button> -->
+                                        </div>
+                                    </p-header>
+
+                                    <div id="documentList_table">
+                                        <p-table #dt [value]="documentlist" appendTo="" [scrollable]="true" scrollHeight="500px"
+                                            [globalFilterFields]="['linkDoc']" [responsive]="true">
+                                            <ng-template pTemplate="caption">
+                                                <div style="text-align: right">
+                                                    <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                                                    <input type="text" pInputText size="30" placeholder="file name"
+                                                        (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                                        style="width:auto" id="doc_filter" [(ngModel)]="doc_filter_txt">
+                                                    <i class="fa fa-close" style="cursor:pointer;margin:4px 4px 0 0"
+                                                        *ngIf="doc_filter_txt.length > 0" (click)="resetTable(dt)"></i>
+
+                                                </div>
+                                            </ng-template>
+                                            <ng-template pTemplate="header">
+                                                <tr>
+                                                    <th style="width:4%;" *ngIf="queryparams.mode == 'D'"></th>
+                                                    <th style="width:4%;" *ngIf="queryparams.mode != 'D'">S.No</th>
+                                                    <th class="text-center" style="width:15%;"
+                                                        [pSortableColumn]="'linkDoc'">File Name
+                                                        <p-sortIcon [field]="'linkDoc'"></p-sortIcon>
+                                                    </th>
+                                                    <th class="text-center" style="width:15%;"
+                                                        [pSortableColumn]="'title'">Description
+                                                        <p-sortIcon [field]="'title'"></p-sortIcon>
+                                                    </th>
+                                                    <th class="text-center" style="width:5%;"
+                                                        [pSortableColumn]="'docDate'">Date
+                                                        <p-sortIcon [field]="'docDate'"></p-sortIcon>
+                                                    </th>
+                                                    <th class="text-center" style="width:4%;">Size</th>
+                                                    <th class="text-center" style="width:4%;">Comt</th>
+                                                    <th class="text-center" style="width:4%;">ID</th>
+                                                    <th class="text-center" style="width:4%;">Edit</th>
+                                                    <th class="text-center" style="width:4%;">Access</th>
+                                                    <th class="text-center" style="width:4%;">Version</th>
+                                                    <th class="text-center" style="width:4%;">Delete</th>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="body" let-rowData let-index="rowIndex">
+                                                <tr>
+                                                    <td style="width:4%;text-align: center;">
+                                                        <div (drop)="drop($event)" (dragover)="allowDrop($event)"
+                                                            *ngIf="queryparams.mode == 'D'">
+                                                            <!-- <span draggable="true" (dragstart)="drag($event,rowData)" (ondragend)="dragend($event)"  > -->
+                                                            <!-- <i class="fa fa-arrows-alt" draggable="true" (dragstart)="drag($event,rowData)" (ondragend)="dragend($event)"></i> -->
+                                                            <!-- </span> -->
+                                                            <!-- <img style="width:24px;height:24px" border="0" src="{{rowData.doctype}}" draggable="true" (dragstart)="drag($event,rowData)" (ondragend)="dragend($event)"> -->
+                                                            <i class="{{rowData.doctype}}" style="cursor:pointer;"
+                                                                data-placement="bottom" aria-hidden="true"
+                                                                draggable="true" (dragstart)="drag($event,rowData)"
+                                                                (ondragend)="dragend($event)"></i>
+                                                        </div>
+                                                        <span *ngIf="queryparams.mode != 'D'">{{ index+1 }}</span>
+                                                    </td>
+                                                    <td style="width:15%;">
+                                                        <a href="javascript:void(0)" class="custom_agrtag"
+                                                            (click)="downloadFile(rowData, 0)">{{rowData.linkDoc}}
+                                                        </a>
+                                                    </td>
+                                                    <td [innerHtml]="rowData.title" style="width:15%;"></td>
+                                                    <td style="width:5%;">{{rowData.docDate}}</td>
+                                                    <td style="width:4%;">{{rowData.fileSize}}</td>
+                                                    <td style="width:4%;">
+
+                                                        <ng-template #tipContent>
+                                                            <div [innerHtml]="rowData.comments"></div>
+                                                        </ng-template>
+                                                        <span *ngIf="rowData.comments" container="body"
+                                                            [tooltip]="tipContent" data-placement="right">
+                                                            <i class="fa fa-comment fa-lg"></i>
+                                                        </span>
+
+                                                    </td>
+                                                    <td class="text-center" style="width:4%;">{{rowData.documentId}}
+                                                    </td>
+                                                    <td class="text-center" style="width:4%;">
+                                                        <a (click)="edit_Dialog(rowData)" style="cursor:pointer">
+                                                            <i class="fa fa-edit fa-lg"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td class="text-center" style="width:4%;">
+                                                        <a (click)="access_popup(rowData)" style="cursor:pointer">
+                                                            <i class="fa fa-user fa-lg"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td class="text-center" style="width:4%;">
+                                                        <select [(ngModel)]="rowData.version"
+                                                            *ngIf="queryparams.mode == 'D' && queryparams.lLvl == 1"
+                                                            (change)="versionChange(rowData,index, rowData.version)"
+                                                            class="doc_dropdown_width">
+                                                            <!-- <option value = "{{rowData.version}}">{{rowData.version}}</option> -->
+                                                            <option
+                                                                *ngFor="let item of createRange(rowData.docCount, rowData);"
+                                                                value="{{item}}">
+                                                                <!-- rowData.docCount -->
+                                                                {{item}}
+                                                            </option>
+                                                        </select>
+
+                                                        <div
+                                                            *ngIf="(queryparams.mode == 'D' && queryparams.lLvl != 1) || (queryparams.mode != 'D')">
+                                                            {{rowData.version}}</div>
+                                                        <!-- <div *ngIf="queryparams.mode != 'D'">{{rowData.version}}</div> -->
+                                                    </td>
+                                                    <td class="text-center" style="width:4%;">
+                                                        <a (click)="Deleteconfirm(rowData)" style="cursor:pointer">
+                                                            <i class="fa fa-trash"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="emptymessage" let-rowData let-index="rowIndex">
+                                                <tr>
+                                                    <td [attr.colspan]="rowData" class="text-center font-weight-bold">
+                                                        No records found
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+                                        </p-table>
+                                    </div>
+                                </p-panel>
+                            </div>
+                            <!-- <div class="ui-g-12 ui-md-12 no-padding " *ngIf="queryparams.mode != 'D' && ModuleTreeItems != null"> -->
+                            <!-- <p-treeTable [value]="treeSubmoduleDocument_temp" styleClass="documenttree_container lightgreen_panel m-r-20" selectionMode="multiple"
+                                        [(selection)]="selectedTreeItem" (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnselect($event)">
+                                        <p-header styleClass="">
+                                            <div class="text-left">Submodule Documents</div>
+                                        </p-header>
+                                        <p-column field="name" header="Description">
+                                            <ng-template let-node="rowData" pTemplate="body">
+                                               
+                                                <span *ngIf="node.fileSize == 0">
+                                                        {{ node.legoName }} <span class="path"> [Submodules {{ node.legoCount }} / #Documents {{node.documentCount}}]</span>                                                    
+                                                </span>
+                                            </ng-template>
+                                        </p-column>
+                                        
+                                        <p-column field="size" header="File Name">
+                                            <ng-template let-node="rowData" pTemplate="body">
+                                                <div class="text-center">
+                                                    <a href="javascript:void(0)">{{ node.linkDoc }}</a>
+                                                </div>
+                                            </ng-template>
+                                        </p-column>
+                                        <p-column field="size" header="File Size">
+                                                <ng-template let-node="rowData" pTemplate="body">
+                                                    <div class="text-center">
+                                                        <a href="javascript:void(0)">{{ node.fileSize }}</a>
+                                                    </div>
+                                                </ng-template>
+                                            </p-column>
+                                        <p-column field="type" header="Date">
+                                            <ng-template let-node="rowData" pTemplate="body">
+                                                <div class="text-center">
+                                                    {{ node.docDate }}
+                                                </div>
+                                            </ng-template>
+                                        </p-column>
+                                    </p-treeTable> -->
+                            <div class="ui-g-12 ui-md-12 no-padding"
+                                *ngIf="queryparams.mode != 'D' && ModuleTreeItems != null && queryparams.mode != 'E'">
+                                <!-- <p-panel styleClass=" m-r-20" *ngIf="queryparams.mode != 'D' && ModuleTreeItems != null">
+                  <p-scrollPanel [style]="{width: '100%', height: '150px'}" styleClass="custom"> -->
+                                <p-treeTable [value]="treeSubmoduleDocument" expanded="true" scrollHeight=100%
+                                    styleClass="documenttree_container lightgreen_panel">
+                                    <p-column [style]="{'width':'60%','text-align':'left'}" field="name"
+                                        header="Submodule">
+                                        <ng-template let-node="rowData" pTemplate="body">
+                                            <span *ngIf="node.type == 'Folder' "> {{ node.legoName }}
+                                                <span class="path">{{ node.path }} </span>
+                                            </span>
+                                        </ng-template>
+                                    </p-column>
+                                    <p-column [style]="{'width':'20%'}" field="size" header="File Name">
+                                        <ng-template let-node="rowData" pTemplate="body">
+                                            <a style="cursor:pointer;color: blueviolet"
+                                                (click)="downloadFile(node, 1)">{{node.linkDoc}}</a>
+
+                                        </ng-template>
+                                    </p-column>
+                                    <p-column [style]="{'width':'20%'}" field="size" header="Date">
+                                        <ng-template let-node="rowData" pTemplate="body">
+                                            {{node.docDate}}
+
+                                        </ng-template>
+                                    </p-column>
+                                    <p-column [style]="{'width':'20%'}" field="type" header="File Size">
+                                        <ng-template let-node="rowData" pTemplate="body">
+
+                                            <span *ngIf="node.fileSize == 0"></span>
+                                            <span *ngIf="node.fileSize != 0">{{node.fileSize}}</span>
+
+                                        </ng-template>
+                                    </p-column>
+                                </p-treeTable>
+                                <!-- </p-scrollPanel>
+                </p-panel> -->
+                            </div>
+                            <!-- </div> -->
+
+                            <div class="clearfix" style="min-height: 10px"></div>
+
+                            <!-- </p-scrollPanel> -->
+                        </div>
+                    </div>
+                </tab>
+                <!-- <div class="form-group no-padding"> -->
+
+                <tab id="stab_document_Add" class="custom_tabs" [active]="false" disabled="true"
+                    *ngIf="(hasReadOnly == false) && (queryparams.lLvl == 1 && queryparams.mode == 'D') || queryparams.mode == 'T' || queryparams.mode == 'O' || queryparams.mode == 'S' || queryparams.mode == 'P' || queryparams.mode == 'E'">
+                    <div *tabHeading class="dropdown" (click)="showDialog()">
+                        <i class="fa fa-plus"></i> Add Document
+                    </div>
+                </tab>
+                <tab id="stab_document_link" class="custom_tabs" *ngIf="(queryparams.mode != 'D')" [active]="false"
+                    disabled="true">
+                    <div *tabHeading class="dropdown" (click)="displaylinkdocument()">
+                        <i class="fa fa-link"></i> Link Document
+                    </div>
+                </tab>
+
+                <!-- </div> -->
+
+                <tab id="stab_document_folder" heading="Document Folder Tools" class="custom_tabs"
+                    (select)="onSelect($event)" [active]="false"
+                    *ngIf="queryparams.lLvl == 1 && queryparams.mode == 'D'">
+                    <div class="tree-body">
+                        <div class="doctree-list">
+                            <div class="sidebarmodule-list-body">
+                                <ng-template #recursiveList let-TreeItems let-parentModule='parentModule'>
+                                    <li class="doc-listitem">
+                                        <div class="doc_link_holder"
+                                            [ngClass]="{ 'active' : (TreeItems.legoId == selectedModuleId) }"
+                                            [contextMenu]="documentRightMenu"
+                                            [contextMenuSubject]="[parentModule,TreeItems]">
+                                            <span *ngIf="checkChildExist(TreeItems)"
+                                                class="documentmodule_expandcollapse"
+                                                [ngClass]="(TreeItems.expanded == true) ? 'doctree_expanded' : 'doctree_collapsed'"
+                                                (click)="toggleExpandCollapse(TreeItems,$event)">
+                                                <i class="icon-arrow-down icons collapsed"></i>
+                                                <i class="icon-arrow-up icons expanded"></i>
+                                            </span>
+
+                                            <a class="doc-link" style="cursor: pointer"> {{ TreeItems.legoName }}</a>
+
+
+                                        </div>
+                                        <div class="doc_child_holder" *ngIf="TreeItems.expanded == true">
+                                            <ul class="moduledropdown-items"
+                                                *ngFor="let listChild of TreeItems.children;trackBy:index;let in = index;">
+                                                <!-- <a class="sidebarmodule-link" routerLink="{{ listChild.url }}"><div>
+                                    {{ listChild.legoName }}</div>
+                                </a> -->
+                                                <ng-container
+                                                    *ngTemplateOutlet="recursiveList; context:{ $implicit: listChild,parentModule:TreeItems }">
+                                                </ng-container>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ng-template>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-container
+                        *ngTemplateOutlet="recursiveList; context:{ $implicit: ModuleTreeItems,parentModule : null }">
+                    </ng-container>
+                    <!-- <p-tree #tree [value]="[ModuleTreeItems]" selectionMode="single" [contextMenu]="documentRightMenu" [contextMenuSubject]="[selectedFile]" [(selection)]="selectedFile">
+                    </p-tree> -->
+
+                    <!-- <p-tree selectionMode="single" [value]="[ModuleTreeItems]">
+                        <ng-template let-node pTemplate="default">
+                            <span [contextMenu]="documentRightMenu">
+                                {{node.legoName}} sddsg
+                            </span>
+                        </ng-template>
+                    </p-tree> -->
+                    <context-menu #documentRightMenu [disabled]="disableBasicMenu" style="pointer-events:all">
+
+                        <ng-template *ngFor="let action of sidebarRightMenuActions;trackBy:index;" contextMenuItem
+                            let-item [visible]="action.visible" [divider]="action.divider()"
+                            (execute)="action.click($event)">
+                            <div [innerHTML]="action.html(item)"></div>
+                        </ng-template>
+                    </context-menu>
+                    <!-- <p-contextMenu #RightMenu [model]="items" [target]="tree" appendTo="body"></p-contextMenu> -->
+                    <!-- <p-contextMenu #cmFile [model]="contextMenuFile"></p-contextMenu>
+                    <p-contextMenu #cmFolder [model]="contextMenuFolder"></p-contextMenu> -->
+
+                </tab>
+                <tab class="custom_tabs" *ngIf="queryparams.lLvl == 1 && queryparams.mode == 'D'" [active]="false"
+                    disabled="true">
+                    <div *tabHeading class="dropdown">
+                        <div class="btn-group help helpLeft">
+                            <i class="fa fa-question-circle fa-sm help_icon "></i>
+                            <div class="helpHover">
+
+                                <div class="helpHover_inner">
+                                    <p-scrollPanel [style]="{width: '100%', height: '450px', 'border' : 'none'}"
+                                        styleClass="custom_scrollpane">
+                                        <h5>Open a Document</h5>
+                                        <ul class="help_ul">
+                                            <li>
+                                                <p>Double click on the document name to open any document in the list
+                                                </p>
+                                            </li>
+                                        </ul>
+
+                                        <h5>Adding Documents to Folders</h5>
+                                        <ul class="help_ul">
+                                            <li style="float:left;">
+                                                <p>
+                                                    All Documents reside in the ‘Documents Library’, a list of these
+                                                    documents is found by clicking on the ‘View Documents’.
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <p>From the ‘View Documents’ page, documents can be dragged and dropped
+                                                    into any folder to add this document to. This is done by left
+                                                    clicking and holding on the Document icon and dragging it over the
+                                                    top of
+                                                    the desired sub-folder and releasing the mouse button. A reference
+                                                    of this document will now be located in the desired sub-folder. The
+                                                    original will always reside in the Documents Library </p>
+                                            </li>
+                                            <li>
+                                                <p>Documents can be dragged and dropped into any folders, allowing them
+                                                    to be linked and shown in any number of the folders created. The
+                                                    master will always reside in the main Documents Library</p>
+                                            </li>
+                                        </ul>
+                                        <h5>Adding Folders</h5>
+                                        <h6>Option 1:</h6>
+                                        <ul class="help_ul">
+                                            <li style="float:left;">
+                                                Right click on any of the “Documents Library” folder in the left side
+                                                bar to add folders
+
+                                            </li>
+                                            <li>
+                                                Right click on any sub-folders to add new folders underneath any of
+                                                the folders in the list
+                                            </li>
+                                            <li>
+                                                Rename and Delete using the same method
+                                            </li>
+                                        </ul>
+                                        <h6>Option 2:</h6>
+                                        <ul class="help_ul">
+                                            <li style="float:left;">
+                                                Click on the ‘Document Folder Tools’ sub-folder
+                                            </li>
+                                            <li style="float:left;">
+                                                Review the help hover instructions for ‘Adding Document Folders’
+                                            </li>
+                                        </ul><br><br>
+                                        <h5 style="float:left;">Comments</h5><br>
+                                        <ul class="help_ul">
+                                            <li style="float:left;">
+                                                Mouse over the Comments bubble for the text to show
+                                            </li>
+                                            <li style="float:left;">
+                                                Comments are added when the Document is added, and can be changed
+                                                using the Edit feature
+                                            </li>
+                                            <li style="float:left;">
+                                                Documents can be dragged and dropped into any folders, allowing them
+                                                to be linked and shown in any number of the folders created. The
+                                                master will always reside in the main Documents Library
+                                            </li>
+                                        </ul>
+                                        <h5>Access</h5>
+                                        <ul class="help_ul">
+                                            <li style="float:left;">
+                                                Defines who can have access to a Document
+                                            </li>
+                                            <li style="float:left;">
+                                                Default is for ‘All’ users to have full access to a Document that is
+                                                added
+
+                                            </li>
+                                            <li style="float:left;">
+                                                This access can be changed to restrict ‘All’ users, then individual
+                                                users can be added to provide more access to the document.
+                                            </li>
+                                        </ul><br>
+                                        <h5>Version</h5>
+                                        <ul class="help_ul">
+                                            <li style="float:left;">
+                                                Versions of documents can be added using the ‘Add Document’ feature
+                                            </li>
+                                            <li style="float:left;">
+                                                Users can view the desired document version by selecting the
+                                                ‘Version’ number in the dropdown and then opening the document by
+                                                double clicking on the document icon
+                                            </li>
+                                        </ul>
+                                    </p-scrollPanel>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </tab>
+
+
+            </tabset>
+
+
+
+            <!-- end row -->
+
+        </div>
+        <!-- end container -->
+
+        <!-- Pop up of Edit-->
+
+
+    </div>
+    <!-- end content -->
+
+
+</div>
+<!-- add link popup -->
+<p-dialog header="Link Document" [(visible)]="display_linkdocument" [modal]="true" [width]='1000' [positionTop]='10'
+    [responsive]="true" appendTo="body" [closable]="false" draggable="false" resizable="false">
+    <!-- <div class="animated fadeIn"> -->
+    <div class="container">
+
+        <div class="ui-g">
+            <div class="col-lg-12 col-sm-12 col-md-12" style="padding-left: 2px;">
+                <!-- ocn-status -->
+                <div class="col-md-12">
+                    <!-- <p-dataTable #tempTable expandableRows="true" [(value)]="link_documentlist" [paginator]="false"
+                        [rows]="20" selectionMode="multiple" sortMode="multiple" [(selection)]="temp_documentlist"
+                        [scrollable]="true" scrollHeight="400px">
+                        <p-column field="documentId" header="" [style]="{'width':'10%'}" selectionMode="multiple">
+                        </p-column>
+                        <p-column field="documentId" header="Id" [style]="{'width':'20%'}" [filter]="true">
+                        </p-column>
+                        <p-column field="linkDoc" header="File Name" [sortable]="true" [style]="{'width':'30%'}"
+                            [filter]="true">
+                        </p-column>
+                        <p-column field="docDate" header="Date" [sortable]="true" [style]="{'width':'30%'}"
+                            [filter]="true">
+                        </p-column>
+                        <p-column field="version" header="Version" [style]="{'width':'10%'}">
+                        </p-column>
+                    </p-dataTable> -->
+                    <p-table #ptable [value]="link_documentlist" [scrollable]="true" scrollHeight="400px"
+                        [globalFilterFields]="['linkDoc']" [responsive]="true" [rows]="20" 
+                        sortMode="multiple" [(selection)]="temp_documentlist" [scrollable]="true" scrollHeight="400px">
+                        <ng-template pTemplate="caption">
+                            <div style="text-align: right">
+                                <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                                <input type="text" pInputText size="30" placeholder="file name" id="pop_filter"
+                                    (input)="ptable.filterGlobal($event.target.value, 'contains')" style="width:auto"
+                                    [(ngModel)]="lnkdoc_filter_txt">
+                                <i class="fa fa-close" style="cursor:pointer;margin:4px 4px 0 0"
+                                    *ngIf="lnkdoc_filter_txt.length > 0" (click)="resetTable(ptable, '1')"></i>
+
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="width:4%">
+                                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                </th>
+                                <th class="text-center" style="width:5%;">ID</th>
+                                <th class="text-center" style="width:15%;" [pSortableColumn]="'linkDoc'">File Name
+                                    <p-sortIcon [field]="'linkDoc'"></p-sortIcon>
+                                </th>
+
+                                <th class="text-center" style="width:10%;" [pSortableColumn]="'docDate'">Date
+                                    <p-sortIcon [field]="'docDate'"></p-sortIcon>
+                                </th>
+                                <th class="text-center" style="width:4%;">Version</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowData let-index="rowIndex">
+                            <tr [pSelectableRow]="rowData">
+                                <td style="width:4%">
+                                    <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+                                </td>
+                                <td class="text-center" style="width:5%;">{{rowData.documentId}}
+                                </td>
+                                <td style="width:15%;">
+                                    {{rowData.linkDoc}}
+                                </td>
+                                <td style="width:10%;">{{rowData.docDate}}</td>
+                                <td class="text-center" style="width:4%;">
+                                    <select [(ngModel)]="rowData.version"
+                                        (change)="LnkDoc_versionChange(rowData,index, rowData.version)"
+                                        class="doc_dropdown_width">
+                                        <option *ngFor="let item of GetLnkDocVersion(rowData.docCount, rowData);"
+                                            value="{{item}}">
+                                            {{item}}
+                                        </option>
+                                    </select>
+
+                                </td>
+
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage" let-rowData let-index="rowIndex">
+                            <tr>
+                                <td [attr.colspan]="rowData" class="text-center font-weight-bold">
+                                    No records found
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <p-footer>
+        <button type="button" pButton icon="fa-check" label="Add" (click)="saveLinkDocument(temp_documentlist)"
+            [disabled]="link_documentlist == null || link_documentlist.length == 0"></button>
+        <!-- <button type="button" pButton icon="fa-close" label="Exit" (click)="display_linkdocument=false"></button> -->
+        <button type="button" pButton icon="fa-close" label="Exit" (click)="closeLinkDocument_Dialog()"></button>
+    </p-footer>
+</p-dialog>
+<!-- Delete Pop Up -->
+<p-dialog header="Confirm Delete" [(visible)]="confirm" appendTo="body">
+    The Selected Folder and ALL Sub-Folders will be Deleted. Are sure you want to continue?
+    <p-footer>
+        <button type="button" pButton icon="fa-check" (click)="deleteDocument('')" label="Yes"></button>
+        <button type="button" pButton icon="fa-close" (click)="confirm=false" label="No"></button>
+    </p-footer>
+</p-dialog>
+
+<!-- ADD DOCUMENT POPUP STARTs-->
+<p-dialog header="Add Document" [(visible)]="display" [modal]="true" [responsive]="true" appendTo="body"
+    [closable]="false">
+
+    <!-- <div class="container">
+
+        <div class="row">
+            <div class="col-md-5 ">
+                <div class="form-group">
+                    <label>Select File to Upload</label>
+                    <input #file type="file" />
+                    
+                </div>
+                <div class="form-group">
+                   
+                    <p-checkbox binary="true" name="isCheck" label="Add this file to new Version to an Existing File" [(ngModel)]="addDocument.isCheck"></p-checkbox>
+                </div>
+            </div>
+            <div class="col-md-3 ">
+                <div class="form-group">
+                    <label>File Description</label>
+                    <textarea class="form-control" placeholder="Description" [(ngModel)]="addDocument.title"></textarea>
+                </div>
+
+            </div>
+            <div class="col-md-3 ">
+                <div class="form-group">
+                    <label>Date
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                    </label>
+                    <input type="text" #dp="bsDatepicker" bsDatepicker class="form-control" id="example" [(ngModel)]="addDocument.docDate">
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-9 ">
+                <div class="form-group">
+                    <ck-editor [readonly]="false" style="height:50px !important;" [config]="config" [(ngModel)]="addDocument.comments">
+                    </ck-editor>
+                </div>
+            </div>
+            <div class="col-md-3 " *ngIf="queryparams.lLvl == 1 && queryparams.mode == 'D'">
+                <div class="form-group">
+                    <p-tree [value]="[ModuleTreeItems_popup]" selectionMode="checkbox" [(selection)]="selectednodeModule">
+                    </p-tree>
+                </div>
+            </div>
+        </div>
+
+    </div> -->
+    <div class="container" *ngIf="display == true">
+        <app-add-document (addFileOutput)="uploadDocumentEvent($event)" (exitOutput)="closeModelEvent($event)">
+        </app-add-document>
+    </div>
+
+    <!-- <p-footer>
+        <p-button icon="fa fa-fw fa-check" label="Save" styleClass="custom_btn" (click)="upload(file.files, addDocument)"></p-button>
+        <p-button icon="fa fa-fw fa-close" label="Cancel" styleClass="custom_btn" (click)="display=false"></p-button>
+    </p-footer> -->
+</p-dialog>
+<!-- ADD DOCUMENT POPUP ENDS-->
+
+<!-- EDIT DOCUMENT POPUP STARTs-->
+<p-dialog header="Edit Document" [(visible)]="edit_document_popup" [modal]="true" [responsive]="true" appendTo="body"
+    [closable]="false">
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-5 ">
+                <div class="form-group">
+                    <label>File Name</label>
+
+                    <span style="font-weight:bold;color:green;">
+                        {{edit_document.linkDoc}}
+                    </span>
+                </div>
+
+            </div>
+            <div class="col-md-3 ">
+                <div class="form-group">
+                    <label>File Description</label>
+                    <textarea class="form-control" placeholder="Description" [(ngModel)]="edit_document.title"
+                        maxlength="100"></textarea>
+                </div>
+
+            </div>
+            <div class="col-md-3 " *ngIf="edit_document_popup == true">
+                <div class="form-group">
+                    <label>Date
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                    </label>
+                    <input type="text" #dp="bsDatepicker" [bsConfig]="bsConfig" bsDatepicker class="form-control"
+                        id="example" [(ngModel)]="edit_document.docDate" readonly>
+                    <!-- <input type="text" #dp="bsDatepicker" bsDatepicker class="form-control" [(ngModel)]="edit_document.docDate" id="example" [value]="edit_document.docDate | date:'dd-MM-yyyy'"
+                        (input)="edit_document.docDate=parseDate($event.target.value)" /> -->
+                </div>
+            </div>
+        </div>
+        <!-- <h5>Comments</h5> -->
+        <!-- <div class="row">
+            <div class="col-md-9 ">
+                <div class="form-group">
+                    <ck-editor [readonly]="false" style="height:50px !important;" [config]="config" [(ngModel)]="edit_document.comments">
+                    </ck-editor>
+                </div>
+            </div>
+            <div class="col-md-3 " *ngIf="queryparams.lLvl == 1 && queryparams.mode == 'D'">
+                <div class="form-group">
+                    <p-tree [value]="[ModuleTreeItems_popup]" selectionMode="checkbox" [(selection)]="selectednodeModule" [style]="{'max-height':'600px','overflow':'auto'}">
+                    </p-tree>
+                </div>
+            </div>
+        </div> -->
+
+        <div class="row">
+            <div class="col-md-12 "
+                *ngIf="(queryparams.lLvl != 1 && queryparams.mode == 'D') || queryparams.mode == 'T' || queryparams.mode == 'O' || queryparams.mode == 'P' || queryparams.mode == 'E' || queryparams.mode == 'S'">
+                <div class="form-group">
+                    <ck-editor [readonly]="false" style="height:50px !important;border-left:2px !important;"
+                        [config]="config" [(ngModel)]="edit_document.comments">
+                    </ck-editor>
+                </div>
+            </div>
+            <div class="col-md-9 " *ngIf="queryparams.lLvl == 1 && queryparams.mode == 'D'">
+                <div class="form-group">
+                    <ck-editor [readonly]="false" style="height:50px !important;width:150px;" [config]="config"
+                        [(ngModel)]="edit_document.comments">
+                    </ck-editor>
+                </div>
+            </div>
+            <div class="col-md-3 " *ngIf="queryparams.lLvl == 1 && queryparams.mode == 'D'">
+                <div class="form-group">
+                    <!-- <p-tree [value]="ModuleTreeItems_popup" selectionMode="checkbox" [(selection)]="selectednodeModule"
+                        [style]="{'max-height':'600px','overflow':'auto'}">
+                    </p-tree> -->
+
+                    <div class="sidebar-body">
+                        <div class="sidebarmodule-list">
+                            <div class="sidebarmodule-list-body">
+                                <ng-template #recursiveList let-TreeItems let-parentModule='parentModule'>
+                                    <li class="doc-listitem">
+                                        <div class="doc_link_holder"
+                                            [ngClass]="{ 'active' : (TreeItems.legoId == selectedModuleId) }">
+                                            <span *ngIf="checkChildExist(TreeItems)"
+                                                class="documentmodule_expandcollapse"
+                                                [ngClass]="(TreeItems.expanded == true) ? 'doctree_expanded' : 'doctree_collapsed'"
+                                                (click)="toggleExpandCollapse(TreeItems,$event)">
+                                                <i class="icon-arrow-down icons collapsed"></i>
+                                                <i class="icon-arrow-up icons expanded"></i>
+                                            </span>
+                                            <p-checkbox name="selectedLinkModules" [value]="TreeItems.legoId"
+                                                [(ngModel)]="selectedLinkModuleItems"></p-checkbox>
+                                            <!-- <input type="checkbox" [(ngModel)]="selectedModuleIds" value="{{TreeItems.legoId}}" /> -->
+                                            <a class="doc-link" style="cursor: pointer"> {{ TreeItems.legoName }}</a>
+                                        </div>
+                                        <div class="doc_child_holder" *ngIf="TreeItems.expanded == true">
+                                            <ul class="moduledropdown-items"
+                                                *ngFor="let listChild of TreeItems.children;trackBy:index;let in = index;">
+                                                <!-- <a class="sidebarmodule-link" routerLink="{{ listChild.url }}"><div>
+                                    {{ listChild.legoName }}</div>
+                                </a> -->
+                                                <ng-container
+                                                    *ngTemplateOutlet="recursiveList; context:{ $implicit: listChild,parentModule:TreeItems}">
+                                                </ng-container>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ng-template>
+                                <div style="width:100%;max-height:calc( 55vh );overflow-y:auto;overflow-x:hidden">
+                                    <ng-container
+                                        *ngTemplateOutlet="recursiveList; context:{ $implicit: ModuleTreeItems_popup,parentModule : null}">
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <p-footer>
+        <p-button icon="fa fa-fw fa-check" label="Update" styleClass="custom_btn"
+            (click)="editDocument(edit_document, selectedLinkModuleItems)"></p-button>
+        <p-button icon="fa fa-fw fa-close" label="Cancel" styleClass="custom_btn" (click)="revertDocument_onCancel()">
+        </p-button>
+    </p-footer>
+</p-dialog>
+<!-- EDIT DOCUMENT POPUP ENDS-->
+
+<!-- user access popup -->
+<p-dialog header="Add User" [(visible)]="display_access_popup" [modal]="true" [responsive]="true" appendTo="body"
+    [closable]="false">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-md-12" style="padding-left: 2px;">
+                <div class="ocn-status">
+                    <table class="table table-striped">
+                        <thead align="center">
+                            <tr>
+                                <th>No.</th>
+                                <th>Employee ID</th>
+                                <th>Employee</th>
+                                <th>UnRestricted</th>
+                                <th>View/ReadOnly</th>
+                                <th>Restricted</th>
+
+                            </tr>
+                        </thead>
+                        <tbody align="center">
+                            <tr>
+                                <td>1</td>
+                                <td>[]</td>
+                                <td>All User</td>
+                                <td>
+                                    <input type="radio" checked name="user_access">
+                                </td>
+                                <td>
+                                    <input type="radio" name="user_access">
+                                </td>
+                                <td>
+                                    <input type="radio" name="user_access">
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <p-footer>
+        <button type="button" class="btn btn-sm btn-primary" (click)="Show_emp_dialog()">
+            <i class="fa fa-user"></i> Add User</button>
+        <button type="button" class="btn btn-sm btn-primary" (click)="display_access_popup=false">Save</button>
+        <button type="button" class="btn btn-sm btn-primary" (click)="display_access_popup=false">Exit</button>
+    </p-footer>
+</p-dialog>
+<!-- user access Pop Up -->
+
+<!-- user List popup -->
+<p-dialog header="Add User" [(visible)]="show_user_popup" [modal]="true" [responsive]="true" appendTo="body"
+    [closable]="false">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-md-12" style="padding-left: 2px;">
+                <div class="ocn-status">
+                    <!-- <table class="table table-striped">
+                        <thead align="center">
+                            <tr>
+                                <th>No.</th>
+                                <th>Employee ID</th>
+                                <th>Employee</th>
+                                <th>UnRestricted</th>
+                                <th>View/ReadOnly</th>
+                                <th>Restricted</th>
+
+                            </tr>
+                        </thead>
+                        <tbody align="center">
+                            <tr *ngFor="let emp of employeelist; let i= index;">
+                                <td>{{i+1}}</td>
+                                <td>{{emp.employeeId}}</td>
+                                <td>{{emp.firstName}}</td>
+                                <td>
+                                    <input type="radio" name="radiogroup{{emp.employeeId}}" [value]="emp.employeeId">
+                                </td>
+                                <td>
+                                    <input type="radio" name="radiogroup{{emp.employeeId}}" [value]="emp.employeeId">
+                                </td>
+                                <td>
+                                    <input type="radio" name="radiogroup{{emp.employeeId}}" [value]="emp.employeeId">
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table> -->
+
+                    <!-- <p-dataTable #tempEmpTable expandableRows="true" [(value)]="temp_nonparticipatedUsers" [paginator]="true" [rows]="10"
+                    selectionMode="multiple" [(selection)]="tempselectedparticipated" [metaKeySelection]="true">
+                       
+                        <p-column field="firstName" header="First Name" [style]="{'width':'40%'}">
+                        </p-column>
+                        
+                        <p-column field="employeeId" header="Id" [style]="{'width':'20%'}">
+                        </p-column>
+                        
+                        <p-column field="unrestricted" header ="UnRestricted" [style]="{'width':'40%'}" [editable]="true">
+                            <ng-template let-rowdata="rowData" pTemplate="body">
+                                <p-radioButton name="{{rowdata['employeeId']}}" value="unrestricted" [(ngModel)]="rowdata.unrestricted"></p-radioButton>
+                            </ng-template>                            
+                        </p-column>
+                        <p-column field="restricted" header ="Restricted" [style]="{'width':'40%'}" [editable]="true">
+                            <ng-template let-rowdata="rowData" pTemplate="body">
+                                <p-radioButton name="{{rowdata['employeeId']}}" value="restricted" [(ngModel)]="rowdata.restricted"></p-radioButton>
+                            </ng-template>                            
+                        </p-column>
+                        <p-column field="readonly" header ="View/ReadOnly" [style]="{'width':'40%'}" [editable]="true">
+                            <ng-template let-rowdata="rowData" pTemplate="body">
+                                <p-radioButton name="{{rowdata['employeeId']}}" value="readonly" [(ngModel)]="rowdata.readonly"></p-radioButton>
+                            </ng-template>                            
+                        </p-column>                        
+                    </p-dataTable> -->
+                    <p-table [columns]="temp_nonparticipatedUsers" [value]="temp_nonparticipatedUsers"
+                        [(selection)]="tempselectedparticipated" [paginator]="true" [rows]="10" #dt
+                        [resizableColumns]="true" columnResizeMode="expand">
+
+                        <ng-template pTemplate="header" let-columns>
+                            <tr [pSelectableRow]="rowData">
+                                <th>
+                                    Employee Id
+                                </th>
+                                <th>
+                                    Employee Name
+                                </th>
+                                <th>
+                                    UnRestricted
+                                </th>
+                                <th>
+                                    Restricted
+                                </th>
+                                <th>
+                                    View/ ReadOnly
+                                </th>
+                            </tr>
+
+                        </ng-template>
+                        <ng-template pTemplate="body" styleClass="doc_rights_table" let-rowData let-rowIndex="rowIndex"
+                            let-columns="columns">
+                            <tr class="doc_rights_table">
+                                <td>
+                                    {{rowData['employeeId']}}
+                                </td>
+                                <td>
+                                    {{rowData['firstName']}}
+                                </td>
+                                <!-- <td>
+                  <p-tableRadioButton ngDefaultControl [pSelectableRow]="rowData" name="{{rowData['employeeId']}}" [value]="unrestricted"
+                  (onClick)="setAccess(rowData,'unrestricted')" [(ngModel)]="rowData.unrestricted"></p-tableRadioButton>
+                </td> -->
+                                <td>
+                                    <p-radioButton [pSelectableRow]="rowData" name="{{rowData['employeeId']}}"
+                                        value="unrestricted" (onClick)="setAccess(rowData,'unrestricted')"
+                                        [(ngModel)]="rowData.unrestricted"></p-radioButton>
+                                </td>
+                                <td>
+                                    <p-radioButton [pSelectableRow]="rowData" name="{{rowData['employeeId']}}"
+                                        value="restricted" (onClick)="setAccess(rowData,'restricted')"
+                                        [(ngModel)]="rowData.restricted"></p-radioButton>
+                                </td>
+                                <td>
+                                    <p-radioButton [pSelectableRow]="rowData" name="{{rowData['employeeId']}}"
+                                        value="readonly" (onClick)="setAccess(rowData,'readonly')"
+                                        [(ngModel)]="rowData.readonly"></p-radioButton>
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage" let-rowData let-index="rowIndex">
+                            <tr class="text-center font-weight-bold">
+                                <!-- <td [attr.colspan]="rowData" class="text-center font-weight-bold"> -->
+                                No records found
+                                <!-- </td> -->
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                    <!-- <p-dataTable #tempTable expandableRows="true" [(value)]="temp_nonparticipatedUsers" [paginator]="true" [rows]="10" 
+                        [(selection)]="tempselectedparticipated" [selectionMode] = "multiple">
+                        <p-column field = "firstName" header="Employee Name" [style]="{'width':'20%'}">
+                                
+                        </p-column>
+                        <p-column field = "employeeId" header="unrestricted" [style]="{'width':'80%'}" [editable]="true">
+                                <ng-template let-rowData="rowData" pTemplate="body">
+                                        
+                                        <p-radioButton name="{{rowData['employeeId']}}" value="unrestricted" label="UnRestricted" [(ngModel)]="unrestricted" [(ngModel)]="rowData.unrestricted" (onClick)="setAccess(rowData,'unrestricted')"
+                                        ></p-radioButton>
+                                        <p-radioButton name="{{rowData['employeeId']}}" value="restricted" label="Restricted" [(ngModel)]="restricted" [(ngModel)]="rowData.restricted" (onClick)="setAccess(rowData,'restricted')"
+                                        ></p-radioButton>
+                                        <p-radioButton name="{{rowData['employeeId']}}" value="readonly" label="View/ReadOnly" [(ngModel)]="readonly" [(ngModel)]="rowData.readonly" (onClick)="setAccess(rowData,'readonly')"
+                                        ></p-radioButton>
+                                      </ng-template>
+                                
+                        </p-column>
+                        
+                    </p-dataTable> -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <p-footer>
+
+        <button type="button" class="btn btn-sm btn-primary"
+            (click)="AddEmployee_access(tempselectedparticipated, 'selected_user')"
+            [disabled]="temp_nonparticipatedUsers == null || temp_nonparticipatedUsers.length == 0">Save</button>
+        <button type="button" class="btn btn-sm btn-primary" (click)="show_user_popup=false">Exit</button>
+    </p-footer>
+</p-dialog>
+<!-- user List Pop Up -->
+
+<!-- ADD FOLDER DIALOG -->
+<p-dialog header="Add Folder" [(visible)]="addfolder_dialog" [modal]="true" [responsive]="true" appendTo="body"
+    [closable]="false">
+
+    <div>
+        <div class="ocn-status">
+
+            <div class="form-group row ">
+                <label for="lbl_master_pwd" class="col-sm-5 col-form-label required_label">Folder Name</label>
+                <div class="col-sm-7">
+                    <input #foldername class="form-control" id="addfolder1" placeholder="" type="text" value=""
+                        (keyup.enter)="addNewFolder(folderDetails)" required [(ngModel)]="folderDetails.legoName">
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <p-footer>
+        <p-button icon="fa fa-fw fa-check" label="Save" styleClass="custom_btn" (click)="addNewFolder(folderDetails)">
+        </p-button>
+        <p-button icon="fa fa-fw fa-close" label="Cancel" styleClass="custom_btn" (click)="revert_cancelDialog()">
+        </p-button>
+        <!-- <button pButton type="button" class="custom_btn" (click)="addNewFolder(folderDetails)">save</button>
+        <button pButton  type="button" class="custom_btn" (click)="revert_cancelDialog()">Exit</button> -->
+    </p-footer>
+</p-dialog>
+
+<!-- EDIT FOLDER DIALOG -->
+<p-dialog header="Edit Folder" [(visible)]="editfolder_dialog" [modal]="true" [responsive]="true" appendTo="body"
+    [closable]="false">
+
+    <div>
+        <div class="ocn-status">
+
+            <div class="form-group row ">
+                <label for="lbl_master_pwd" class="col-sm-5 col-form-label required_label">Folder Name</label>
+                <div class="col-sm-7">
+                    <input id="editfolder1" class="form-control" placeholder=""
+                        (keyup.enter)="editFolder(parentDetails)" type="text" required
+                        [(ngModel)]="parentDetails.legoName">
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <p-footer>
+        <p-button icon="fa fa-fw fa-check" label="Save" styleClass="custom_btn" (click)="editFolder(parentDetails)">
+        </p-button>
+        <p-button icon="fa fa-fw fa-close" label="Cancel" styleClass="custom_btn" (click)="revert_cancelDialog()">
+        </p-button>
+        <!-- <button pButton  type="button" class="custom_btn" (click)="editFolder(parentDetails)">save</button>
+        <button pButton  type="button" class="custom_btn" (click)="revert_cancelDialog()">Exit</button> -->
+    </p-footer>
+</p-dialog>
+<!-- <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle" width="425" [closable]="false"></p-confirmDialog> -->
+
+<style>
+    .btn-search {
+        background: #424242;
+        border-radius: 0;
+        color: #fff;
+        border-width: 1px;
+        border-style: solid;
+        border-color: #1c1c1c;
+    }
+
+    .btn-search:link,
+    .btn-search:visited {
+        color: #fff;
+    }
+
+    .btn-search:active,
+    .btn-search:hover {
+        background: #1c1c1c;
+        color: #fff;
+    }
+
+    label {
+        font-size: 13px !important;
+        color: black !important;
+    }
+
+    textarea {
+        resize: none;
+    }
+
+    .btn:focus {
+        outline: none !important;
+    } 
+    .hide_tab {
+        visibility: hidden !important;
+    }
+</style>

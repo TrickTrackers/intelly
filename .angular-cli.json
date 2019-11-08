@@ -1,0 +1,82 @@
+{
+    "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+    "project": {
+        "name": "ng"
+    },
+    "apps": [{
+        "root": "src",
+        "outDir": "ui-up",
+        "assets": [
+            "assets",
+            "favicon.ico",
+            "assets/mxg/**",
+            "assets/mxgraph/editor.html",
+            "assets/mxgraph/viewer.html",
+            "assets/us_states_list.json",
+            "assets/Intellimodule_User_Manual.pdf"
+        ],
+        "index": "index.html",
+        "main": "main.ts",
+        "polyfills": "polyfills.ts",
+        "test": "test.ts",
+        "tsconfig": "tsconfig.app.json",
+        "testTsconfig": "tsconfig.spec.json",
+        "prefix": "app",
+        "styles": [
+            "../node_modules/font-awesome/css/font-awesome.min.css",
+            "../node_modules/primeng/resources/primeng.min.css",
+            "../node_modules/primeng/resources/themes/omega/theme.scss",
+            "../node_modules/simple-line-icons/css/simple-line-icons.css",
+            "../node_modules/bootstrap/dist/css/bootstrap.min.css",
+            "assets/css/core.css",
+            "assets/css/workflow.css",
+            "assets/css/customs.css",
+            "assets/css/pimodule.css",
+            "assets/css/helper.css",
+            "assets/css/components.css",
+            "../node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
+            "assets/css/customs_theme.css",
+            "assets/css/customs_media.css",
+            "assets/css/chat.css",
+            "assets/css/media.css",
+            "scss/style.scss",
+            "../node_modules/dhtmlx-gantt/codebase/dhtmlxgantt.css"
+        ],
+        "scripts": [
+            "../node_modules/jquery/dist/jquery.min.js",
+            "../node_modules/dhtmlx-gantt/codebase/dhtmlxgantt.js"
+        ],
+        "environmentSource": "environments/environment.ts",
+        "environments": {
+            "dev": "environments/environment.ts",
+            "prod": "environments/environment.prod.ts"
+        }
+    }],
+    "e2e": {
+        "protractor": {
+            "config": "./protractor.conf.js"
+        }
+    },
+    "lint": [{
+            "project": "src/tsconfig.app.json",
+            "exclude": "**/node_modules/**"
+        },
+        {
+            "project": "src/tsconfig.spec.json",
+            "exclude": "**/node_modules/**"
+        },
+        {
+            "project": "e2e/tsconfig.e2e.json",
+            "exclude": "**/node_modules/**"
+        }
+    ],
+    "test": {
+        "karma": {
+            "config": "./karma.conf.js"
+        }
+    },
+    "defaults": {
+        "styleExt": "scss",
+        "component": {}
+    }
+}
