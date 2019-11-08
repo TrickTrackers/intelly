@@ -1,4 +1,3 @@
-# IntelliModz - User Panel
 Angular 5 Project
 
 ## Usage
